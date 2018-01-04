@@ -1,4 +1,4 @@
-# Ada Server Faces
+# Ada Servlet
 
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Server-Faces.svg)](http://jenkins.vacs.fr/job/Ada-Server-Faces/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Server-Faces.svg)](http://jenkins.vacs.fr/job/Ada-Server-Faces/)
@@ -6,10 +6,12 @@
 [![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-asf/1.1.0.svg)
 
-Ada Server Faces allows to create web applications using the same pattern
-as the Java Server Faces (See JSR 252, JSR 314 and JSR 344). 
+Ada Servlet allows to create web applications using the same pattern
+as the Java Servlet (See JSR 154, JSR 315). 
 
-To build ASF, you will need:
+## Build
+
+To build Ada Servlet, you will need:
 
 * Ada Util     (https://github.com/stcarrez/ada-util          1.9.0)
 * Ada EL       (https://github.com/stcarrez/ada-el            1.6.1)
@@ -38,17 +40,9 @@ And unit tests are executed with:
    bin/asf_harness
 ```
 
-# Documentation
+## Documentation
 
 The Ada Server Faces sources as well as a wiki documentation is provided on:
 
    https://github.com/stcarrez/ada-asf/wiki
 
-# Licenses
-
-Ada Server Faces integrates the Javascript library jQuery licensed under
-MIT or GPL (See http://jquery.org/license/).
-
-Ada Server Faces integrates a generated version of 960 grid system
-licensed under MIT or GPL (See http://960.gs/ and http://grids.heroku.com/
-for the CSS generator). 
