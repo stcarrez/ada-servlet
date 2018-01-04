@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.servlets.measures -- Dump performance measurements
+--  servlet-servlets.measures -- Dump performance measurements
 --  Copyright (C) 2010, 2011, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,12 +17,12 @@
 -----------------------------------------------------------------------
 
 with Util.Measures;
-with ASF.Filters;
-package ASF.Servlets.Measures is
+with Servlet.Filters;
+package Servlet.Servlets.Measures is
 
    --  The <b>Measure_Servlet</b> reports the measures collected by the
    --  application with the <b>Util.Measures</b> library.
-   type Measure_Servlet is limited new Servlet and ASF.Filters.Filter with private;
+   type Measure_Servlet is limited new Servlet and Servlet.Filters.Filter with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
@@ -105,13 +105,13 @@ package ASF.Servlets.Measures is
    procedure Do_Filter (F        : in Measure_Servlet;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain);
+                        Chain    : in out Servlet.Servlets.Filter_Chain);
 
 private
 
-   type Measure_Servlet is limited new Servlet and ASF.Filters.Filter with record
+   type Measure_Servlet is limited new Servlet and Servlet.Filters.Filter with record
       Measures  : aliased Util.Measures.Measure_Set;
       Current   : Util.Measures.Measure_Set_Access;
    end record;
 
-end ASF.Servlets.Measures;
+end Servlet.Servlets.Measures;
