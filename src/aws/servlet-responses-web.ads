@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses.web -- ASF Responses with AWS server
+--  servlet-responses.web -- Servlet Responses with AWS server
 --  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,9 +20,9 @@ with Ada.Streams;
 with AWS.Response;
 with Util.Streams;
 with Util.Streams.Texts;
-package ASF.Responses.Web is
+package Servlet.Responses.Web is
 
-   type Response is new ASF.Responses.Response and Util.Streams.Output_Stream with private;
+   type Response is new Servlet.Responses.Response and Util.Streams.Output_Stream with private;
 
    --  Write the buffer array to the output stream.
    procedure Write (Stream : in out Response;
@@ -80,10 +80,10 @@ private
    overriding
    procedure Initialize (Resp : in out Response);
 
-   type Response is new ASF.Responses.Response and Util.Streams.Output_Stream with record
+   type Response is new Servlet.Responses.Response and Util.Streams.Output_Stream with record
       Data     : AWS.Response.Data;
       Content  : aliased Util.Streams.Texts.Print_Stream;
       Redirect : Boolean := False;
    end record;
 
-end ASF.Responses.Web;
+end Servlet.Responses.Web;
