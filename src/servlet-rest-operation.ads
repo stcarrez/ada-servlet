@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-rest-operation -- REST API Operation Definition
+--  servlet-rest-operation -- REST API Operation Definition
 --  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,8 +20,8 @@ generic
    Method     : Method_Type := GET;
    URI        : String;
    Permission : Security.Permissions.Permission_Index := Security.Permissions.NONE;
-package ASF.Rest.Operation is
+package Servlet.Rest.Operation is
 
    function Definition return Descriptor_Access;
 
-end ASF.Rest.Operation;
+end Servlet.Rest.Operation;
