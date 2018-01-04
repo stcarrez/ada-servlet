@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  ASF -- Ada Server Faces
---  Copyright (C) 2009, 2010, 2015 Stephane Carrez
+--  servlet_harness -- Ada Servlet unit tests
+--  Copyright (C) 2009, 2010, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,13 @@
 -----------------------------------------------------------------------
 
 with Util.Tests;
-with ASF.Tests;
-with ASF.Testsuite;
-procedure ASF_Harness is
+with Servlet.Tests;
+with Servlet.Testsuite;
+procedure Servlet_Harness is
 
-   procedure Harness is new Util.Tests.Harness (Suite  => ASF.Testsuite.Suite,
-                                                Finish => ASF.Tests.Finish);
+   procedure Harness is new Util.Tests.Harness (Suite  => Servlet.Testsuite.Suite,
+                                                Finish => Servlet.Tests.Finish);
 
 begin
-   Harness ("asf-tests.xml");
-end ASF_Harness;
+   Harness ("servlet-tests.xml");
+end Servlet_Harness;
