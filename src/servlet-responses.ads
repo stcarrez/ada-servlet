@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses -- ASF Requests
+--  servlet-responses -- Servlet Requests
 --  Copyright (C) 2010 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,13 +20,13 @@ with Ada.Calendar;
 with Ada.Strings.Unbounded;
 with Ada.Finalization;
 
-with ASF.Streams;
-with ASF.Cookies;
+with Servlet.Streams;
+with Servlet.Cookies;
 private with Util.Streams.Texts;
 
---  The <b>ASF.Responses</b> package is an Ada implementation of
+--  The <b>Servlet.Responses</b> package is an Ada implementation of
 --  the Java servlet response (JSR 315 5. The Response).
-package ASF.Responses is
+package Servlet.Responses is
 
    SC_CONTINUE : constant Natural := 100;
    SC_SWITCHING_PROTOCOLS : constant Natural := 101;
@@ -177,7 +177,7 @@ package ASF.Responses is
    --  Adds the specified cookie to the response. This method can be called multiple
    --  times to set more than one cookie.
    procedure Add_Cookie (Resp   : in out Response;
-                         Cookie : in ASF.Cookies.Cookie);
+                         Cookie : in Servlet.Cookies.Cookie);
 
    --  Returns a boolean indicating whether the named response header has already
    --  been set.
@@ -310,7 +310,7 @@ package ASF.Responses is
    function Get_Status (Resp : in Response) return Natural;
 
    --  Get the output stream
-   function Get_Output_Stream (Resp : in Response) return ASF.Streams.Print_Stream;
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Print_Stream;
 
 private
 
@@ -321,4 +321,4 @@ private
       Locale       : Util.Locales.Locale;
    end record;
 
-end ASF.Responses;
+end Servlet.Responses;
