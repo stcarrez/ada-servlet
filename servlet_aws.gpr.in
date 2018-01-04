@@ -1,18 +1,18 @@
 with "@UTIL_DIR@config";
-with "asf_core";
+with "servlet_core";
 with "@UTIL_DIR@util_http_aws";
 @WITH_SERVER@
 
-project Asf_Aws is
+project Servlet_Aws is
 
-   Version := "@ASF_VERSION@";
-   Library_Dir := "@ASF_LIBDIR@";
-   Library_Type : Config.Library_Type_Type := external ("ASF_LIBRARY_TYPE", "static");
+   Version := "@SERVLET_VERSION@";
+   Library_Dir := "@SERVLET_LIBDIR@";
+   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
-   Has_Aws     : Config.Yes_No := "@ASF_HAVE_AWS@";
+   Has_Aws     : Config.Yes_No := "@SERVLET_HAVE_AWS@";
 
    type Server_Type is ("none", "aws");
-   Server : Server_Type := external ("SERVER", "@ASF_SERVER@");
+   Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
 
    for Source_Dirs use ();
    case Server is
@@ -23,16 +23,16 @@ project Asf_Aws is
 
    end case;
 
-   for Library_Name use "ada_asf_aws";
+   for Library_Name use "ada_servlet_aws";
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use Library_Dir & "/asf-aws/" & Project'Library_Kind;
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/asf-aws/" & Project'Library_Kind;
+   for Library_Dir use Library_Dir & "/servlet-aws/" & Project'Library_Kind;
+   for Object_Dir use "./" & Config'Object_Dir & "/obj/servlet-aws/" & Project'Library_Kind;
 
    package Binder renames Config.Binder;
    package Builder renames Config.Builder;
    package Compiler renames Config.Compiler;
    package Ide      renames Config.Ide;
 
-end Asf_Aws;
+end Servlet_Aws;
