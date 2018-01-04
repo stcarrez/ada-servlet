@@ -17,19 +17,19 @@
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
 
-with ASF.Filters;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
+with Servlet.Filters;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Servlets;
 with Security.OAuth.Servers; use Security.OAuth;
 with Security.Policies;
 
---  The <b>ASF.Security.Filters.OAuth</b> package provides a servlet filter that
+--  The <b>Servlet.Security.Filters.OAuth</b> package provides a servlet filter that
 --  implements the RFC 6749 "Accessing Protected Resources" part: it extracts the OAuth
 --  access token, verifies the grant and the permission.  The servlet filter implements
 --  the RFC 6750 "OAuth 2.0 Bearer Token Usage".
 --
-package ASF.Security.Filters.OAuth is
+package Servlet.Security.Filters.OAuth is
 
    --  RFC 2617 HTTP header for authorization.
    AUTHORIZATION_HEADER_NAME    : constant String := "Authorization";
@@ -37,13 +37,13 @@ package ASF.Security.Filters.OAuth is
    --  RFC 2617 HTTP header for failed authorization.
    WWW_AUTHENTICATE_HEADER_NAME : constant String := "WWW-Authenticate";
 
-   type Auth_Filter is new ASF.Filters.Filter with private;
+   type Auth_Filter is new Servlet.Filters.Filter with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    overriding
    procedure Initialize (Server  : in out Auth_Filter;
-                         Config  : in ASF.Servlets.Filter_Config);
+                         Config  : in Servlet.Servlets.Filter_Config);
 
    --  Set the permission manager that must be used to verify the permission.
    procedure Set_Permission_Manager (Filter  : in out Auth_Filter;
@@ -55,28 +55,28 @@ package ASF.Security.Filters.OAuth is
    --  to view the page.  Invokes the <b>Do_Deny</b> procedure if the permission
    --  is denied.
    procedure Do_Filter (F        : in Auth_Filter;
-                        Request  : in out ASF.Requests.Request'Class;
-                        Response : in out ASF.Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain);
+                        Request  : in out Servlet.Requests.Request'Class;
+                        Response : in out Servlet.Responses.Response'Class;
+                        Chain    : in out Servlet.Servlets.Filter_Chain);
 
    --  Display or redirects the user to the login page.  This procedure is called when
    --  the user is not authenticated.
    procedure Do_Login (F        : in Auth_Filter;
-                       Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class);
+                       Request  : in out Servlet.Requests.Request'Class;
+                       Response : in out Servlet.Responses.Response'Class);
 
    --  Display the forbidden access page.  This procedure is called when the user is not
    --  authorized to see the page.  The default implementation returns the SC_FORBIDDEN error.
    procedure Do_Deny (F        : in Auth_Filter;
-                      Request  : in out ASF.Requests.Request'Class;
-                      Response : in out ASF.Responses.Response'Class);
+                      Request  : in out Servlet.Requests.Request'Class;
+                      Response : in out Servlet.Responses.Response'Class);
 
 private
 
-   type Auth_Filter is new ASF.Filters.Filter with record
+   type Auth_Filter is new Servlet.Filters.Filter with record
       Manager   : Policies.Policy_Manager_Access;
       Realm     : Servers.Auth_Manager_Access;
       Realm_URL : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
-end ASF.Security.Filters.OAuth;
+end Servlet.Security.Filters.OAuth;
