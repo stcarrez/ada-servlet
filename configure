@@ -581,7 +581,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="src/asf.ads"
+ac_unique_file="src/servlet.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 ADA_PRJ_BASE
@@ -589,21 +589,21 @@ ADA_ALI_BASE
 ADA_LIB_BASE
 ADA_INC_BASE
 GPRINSTALL
-WITH_ASF_AWS
+WITH_SERVLET_AWS
 WITH_SERVER
-ASF_HAVE_AWS
-ASF_SERVER
+SERVLET_HAVE_AWS
+SERVLET_SERVER
 SECURITY_DIR
 EL_DIR
 UTIL_DIR
 BUILDS_SHARED
 NR_CPUS
-ASF_LIBDIR
+SERVLET_LIBDIR
 EXEC_PREFIX
-ASF_MICRO_VERSION
-ASF_MINOR_VERSION
-ASF_MAJOR_VERSION
-ASF_VERSION
+SERVLET_MICRO_VERSION
+SERVLET_MINOR_VERSION
+SERVLET_MAJOR_VERSION
+SERVLET_VERSION
 LN_S
 INSTALL_DATA
 INSTALL_SCRIPT
@@ -1933,10 +1933,10 @@ test -n "$target_alias" &&
 
 
 # Current release settings
-ASF_MAJOR_VERSION=1
-ASF_MINOR_VERSION=2
-ASF_MICRO_VERSION=0
-ASF_VERSION=$ASF_MAJOR_VERSION.$ASF_MINOR_VERSION.$ASF_MICRO_VERSION
+SERVLET_MAJOR_VERSION=1
+SERVLET_MINOR_VERSION=2
+SERVLET_MICRO_VERSION=0
+SERVLET_VERSION=$SERVLET_MAJOR_VERSION.$SERVLET_MINOR_VERSION.$SERVLET_MICRO_VERSION
 
 
   for ac_prog in gprbuild
@@ -3057,7 +3057,7 @@ fi
 EXEC_PREFIX="$prefix"
 
 
-ASF_LIBDIR="lib"
+SERVLET_LIBDIR="lib"
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking number of processors" >&5
@@ -3275,8 +3275,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_el=
     gnat_project_name_el=
-    if test x"Building Ada Server Faces requires the Ada EL Library." != x; then
-      as_fn_error $? "Building Ada Server Faces requires the Ada EL Library.
+    if test x"Building Ada Servlet requires the Ada EL Library." != x; then
+      as_fn_error $? "Building Ada Servlet requires the Ada EL Library.
   You should build and install the Ada Expression Language Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3377,8 +3377,8 @@ $as_echo "no" >&6; }
   else
     gnat_project_dir_security=
     gnat_project_name_security=
-    if test x"Building Ada Server Faces requires the Ada Security Library." != x; then
-      as_fn_error $? "Building Ada Server Faces requires the Ada Security Library.
+    if test x"Building Ada Servlet requires the Ada Security Library." != x; then
+      as_fn_error $? "Building Ada Servlet requires the Ada Security Library.
   You should build and install the Ada Security Library component.
   It must be available and found by ${GNATMAKE}.
   This project was not found in the ADA_PROJECT_PATH environment variable.
@@ -3457,16 +3457,16 @@ $as_echo "no" >&6; }
   fi
   if test T$gnat_enable_aws = Tno; then
 
-    ASF_HAVE_AWS=no
-    ASF_SERVER=none
+    SERVLET_HAVE_AWS=no
+    SERVLET_SERVER=none
     WITH_SERVER=
 
   else
 
-    ASF_SERVER=aws
-    ASF_HAVE_AWS=yes
+    SERVLET_SERVER=aws
+    SERVLET_HAVE_AWS=yes
     WITH_SERVER="with \"${gnat_project_name}\";";
-    WITH_ASF_AWS="with \"asf_aws\";";
+    WITH_SERVLET_AWS="with \"servlet_aws\";";
 
   fi
 
@@ -3902,7 +3902,7 @@ $as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
   fi
 
 
-ac_config_files="$ac_config_files Makefile asf.gpr asf_core.gpr asf_aws.gpr asf_tests.gpr samples.gpr asf_unit.gpr distrib/asf.gpr distrib/asf_unit.gpr distrib/asf_core.gpr distrib/asf_aws.gpr"
+ac_config_files="$ac_config_files Makefile servlet.gpr servlet_core.gpr servlet_aws.gpr servlet_tests.gpr samples.gpr servlet_unit.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4611,16 +4611,12 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "asf.gpr") CONFIG_FILES="$CONFIG_FILES asf.gpr" ;;
-    "asf_core.gpr") CONFIG_FILES="$CONFIG_FILES asf_core.gpr" ;;
-    "asf_aws.gpr") CONFIG_FILES="$CONFIG_FILES asf_aws.gpr" ;;
-    "asf_tests.gpr") CONFIG_FILES="$CONFIG_FILES asf_tests.gpr" ;;
+    "servlet.gpr") CONFIG_FILES="$CONFIG_FILES servlet.gpr" ;;
+    "servlet_core.gpr") CONFIG_FILES="$CONFIG_FILES servlet_core.gpr" ;;
+    "servlet_aws.gpr") CONFIG_FILES="$CONFIG_FILES servlet_aws.gpr" ;;
+    "servlet_tests.gpr") CONFIG_FILES="$CONFIG_FILES servlet_tests.gpr" ;;
     "samples.gpr") CONFIG_FILES="$CONFIG_FILES samples.gpr" ;;
-    "asf_unit.gpr") CONFIG_FILES="$CONFIG_FILES asf_unit.gpr" ;;
-    "distrib/asf.gpr") CONFIG_FILES="$CONFIG_FILES distrib/asf.gpr" ;;
-    "distrib/asf_unit.gpr") CONFIG_FILES="$CONFIG_FILES distrib/asf_unit.gpr" ;;
-    "distrib/asf_core.gpr") CONFIG_FILES="$CONFIG_FILES distrib/asf_core.gpr" ;;
-    "distrib/asf_aws.gpr") CONFIG_FILES="$CONFIG_FILES distrib/asf_aws.gpr" ;;
+    "servlet_unit.gpr") CONFIG_FILES="$CONFIG_FILES servlet_unit.gpr" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
