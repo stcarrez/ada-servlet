@@ -18,6 +18,7 @@
 with Servlet.Rest;
 with Servlet.Routes.Servlets.Rest;
 
+use Servlet.Rest;
 package Servlet.Servlets.Rest is
 
    --  The <b>Servlet</b> represents the component that will handle
@@ -40,14 +41,14 @@ package Servlet.Servlets.Rest is
                       Response : in out Responses.Response'Class);
 
    --  Create a route for the REST API.
-   function Create_Route (Registry : in Servlet.Servlets.Servlet_Registry;
+   function Create_Route (Registry : in Servlets.Servlet_Registry;
                           Name     : in String)
-                          return Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
-   function Create_Route (Servlet  : in Servlet.Servlets.Servlet_Access)
-                          return Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
+                          return Routes.Servlets.Rest.API_Route_Type_Access;
+   function Create_Route (Servlet  : in Servlets.Servlet_Access)
+                          return Routes.Servlets.Rest.API_Route_Type_Access;
 
    procedure Dispatch (Server   : in Rest_Servlet;
-                       Method   : in Servlet.Rest.Method_Type;
+                       Method   : in Method_Type;
                        Request  : in out Requests.Request'Class;
                        Response : in out Responses.Response'Class);
 
