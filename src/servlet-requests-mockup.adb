@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests.mockup -- ASF Requests mockup
+--  servlet-requests.mockup -- Servlet Requests mockup
 --  Copyright (C) 2010, 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-package body ASF.Requests.Mockup is
+package body Servlet.Requests.Mockup is
 
    function Find (Map  : in Util.Strings.Maps.Map;
                   Name : in String) return String;
@@ -279,7 +279,7 @@ package body ASF.Requests.Mockup is
    procedure Process_Part (Req      : in out Request;
                            Position : in Positive;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class)) is
+                             procedure (Data : in Servlet.Parts.Part'Class)) is
    begin
       null;
    end Process_Part;
@@ -291,7 +291,7 @@ package body ASF.Requests.Mockup is
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class)) is
+                             procedure (Data : in Servlet.Parts.Part'Class)) is
    begin
       null;
    end Process_Part;
@@ -300,10 +300,10 @@ package body ASF.Requests.Mockup is
    --  Set the request cookie by using the cookie returned in the response.
    --  ------------------------------
    procedure Set_Cookie (Req  : in out Request;
-                         From : in ASF.Responses.Mockup.Response'Class) is
+                         From : in Servlet.Responses.Mockup.Response'Class) is
       C : constant String := From.Get_Header ("Set-Cookie");
    begin
       Req.Set_Header ("Cookie", C);
    end Set_Cookie;
 
-end ASF.Requests.Mockup;
+end Servlet.Requests.Mockup;
