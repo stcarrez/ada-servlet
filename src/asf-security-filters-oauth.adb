@@ -18,7 +18,7 @@
 
 with Util.Log.Loggers;
 
-with ASF.Applications.Main;
+--  with ASF.Applications.Main;
 
 with Security.Policies.URLs;
 package body ASF.Security.Filters.OAuth is
@@ -37,13 +37,14 @@ package body ASF.Security.Filters.OAuth is
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
-      use ASF.Applications;
+--      use ASF.Applications;
 
       Context : constant Servlets.Servlet_Registry_Access := Servlets.Get_Servlet_Context (Config);
    begin
-      if Context.all in Main.Application'Class then
-         Server.Set_Permission_Manager (Main.Application'Class (Context.all).Get_Security_Manager);
-      end if;
+--      if Context.all in Main.Application'Class then
+--         Server.Set_Permission_Manager (Main.Application'Class (Context.all).Get_Security_Manager);
+--      end if;
+null;
    end Initialize;
 
    --  ------------------------------
