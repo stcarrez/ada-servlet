@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  ASF testsuite - Ada Server Faces Test suite
+--  Servlet testsuite - Ada Server Faces Test suite
 --  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,8 +18,8 @@
 
 with Util.Tests;
 
-package ASF.Testsuite is
+package Servlet.Testsuite is
 
    function Suite return Util.Tests.Access_Test_Suite;
 
-end ASF.Testsuite;
+end Servlet.Testsuite;
