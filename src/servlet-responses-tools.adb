@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses.tools -- ASF Responses Tools
+--  servlet-responses.tools -- Servlet Responses Tools
 --  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 
 with Ada.Strings.Unbounded;
 with Util.Strings.Transforms;
-package body ASF.Responses.Tools is
+package body Servlet.Responses.Tools is
 
    --  ------------------------------
    --  Builds a printable representation of the response for debugging purposes.
@@ -63,15 +63,15 @@ package body ASF.Responses.Tools is
       end Put;
 
    begin
-      Append_Html ("<div class='asf-dbg-req'><div class='asf-dbg-uri'>"
-                   & "<table class='asf-dbg-uri'><tr><th colspan='2'>Response</th></tr>");
+      Append_Html ("<div class='servlet-dbg-req'><div class='servlet-dbg-uri'>"
+                   & "<table class='servlet-dbg-uri'><tr><th colspan='2'>Response</th></tr>");
       Append (Info, ASCII.LF);
       Put ("      Status", Natural'Image (Reply.Get_Status));
       Put ("Content-Type", Reply.Get_Content_Type);
       Append_Html ("</table></div>");
 
       if Print_Headers then
-         Append_Html ("<div class='asf-dbg-attr'><table class='asf-dbg-list'>"
+         Append_Html ("<div class='servlet-dbg-attr'><table class='servlet-dbg-list'>"
                       & "<tr><th colspan='2'>Headers</th></tr>");
          Reply.Iterate_Headers (Process => Put'Access);
          Append_Html ("</table></div>");
@@ -81,4 +81,4 @@ package body ASF.Responses.Tools is
       return To_String (Info);
    end To_String;
 
-end ASF.Responses.Tools;
+end Servlet.Responses.Tools;
