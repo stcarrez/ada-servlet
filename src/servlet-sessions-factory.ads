@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.sessions.factory -- ASF Sessions factory
+--  servlet-sessions.factory -- Servlet Sessions factory
 --  Copyright (C) 2010, 2011, 2014, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -24,9 +24,9 @@ with Ada.Numerics.Discrete_Random;
 with Interfaces;
 with Ada.Streams;
 
---  The <b>ASF.Sessions.Factory</b> package is a factory for creating, searching
+--  The <b>Servlet.Sessions.Factory</b> package is a factory for creating, searching
 --  and deleting sessions.
-package ASF.Sessions.Factory is
+package Servlet.Sessions.Factory is
 
    type Session_Factory is new Ada.Finalization.Limited_Controlled with private;
 
@@ -123,4 +123,4 @@ private
    overriding
    procedure Initialize (Factory : in out Session_Factory);
 
-end ASF.Sessions.Factory;
+end Servlet.Sessions.Factory;
