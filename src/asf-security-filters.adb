@@ -21,7 +21,7 @@ with Ada.Strings.Unbounded;
 with Util.Log.Loggers;
 
 with ASF.Cookies;
-with ASF.Applications.Main;
+--  with ASF.Applications.Main;
 
 with Security.Contexts;
 with Security.Policies.URLs;
@@ -36,13 +36,14 @@ package body ASF.Security.Filters is
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in ASF.Servlets.Filter_Config) is
-      use ASF.Applications.Main;
+--      use ASF.Applications.Main;
 
       Context : constant Servlets.Servlet_Registry_Access := Servlets.Get_Servlet_Context (Config);
    begin
-      if Context.all in Application'Class then
-         Server.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
-      end if;
+--      if Context.all in Application'Class then
+--         Server.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
+--      end if;
+null;
    end Initialize;
 
    --  ------------------------------
