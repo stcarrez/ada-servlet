@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-servlets-mappers -- Read servlet configuration files
+--  servlet-servlets-mappers -- Read servlet configuration files
 --  Copyright (C) 2011, 2012, 2013, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 with Ada.Containers;
 with EL.Utils;
 
-package body ASF.Servlets.Mappers is
+package body Servlet.Servlets.Mappers is
 
    --  ------------------------------
    --  Save in the servlet config object the value associated with the given field.
@@ -167,4 +167,4 @@ begin
    SMapper.Add_Mapping ("error-page/error-code", ERROR_CODE);
    SMapper.Add_Mapping ("error-page/location", LOCATION);
 
-end ASF.Servlets.Mappers;
+end Servlet.Servlets.Mappers;
