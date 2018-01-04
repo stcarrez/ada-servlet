@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests.tools -- ASF Requests Tools
+--  servlet-requests.tools -- Servlet Requests Tools
 --  Copyright (C) 2010, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Strings.Transforms;
-package body ASF.Requests.Tools is
+package body Servlet.Requests.Tools is
 
    --  ------------------------------
    --  Builds a printable representation of the request for debugging purposes.
@@ -67,8 +67,8 @@ package body ASF.Requests.Tools is
       end Put;
 
    begin
-      Append_Html ("<div class='asf-dbg-req'><div class='asf-dbg-uri'>"
-                   & "<table class='asf-dbg-uri'><tr><th colspan='2'>Request</th></tr>");
+      Append_Html ("<div class='servlet-dbg-req'><div class='servlet-dbg-uri'>"
+                   & "<table class='servlet-dbg-uri'><tr><th colspan='2'>Request</th></tr>");
       Append (Info, ASCII.LF);
       Put ("     URI", Req.Get_Request_URI);
       Put ("    Peer", Req.Get_Remote_Host);
@@ -78,14 +78,14 @@ package body ASF.Requests.Tools is
       Append_Html ("</table></div>");
 
       if Print_Headers then
-         Append_Html ("<div class='asf-dbg-attr'><table class='asf-dbg-list'>"
+         Append_Html ("<div class='servlet-dbg-attr'><table class='servlet-dbg-list'>"
                       & "<tr><th colspan='2'>Headers</th></tr>");
          Req.Iterate_Headers (Process => Put'Access);
          Append_Html ("</table></div>");
       end if;
 
       if Print_Attributes then
-         Append_Html ("<div class='asf-dbg-attr'><table class='asf-dbg-list'>"
+         Append_Html ("<div class='servlet-dbg-attr'><table class='servlet-dbg-list'>"
                       & "<tr><th colspan='2'>Attributes</th></tr>");
          Req.Iterate_Attributes (Process => Put'Access);
          Append_Html ("</table></div>");
@@ -103,11 +103,11 @@ package body ASF.Requests.Tools is
    --  </ul/
    --  ------------------------------
    procedure Set_Context (Req      : in out Request'Class;
-                          Response : in ASF.Responses.Response_Access;
-                          Context  : access ASF.Routes.Route_Context_Type) is
+                          Response : in Servlet.Responses.Response_Access;
+                          Context  : access Servlet.Routes.Route_Context_Type) is
    begin
       Req.Context := Context;
       Req.Info.Response := Response;
    end Set_Context;
 
-end ASF.Requests.Tools;
+end Servlet.Requests.Tools;
