@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-parts-web -- ASF Parts on top of AWS attachments
+--  servlet-parts-web -- Servlet Parts on top of AWS attachments
 --  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 
 with AWS.Attachments.Extend;
 
-package body ASF.Parts.Web is
+package body Servlet.Parts.Web is
 
    --  ------------------------------
    --  Get the size of the mime part.
@@ -60,11 +60,11 @@ package body ASF.Parts.Web is
    --  Build a part instance from the AWS attachment and execute the <b>Process</b> operation.
    --  ------------------------------
    procedure Process_Part (Part    : in AWS.Attachments.Element;
-                           Process : not null access procedure (Part : in ASF.Parts.Part'Class)) is
+                           Process : not null access procedure (Part : in Servlet.Parts.Part'Class)) is
       P : AWS_Part;
    begin
       P.Element := Part;
       Process (P);
    end Process_Part;
 
-end ASF.Parts.Web;
+end Servlet.Parts.Web;
