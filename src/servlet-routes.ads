@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-routes -- Request routing
+--  servlet-routes -- Request routing
 --  Copyright (C) 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -23,7 +23,7 @@ with Util.Refs;
 with EL.Expressions;
 with EL.Contexts;
 
-package ASF.Routes is
+package Servlet.Routes is
 
    type Route_Type is abstract new Util.Refs.Ref_Entity with null record;
    type Route_Type_Access is access all Route_Type'Class;
@@ -299,4 +299,4 @@ private
                      Node   : in Route_Node_Access;
                      Kind   : in Route_Match_Type);
 
-end ASF.Routes;
+end Servlet.Routes;
