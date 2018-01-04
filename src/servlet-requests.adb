@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests -- ASF Requests
+--  servlet-requests -- Servlet Requests
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,29 +18,29 @@
 with Ada.Unchecked_Deallocation;
 with Ada.Strings.Fixed;
 
-with ASF.Servlets;
-with ASF.Routes.Servlets;
+with Servlet.Servlets;
+with Servlet.Routes.Servlets;
 
 with Util.Strings;
 with Util.Strings.Transforms;
 with Util.Strings.Tokenizers;
 with Util.Dates.RFC7231;
 
---  The <b>ASF.Requests</b> package is an Ada implementation of
+--  The <b>Servlet.Requests</b> package is an Ada implementation of
 --  the Java servlet request (JSR 315 3. The Request).
-package body ASF.Requests is
+package body Servlet.Requests is
 
-   use type ASF.Servlets.Servlet_Access;
-   use type ASF.Routes.Route_Type_Access;
+   use type Servlet.Servlets.Servlet_Access;
+   use type Servlet.Routes.Route_Type_Access;
 
-   function Get_Servlet (Req : in Request'Class) return ASF.Servlets.Servlet_Access;
+   function Get_Servlet (Req : in Request'Class) return Servlet.Servlets.Servlet_Access;
 
    --  ------------------------------
    --  Get the servlet associated with the request object.
    --  Returns null if there is no such servlet.
    --  ------------------------------
-   function Get_Servlet (Req : in Request'Class) return ASF.Servlets.Servlet_Access is
-      Route : ASF.Routes.Route_Type_Access;
+   function Get_Servlet (Req : in Request'Class) return Servlet.Servlets.Servlet_Access is
+      Route : Servlet.Routes.Route_Type_Access;
    begin
       if Req.Context = null then
          return null;
@@ -49,7 +49,7 @@ package body ASF.Requests is
       if Route = null then
          return null;
       end if;
-      return ASF.Routes.Servlets.Servlet_Route_Type'Class (Route.all).Servlet;
+      return Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.all).Servlet;
    end Get_Servlet;
 
    --  ------------------------------
@@ -454,10 +454,10 @@ package body ASF.Requests is
    --  Make sure the cookies are loaded in the request object.
    --  ------------------------------
    procedure Load_Cookies (Req : in Request'Class) is
-      use type ASF.Cookies.Cookie_Array_Access;
+      use type Servlet.Cookies.Cookie_Array_Access;
    begin
       if Req.Info.Cookies = null then
-         Req.Info.Cookies := ASF.Cookies.Get_Cookies (Req.Get_Header ("Cookie"));
+         Req.Info.Cookies := Servlet.Cookies.Get_Cookies (Req.Get_Header ("Cookie"));
       end if;
    end Load_Cookies;
 
@@ -465,7 +465,7 @@ package body ASF.Requests is
    --  Returns an array containing all of the Cookie  objects the client sent with
    --  this request. This method returns null if no cookies were sent.
    --  ------------------------------
-   function Get_Cookies (Req : in Request) return ASF.Cookies.Cookie_Array is
+   function Get_Cookies (Req : in Request) return Servlet.Cookies.Cookie_Array is
    begin
       Req.Load_Cookies;
       return Req.Info.Cookies.all;
@@ -476,8 +476,8 @@ package body ASF.Requests is
    --  ------------------------------
    procedure Iterate_Cookies (Req     : in Request;
                               Process : not null access
-                                procedure (Cookie : in ASF.Cookies.Cookie)) is
-      use type ASF.Cookies.Cookie_Array_Access;
+                                procedure (Cookie : in Servlet.Cookies.Cookie)) is
+      use type Servlet.Cookies.Cookie_Array_Access;
    begin
       Req.Load_Cookies;
       for I in Req.Info.Cookies'Range loop
@@ -566,7 +566,7 @@ package body ASF.Requests is
       if Req.Context = null then
          return "";
       else
-         return ASF.Routes.Get_Path (Req.Context.all, ASF.Routes.SUFFIX);
+         return Servlet.Routes.Get_Path (Req.Context.all, Servlet.Routes.SUFFIX);
       end if;
    end Get_Path_Info;
 
@@ -578,7 +578,7 @@ package body ASF.Requests is
       if Req.Context = null then
          return "";
       else
-         return ASF.Routes.Get_Path (Req.Context.all, ASF.Routes.FULL);
+         return Servlet.Routes.Get_Path (Req.Context.all, Servlet.Routes.FULL);
       end if;
    end Get_Path;
 
@@ -590,7 +590,7 @@ package body ASF.Requests is
    --  The container does not decode this string.
    --  ------------------------------
    function Get_Context_Path (Req : in Request) return String is
-      Servlet : constant ASF.Servlets.Servlet_Access := Get_Servlet (Req);
+      Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
    begin
       if Servlet = null then
          return "/";
@@ -615,8 +615,8 @@ package body ASF.Requests is
    --  and type of authentication. Same as the value of the CGI variable REMOTE_USER.
    --  ------------------------------
    function Get_Remote_User (Req : in Request) return String is
-      use type ASF.Principals.Principal_Access;
-      Principal : constant ASF.Principals.Principal_Access := Req.Get_User_Principal;
+      use type Servlet.Principals.Principal_Access;
+      Principal : constant Servlet.Principals.Principal_Access := Req.Get_User_Principal;
    begin
       if Principal = null then
          return "";
@@ -629,7 +629,7 @@ package body ASF.Requests is
    --  Returns a Principal object containing the name of the current
    --  authenticated user. If the user has not been authenticated, the method returns null.
    --  ------------------------------
-   function Get_User_Principal (Req : in Request) return ASF.Principals.Principal_Access is
+   function Get_User_Principal (Req : in Request) return Servlet.Principals.Principal_Access is
    begin
       if not Req.Info.Session_Initialized then
          --  Look if the session exist
@@ -653,8 +653,8 @@ package body ASF.Requests is
    begin
       Req.Load_Cookies;
       for I in Req.Info.Cookies'Range loop
-         if ASF.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
-            return ASF.Cookies.Get_Value (Req.Info.Cookies (I));
+         if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
+            return Servlet.Cookies.Get_Value (Req.Info.Cookies (I));
          end if;
       end loop;
       return "";
@@ -706,7 +706,7 @@ package body ASF.Requests is
       if Req.Context = null then
          return "";
       else
-         return ASF.Routes.Get_Path (Req.Context.all, ASF.Routes.PREFIX);
+         return Servlet.Routes.Get_Path (Req.Context.all, Servlet.Routes.PREFIX);
       end if;
    end Get_Servlet_Path;
 
@@ -717,10 +717,10 @@ package body ASF.Requests is
    begin
       Req.Load_Cookies;
       for I in Req.Info.Cookies'Range loop
-         if ASF.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
+         if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
             declare
-               Servlet : constant ASF.Servlets.Servlet_Access := Get_Servlet (Req);
-               SID     : constant String := ASF.Cookies.Get_Value (Req.Info.Cookies (I));
+               Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
+               SID     : constant String := Servlet.Cookies.Get_Value (Req.Info.Cookies (I));
                Ctx     : constant Servlets.Servlet_Registry_Access := Servlet.Get_Servlet_Context;
             begin
                Ctx.Find_Session (Id     => SID,
@@ -745,7 +745,7 @@ package body ASF.Requests is
    --  committed, an IllegalStateException is thrown.
    --  ------------------------------
    function Get_Session (Req    : in Request;
-                         Create : in Boolean := False) return ASF.Sessions.Session is
+                         Create : in Boolean := False) return Servlet.Sessions.Session is
       Has_Session : Boolean;
    begin
       if not Req.Info.Session_Initialized then
@@ -759,16 +759,16 @@ package body ASF.Requests is
       --  Create the session if necessary.
       if Create and not Has_Session then
          declare
-            Servlet : constant ASF.Servlets.Servlet_Access := Get_Servlet (Req);
-            Ctx     : constant ASF.Servlets.Servlet_Registry_Access
+            Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
+            Ctx     : constant Servlet.Servlets.Servlet_Registry_Access
               := Servlet.Get_Servlet_Context;
          begin
             Ctx.Create_Session (Req.Info.Session);
             declare
-               C : ASF.Cookies.Cookie
-                 := ASF.Cookies.Create ("SID", Req.Info.Session.Get_Id);
+               C : Servlet.Cookies.Cookie
+                 := Servlet.Cookies.Create ("SID", Req.Info.Session.Get_Id);
             begin
-               ASF.Cookies.Set_Path (C, Req.Get_Context_Path);
+               Servlet.Cookies.Set_Path (C, Req.Get_Context_Path);
                Req.Info.Response.Add_Cookie (Cookie => C);
             end;
          end;
@@ -812,7 +812,7 @@ package body ASF.Requests is
    --  ------------------------------
    function Get_Resource (Req  : in Request;
                           Path : in String) return String is
-      Servlet : constant ASF.Servlets.Servlet_Access := Get_Servlet (Req);
+      Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
    begin
       if Servlet = null then
          return "";
@@ -824,12 +824,12 @@ package body ASF.Requests is
    --  ------------------------------
    --  Returns the route object that is associated with the request.
    --  ------------------------------
-   function Get_Route (Req : in Request) return ASF.Routes.Route_Type_Access is
+   function Get_Route (Req : in Request) return Servlet.Routes.Route_Type_Access is
    begin
       if Req.Context = null then
          return null;
       else
-         return ASF.Routes.Get_Route (Req.Context.all);
+         return Servlet.Routes.Get_Route (Req.Context.all);
       end if;
    end Get_Route;
 
@@ -841,7 +841,7 @@ package body ASF.Requests is
                                 ELContext : in EL.Contexts.ELContext'Class) is
    begin
       if Req.Context /= null then
-         ASF.Routes.Inject_Parameters (Req.Context.all, Req.Attributes, ELContext);
+         Servlet.Routes.Inject_Parameters (Req.Context.all, Req.Attributes, ELContext);
       end if;
    end Inject_Parameters;
 
@@ -853,9 +853,9 @@ package body ASF.Requests is
                                 Index   : in Positive) return String is
    begin
       if Req.Context /= null then
-         return ASF.Routes.Get_Parameter (Req.Context.all, Index);
+         return Servlet.Routes.Get_Parameter (Req.Context.all, Index);
       else
-         raise ASF.Routes.No_Parameter;
+         raise Servlet.Routes.No_Parameter;
       end if;
    end Get_Path_Parameter;
 
@@ -865,7 +865,7 @@ package body ASF.Requests is
    function Get_Path_Parameter_Count (Req     : in Request) return Natural is
    begin
       if Req.Context /= null then
-         return ASF.Routes.Get_Parameter_Count (Req.Context.all);
+         return Servlet.Routes.Get_Parameter_Count (Req.Context.all);
       else
          return 0;
       end if;
@@ -875,8 +875,8 @@ package body ASF.Requests is
    --  Get a buffer stream to read the request body.
    --  ------------------------------
    function Get_Input_Stream (Req : in Request)
-                              return ASF.Streams.Input_Stream_Access is
-      use type ASF.Streams.Input_Stream_Access;
+                              return Servlet.Streams.Input_Stream_Access is
+      use type Servlet.Streams.Input_Stream_Access;
    begin
       if Req.Info.Stream = null then
          Req.Info.Stream := Request'Class (Req).Create_Input_Stream;
@@ -899,15 +899,15 @@ package body ASF.Requests is
    overriding
    procedure Finalize (Req : in out Request) is
       procedure Free is new Ada.Unchecked_Deallocation (Request_Data, Request_Data_Access);
-      procedure Free is new Ada.Unchecked_Deallocation (ASF.Cookies.Cookie_Array,
-                                                        ASF.Cookies.Cookie_Array_Access);
+      procedure Free is new Ada.Unchecked_Deallocation (Servlet.Cookies.Cookie_Array,
+                                                        Servlet.Cookies.Cookie_Array_Access);
       procedure Free is
-        new Ada.Unchecked_Deallocation (ASF.Streams.Input_Stream'Class,
-                                        ASF.Streams.Input_Stream_Access);
+        new Ada.Unchecked_Deallocation (Servlet.Streams.Input_Stream'Class,
+                                        Servlet.Streams.Input_Stream_Access);
    begin
       Free (Req.Info.Stream);
       Free (Req.Info.Cookies);
       Free (Req.Info);
    end Finalize;
 
-end ASF.Requests;
+end Servlet.Requests;
