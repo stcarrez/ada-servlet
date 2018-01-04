@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-parts-web -- Servlet Parts on top of AWS attachments
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,7 +60,7 @@ package body Servlet.Parts.Web is
    --  Build a part instance from the AWS attachment and execute the <b>Process</b> operation.
    --  ------------------------------
    procedure Process_Part (Part    : in AWS.Attachments.Element;
-                           Process : not null access procedure (Part : in Servlet.Parts.Part'Class)) is
+                           Process : not null access procedure (Part : in Parts.Part'Class)) is
       P : AWS_Part;
    begin
       P.Element := Part;
