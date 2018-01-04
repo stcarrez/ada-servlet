@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  Servlets Tests - Unit tests for ASF.Servlets
+--  Servlets Tests - Unit tests for Servlet.Servlets
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -21,7 +21,7 @@ with Util.Beans.Basic;
 with Util.Beans.Methods;
 with Util.Beans.Objects;
 
-package ASF.Servlets.Tests is
+package Servlet.Servlets.Tests is
 
    use Ada.Strings.Unbounded;
 
@@ -126,4 +126,4 @@ package ASF.Servlets.Tests is
    --  Create a list of forms.
 --     function Create_Form_List return Util.Beans.Basic.Readonly_Bean_Access;
 
-end ASF.Servlets.Tests;
+end Servlet.Servlets.Tests;
