@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  ASF testsuite - Ada Server Faces Test suite
+--  Servlet testsuite - Ada Server Faces Test suite
 --  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,25 +15,25 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Sessions.Tests;
-with ASF.Servlets.Tests;
-with ASF.Security.Tests;
-with ASF.Requests.Tests;
-with ASF.Routes.Tests;
+with Servlet.Sessions.Tests;
+with Servlet.Servlets.Tests;
+with Servlet.Security.Tests;
+with Servlet.Requests.Tests;
+with Servlet.Routes.Tests;
 
-package body ASF.Testsuite is
+package body Servlet.Testsuite is
 
    Tests : aliased Util.Tests.Test_Suite;
 
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
-      ASF.Routes.Tests.Add_Tests (Ret);
-      ASF.Requests.Tests.Add_Tests (Ret);
-      ASF.Sessions.Tests.Add_Tests (Ret);
-      ASF.Servlets.Tests.Add_Tests (Ret);
-      ASF.Security.Tests.Add_Tests (Ret);
+      Servlet.Routes.Tests.Add_Tests (Ret);
+      Servlet.Requests.Tests.Add_Tests (Ret);
+      Servlet.Sessions.Tests.Add_Tests (Ret);
+      Servlet.Servlets.Tests.Add_Tests (Ret);
+      Servlet.Security.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
-end ASF.Testsuite;
+end Servlet.Testsuite;
