@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-servlets-mappers -- Read servlet configuration files
+--  servlet-servlets-mappers -- Read servlet configuration files
 --  Copyright (C) 2011, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -22,10 +22,10 @@ with Util.Beans.Objects.Vectors;
 
 with EL.Contexts;
 
---  The <b>ASF.Servlets.Mappers</b> package defines an XML mapper that can be used
+--  The <b>Servlet.Servlets.Mappers</b> package defines an XML mapper that can be used
 --  to read the servlet configuration files.
 --
---  The servlet configuration used by ASF is a subset of the servlet deployment descriptor
+--  The servlet configuration used by Servlet is a subset of the servlet deployment descriptor
 --  defined in JSR 315 - Java Servlet Specification Version 3.0.  It includes:
 --
 --  <ul>
@@ -38,9 +38,9 @@ with EL.Contexts;
 --
 --  Other configurations are ignored by the mapper.
 --
---  Note: several JSR 315 configuration parameters do not makes sense in the ASF world
+--  Note: several JSR 315 configuration parameters do not makes sense in the Servlet world
 --  because we cannot create a servlet or a filter through the configuration file.
-package ASF.Servlets.Mappers is
+package Servlet.Servlets.Mappers is
 
    type Servlet_Fields is (FILTER_MAPPING, FILTER_NAME, SERVLET_NAME,
                            URL_PATTERN, SERVLET_MAPPING,
@@ -96,4 +96,4 @@ private
                                                Fields              => Servlet_Fields,
                                                Set_Member          => Set_Member);
 
-end ASF.Servlets.Mappers;
+end Servlet.Servlets.Mappers;
