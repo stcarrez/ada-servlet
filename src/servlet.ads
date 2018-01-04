@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  asf -- Ada Server Faces
---  Copyright (C) 2009, 2010 Stephane Carrez
+--  servlet -- Ada Servlet
+--  Copyright (C) 2009, 2010, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  Ada Server Faces is an adapted implementation of JSR 252,
---  the Java Server Faces for Ada 2005.
-package ASF is
+--  Ada Servlet is an adapted implementation of JSR 154 and 315,
+--  the Java Servlet for Ada 2005.
+package Servlet is
 
    pragma Pure;
 
-end ASF;
+end Servlet;
