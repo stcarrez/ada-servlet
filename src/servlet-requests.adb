@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -590,7 +590,7 @@ package body Servlet.Requests is
    --  The container does not decode this string.
    --  ------------------------------
    function Get_Context_Path (Req : in Request) return String is
-      Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
+      Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
    begin
       if Servlet = null then
          return "/";
@@ -719,8 +719,8 @@ package body Servlet.Requests is
       for I in Req.Info.Cookies'Range loop
          if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
             declare
-               Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
-               SID     : constant String := Servlet.Cookies.Get_Value (Req.Info.Cookies (I));
+               Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
+               SID     : constant String := Cookies.Get_Value (Req.Info.Cookies (I));
                Ctx     : constant Servlets.Servlet_Registry_Access := Servlet.Get_Servlet_Context;
             begin
                Ctx.Find_Session (Id     => SID,
@@ -759,16 +759,16 @@ package body Servlet.Requests is
       --  Create the session if necessary.
       if Create and not Has_Session then
          declare
-            Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
-            Ctx     : constant Servlet.Servlets.Servlet_Registry_Access
+            Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
+            Ctx     : constant Servlets.Servlet_Registry_Access
               := Servlet.Get_Servlet_Context;
          begin
             Ctx.Create_Session (Req.Info.Session);
             declare
-               C : Servlet.Cookies.Cookie
-                 := Servlet.Cookies.Create ("SID", Req.Info.Session.Get_Id);
+               C : Cookies.Cookie
+                 := Cookies.Create ("SID", Req.Info.Session.Get_Id);
             begin
-               Servlet.Cookies.Set_Path (C, Req.Get_Context_Path);
+               Cookies.Set_Path (C, Req.Get_Context_Path);
                Req.Info.Response.Add_Cookie (Cookie => C);
             end;
          end;
@@ -812,7 +812,7 @@ package body Servlet.Requests is
    --  ------------------------------
    function Get_Resource (Req  : in Request;
                           Path : in String) return String is
-      Servlet : constant Servlet.Servlets.Servlet_Access := Get_Servlet (Req);
+      Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
    begin
       if Servlet = null then
          return "";
