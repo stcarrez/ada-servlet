@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-parts -- ASF Parts
+--  servlet-parts -- Servlet Parts
 --  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,9 +20,9 @@ with Ada.IO_Exceptions;
 
 with Util.Log.Loggers;
 
-package body ASF.Parts is
+package body Servlet.Parts is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Parts");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Parts");
 
    --  ------------------------------
    --  Write the part data item to the file.  This method is not guaranteed to succeed
@@ -54,4 +54,4 @@ package body ASF.Parts is
       Ada.Directories.Delete_File (Path);
    end Delete;
 
-end ASF.Parts;
+end Servlet.Parts;
