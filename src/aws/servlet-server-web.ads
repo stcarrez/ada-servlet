@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.server -- ASF Server for AWS
+--  servlet-server -- Servlet Server for AWS
 --  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,9 +18,9 @@
 
 with AWS.Config;
 private with AWS.Server;
-package ASF.Server.Web is
+package Servlet.Server.Web is
 
-   use ASF;
+   use Servlet;
 
    type AWS_Container is new Container with private;
 
@@ -44,4 +44,4 @@ private
       Conf : AWS.Config.Object;
    end record;
 
-end ASF.Server.Web;
+end Servlet.Server.Web;
