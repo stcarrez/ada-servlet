@@ -2,15 +2,15 @@ with "@UTIL_DIR@config";
 with "@UTIL_DIR@util";
 with "@UTIL_DIR@util_unit";
 with "@EL_DIR@el";
-with "asf";
-with "asf_unit";
+with "servlet";
+with "servlet_unit";
 
-project Asf_Tests is
+project Servlet_Tests is
 
-   Mains := ("asf_harness.adb");
+   Mains := ("servlet_harness.adb");
 
    for Source_Dirs use ("regtests");
-   case Asf.Server is
+   case Servlet.Server is
       when "aws" =>
           for Source_Dirs use project'Source_Dirs & ("regtests/aws");
 
@@ -28,4 +28,4 @@ project Asf_Tests is
    package Compiler renames Config.Compiler;
    package Linker renames Config.Linker;
 
-end Asf_Tests;
+end Servlet_Tests;
