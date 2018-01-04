@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-routes-tests - Unit tests for ASF.Routes
+--  servlet-routes-tests - Unit tests for Servlet.Routes
 --  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,9 +20,9 @@ with Ada.Strings.Unbounded;
 
 with Util.Tests;
 with Util.Beans.Objects;
-with ASF.Tests;
+with Servlet.Tests;
 
-package ASF.Routes.Tests is
+package Servlet.Routes.Tests is
 
    --  A test bean to verify the path parameter injection.
    type Test_Bean is new Util.Beans.Basic.Bean with record
@@ -50,7 +50,7 @@ package ASF.Routes.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test is new ASF.Tests.EL_Test with record
+   type Test is new Servlet.Tests.EL_Test with record
       Routes : Test_Route_Array;
       Bean   : Test_Bean_Access;
    end record;
@@ -92,4 +92,4 @@ package ASF.Routes.Tests is
    --  Test the Iterate over several paths.
    procedure Test_Iterate (T : in out Test);
 
-end ASF.Routes.Tests;
+end Servlet.Routes.Tests;
