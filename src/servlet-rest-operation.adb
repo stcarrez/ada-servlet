@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-rest-operation -- REST API Operation Definition
+--  servlet-rest-operation -- REST API Operation Definition
 --  Copyright (C) 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-package body ASF.Rest.Operation is
+package body Servlet.Rest.Operation is
 
    URI_Mapping : aliased String := URI;
    Desc        : aliased Static_Descriptor
@@ -30,4 +30,4 @@ package body ASF.Rest.Operation is
       return Desc'Access;
    end Definition;
 
-end ASF.Rest.Operation;
+end Servlet.Rest.Operation;
