@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-streams -- Print streams for servlets
+--  servlet-streams -- Print streams for servlets
 --  Copyright (C) 2010, 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -24,7 +24,7 @@ with Util.Streams;
 with Util.Streams.Texts;
 with Util.Streams.Buffered;
 with EL.Objects;
-package ASF.Streams is
+package Servlet.Streams is
 
    subtype Input_Stream is Util.Streams.Buffered.Input_Buffer_Stream;
    type Input_Stream_Access is access all Input_Stream'Class;
@@ -96,4 +96,4 @@ private
       Target : Util.Streams.Texts.Print_Stream_Access;
    end record;
 
-end ASF.Streams;
+end Servlet.Streams;
