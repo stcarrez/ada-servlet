@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets.measures -- Dump performance measurements
---  Copyright (C) 2010, 2011, 2015 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ package Servlet.Servlets.Measures is
 
    --  The <b>Measure_Servlet</b> reports the measures collected by the
    --  application with the <b>Util.Measures</b> library.
-   type Measure_Servlet is limited new Servlet and Servlet.Filters.Filter with private;
+   type Measure_Servlet is limited new Servlet and Filters.Filter with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
@@ -105,11 +105,11 @@ package Servlet.Servlets.Measures is
    procedure Do_Filter (F        : in Measure_Servlet;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain);
+                        Chain    : in out Servlets.Filter_Chain);
 
 private
 
-   type Measure_Servlet is limited new Servlet and Servlet.Filters.Filter with record
+   type Measure_Servlet is limited new Servlet and Filters.Filter with record
       Measures  : aliased Util.Measures.Measure_Set;
       Current   : Util.Measures.Measure_Set_Access;
    end record;
