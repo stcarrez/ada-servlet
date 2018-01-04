@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.filters.dump -- Filter to dump the request information
+--  servlet-filters.dump -- Filter to dump the request information
 --  Copyright (C) 2010 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,16 +15,16 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Servlets;
 
---  The <b>ASF.Filters.Dump</b> package provides a debugging filter which
+--  The <b>Servlet.Filters.Dump</b> package provides a debugging filter which
 --  can be activated in the request flow to dump the request content into
 --  some log file before processing the request.
-package ASF.Filters.Dump is
+package Servlet.Filters.Dump is
 
-   type Dump_Filter is new ASF.Filters.Filter with null record;
+   type Dump_Filter is new Servlet.Filters.Filter with null record;
 
    --  The Do_Filter method of the Filter is called by the container each time
    --  a request/response pair is passed through the chain due to a client request
@@ -47,6 +47,6 @@ package ASF.Filters.Dump is
    procedure Do_Filter (F        : in Dump_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain);
+                        Chain    : in out Servlet.Servlets.Filter_Chain);
 
-end ASF.Filters.Dump;
+end Servlet.Filters.Dump;
