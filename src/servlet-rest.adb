@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-rest -- REST Support
+--  servlet-rest -- REST Support
 --  Copyright (C) 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,14 +15,14 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Routes;
-with ASF.Routes.Servlets.Rest;
-with ASF.Servlets.Rest;
+with Servlet.Routes;
+with Servlet.Routes.Servlets.Rest;
+with Servlet.Servlets.Rest;
 with EL.Contexts.Default;
 with Util.Log.Loggers;
-package body ASF.Rest is
+package body Servlet.Rest is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Rest");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Rest");
 
    --  ------------------------------
    --  Get the permission index associated with the REST operation.
@@ -46,29 +46,29 @@ package body ASF.Rest is
    --  ------------------------------
    --  Register the list of API descriptors for a given servlet and a root path.
    --  ------------------------------
-   procedure Register (Registry  : in out ASF.Servlets.Servlet_Registry;
+   procedure Register (Registry  : in out Servlet.Servlets.Servlet_Registry;
                        Name      : in String;
                        URI       : in String;
                        ELContext : in EL.Contexts.ELContext'Class;
                        List      : in Descriptor_Access) is
-      procedure Insert (Route : in out ASF.Routes.Route_Type_Ref);
-      use type ASF.Routes.Route_Type_Access;
+      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref);
+      use type Servlet.Routes.Route_Type_Access;
       Item : Descriptor_Access := List;
 
-      procedure Insert (Route : in out ASF.Routes.Route_Type_Ref) is
-         R : constant ASF.Routes.Route_Type_Access := Route.Value;
-         D : ASF.Routes.Servlets.Rest.API_Route_Type_Access;
+      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
+         R : constant Servlet.Routes.Route_Type_Access := Route.Value;
+         D : Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
       begin
          if R /= null then
-            if not (R.all in ASF.Routes.Servlets.Rest.API_Route_Type'Class) then
+            if not (R.all in Servlet.Routes.Servlets.Rest.API_Route_Type'Class) then
                Log.Error ("Route API for {0}/{1} already used by another page",
                           URI, Item.Pattern.all);
                return;
             end if;
-            D := ASF.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
+            D := Servlet.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
          else
-            D := ASF.Servlets.Rest.Create_Route (Registry, Name);
-            Route := ASF.Routes.Route_Type_Refs.Create (D.all'Access);
+            D := Servlet.Servlets.Rest.Create_Route (Registry, Name);
+            Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
          end if;
          if D.Descriptors (Item.Method) /= null then
             Log.Error ("Route API for {0}/{1} is already used", URI, Item.Pattern.all);
@@ -88,39 +88,39 @@ package body ASF.Rest is
    --  Dispatch the request to the API handler.
    overriding
    procedure Dispatch (Handler : in Static_Descriptor;
-                       Req     : in out ASF.Rest.Request'Class;
-                       Reply   : in out ASF.Rest.Response'Class;
+                       Req     : in out Servlet.Rest.Request'Class;
+                       Reply   : in out Servlet.Rest.Response'Class;
                        Stream  : in out Output_Stream'Class) is
    begin
       Handler.Handler (Req, Reply, Stream);
    end Dispatch;
 
    --  Register the API definition in the servlet registry.
-   procedure Register (Registry   : in out ASF.Servlets.Servlet_Registry'Class;
+   procedure Register (Registry   : in out Servlet.Servlets.Servlet_Registry'Class;
                        Definition : in Descriptor_Access) is
-      use type ASF.Routes.Route_Type_Access;
-      use type ASF.Servlets.Servlet_Access;
+      use type Servlet.Routes.Route_Type_Access;
+      use type Servlet.Servlets.Servlet_Access;
 
-      Dispatcher : constant ASF.Servlets.Request_Dispatcher
+      Dispatcher : constant Servlet.Servlets.Request_Dispatcher
          := Registry.Get_Request_Dispatcher (Definition.Pattern.all);
-      Servlet    : constant ASF.Servlets.Servlet_Access := ASF.Servlets.Get_Servlet (Dispatcher);
+      Servlet    : constant Servlet.Servlets.Servlet_Access := Servlet.Servlets.Get_Servlet (Dispatcher);
 
-      procedure Insert (Route : in out ASF.Routes.Route_Type_Ref) is
-         R : constant ASF.Routes.Route_Type_Access := Route.Value;
-         D : ASF.Routes.Servlets.Rest.API_Route_Type_Access;
+      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
+         R : constant Servlet.Routes.Route_Type_Access := Route.Value;
+         D : Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
       begin
          if R /= null then
-            if not (R.all in ASF.Routes.Servlets.Rest.API_Route_Type'Class) then
+            if not (R.all in Servlet.Routes.Servlets.Rest.API_Route_Type'Class) then
                Log.Error ("Route API for {0} already used by another page",
                           Definition.Pattern.all);
-               D := ASF.Servlets.Rest.Create_Route (Servlet);
-               Route := ASF.Routes.Route_Type_Refs.Create (D.all'Access);
+               D := Servlet.Servlets.Rest.Create_Route (Servlet);
+               Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
             else
-               D := ASF.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
+               D := Servlet.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
             end if;
          else
-            D := ASF.Servlets.Rest.Create_Route (Servlet);
-            Route := ASF.Routes.Route_Type_Refs.Create (D.all'Access);
+            D := Servlet.Servlets.Rest.Create_Route (Servlet);
+            Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
          end if;
          if D.Descriptors (Definition.Method) /= null then
             Log.Error ("Route API for {0} is already used", Definition.Pattern.all);
@@ -138,4 +138,4 @@ package body ASF.Rest is
       Registry.Add_Route (Definition.Pattern.all, Ctx, Insert'Access);
    end Register;
 
-end ASF.Rest;
+end Servlet.Rest;
