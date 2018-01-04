@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests -- ASF Requests
+--  servlet-requests -- Servlet Requests
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -26,17 +26,17 @@ with Ada.Calendar;
 with Ada.Strings.Unbounded;
 with Ada.Finalization;
 
-with ASF.Cookies;
-with ASF.Sessions;
-with ASF.Responses;
-with ASF.Principals;
-with ASF.Parts;
-with ASF.Routes;
-with ASF.Streams;
+with Servlet.Cookies;
+with Servlet.Sessions;
+with Servlet.Responses;
+with Servlet.Principals;
+with Servlet.Parts;
+with Servlet.Routes;
+with Servlet.Streams;
 
---  The <b>ASF.Requests</b> package is an Ada implementation of
+--  The <b>Servlet.Requests</b> package is an Ada implementation of
 --  the Java servlet request (JSR 315 3. The Request).
-package ASF.Requests is
+package Servlet.Requests is
 
    use Ada.Strings.Unbounded;
 
@@ -228,12 +228,12 @@ package ASF.Requests is
 
    --  Returns an array containing all of the Cookie  objects the client sent with
    --  this request. This method returns null if no cookies were sent.
-   function Get_Cookies (Req : in Request) return ASF.Cookies.Cookie_Array;
+   function Get_Cookies (Req : in Request) return Servlet.Cookies.Cookie_Array;
 
    --  Iterate over the request cookies and executes the <b>Process</b> procedure.
    procedure Iterate_Cookies (Req     : in Request;
                               Process : not null access
-                                procedure (Cookie : in ASF.Cookies.Cookie));
+                                procedure (Cookie : in Servlet.Cookies.Cookie));
 
    --  Returns the value of the specified request header as a long value that
    --  represents a Date object. Use this method with headers that contain dates,
@@ -317,7 +317,7 @@ package ASF.Requests is
 
    --  Returns a Principal object containing the name of the current
    --  authenticated user. If the user has not been authenticated, the method returns null.
-   function Get_User_Principal (Req : in Request) return ASF.Principals.Principal_Access;
+   function Get_User_Principal (Req : in Request) return Servlet.Principals.Principal_Access;
 
    --  Returns the session ID specified by the client. This may not be the same as
    --  the ID of the current valid session for this request. If the client did not
@@ -367,7 +367,7 @@ package ASF.Requests is
    --  session integrity and is asked to create a new session when the response is
    --  committed, an IllegalStateException is thrown.
    function Get_Session (Req    : in Request;
-                         Create : in Boolean := False) return ASF.Sessions.Session;
+                         Create : in Boolean := False) return Servlet.Sessions.Session;
 
    --  Set the path info.  The <tt>Path_Pos</tt> parameter indicates the optional starting
    --  position for the path info.  When specified, the servlet path is built from the
@@ -384,14 +384,14 @@ package ASF.Requests is
    procedure Process_Part (Req      : in out Request;
                            Position : in Positive;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class)) is abstract;
+                             procedure (Data : in Servlet.Parts.Part'Class)) is abstract;
 
    --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class)) is abstract;
+                             procedure (Data : in Servlet.Parts.Part'Class)) is abstract;
 
    --  Returns True if the request is an AJAX request.
    function Is_Ajax_Request (Req : in Request) return Boolean;
@@ -409,7 +409,7 @@ package ASF.Requests is
                           Path : in String) return String;
 
    --  Returns the route object that is associated with the request.
-   function Get_Route (Req : in Request) return ASF.Routes.Route_Type_Access;
+   function Get_Route (Req : in Request) return Servlet.Routes.Route_Type_Access;
 
    --  Inject the parameters that have been extracted from the path according
    --  to the selected route.  The parameters are injected in the request attributes map.
@@ -426,11 +426,11 @@ package ASF.Requests is
 
    --  Get a buffer stream to read the request body.
    function Get_Input_Stream (Req : in Request)
-                              return ASF.Streams.Input_Stream_Access;
+                              return Servlet.Streams.Input_Stream_Access;
 
    --  Create the buffer stream instance to read the request body.
    function Create_Input_Stream (Req : in Request)
-                                 return ASF.Streams.Input_Stream_Access is (null);
+                                 return Servlet.Streams.Input_Stream_Access is (null);
 
    --  Initialize the request object.
    overriding
@@ -450,26 +450,26 @@ private
 
    type Request_Data is record
       --  The session
-      Session             : ASF.Sessions.Session;
+      Session             : Servlet.Sessions.Session;
 
       --  Indicates whether the session object is known.
       Session_Initialized : Boolean := False;
 
       --  The response object associated with the request.
-      Response            : ASF.Responses.Response_Access;
+      Response            : Servlet.Responses.Response_Access;
 
       --  The request cookies.
-      Cookies             : ASF.Cookies.Cookie_Array_Access := null;
+      Cookies             : Servlet.Cookies.Cookie_Array_Access := null;
 
       --  The input stream.
-      Stream              : ASF.Streams.Input_Stream_Access;
+      Stream              : Servlet.Streams.Input_Stream_Access;
    end record;
    type Request_Data_Access is access Request_Data;
 
    type Request is abstract new Ada.Finalization.Limited_Controlled with record
       Attributes  : Util.Beans.Objects.Maps.Map_Bean;
       Info        : Request_Data_Access := null;
-      Context     : access ASF.Routes.Route_Context_Type;
+      Context     : access Servlet.Routes.Route_Context_Type;
    end record;
 
-end ASF.Requests;
+end Servlet.Requests;
