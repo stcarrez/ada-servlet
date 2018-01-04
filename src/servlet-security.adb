@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-security -- ASF Security
+--  servlet-security -- Servlet Security
 --  Copyright (C) 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Util.Beans.Objects;
 with Security.Contexts; use Security;
-package body ASF.Security is
+package body Servlet.Security is
 
    function Has_Permission (Value : in Util.Beans.Objects.Object)
                             return Util.Beans.Objects.Object;
@@ -39,7 +39,7 @@ package body ASF.Security is
 
    --  ------------------------------
    --  Register a set of functions in the namespace
-   --  xmlns:fn="http://code.google.com/p/ada-asf/auth"
+   --  xmlns:fn="http://code.google.com/p/ada-servlet-auth"
    --  Functions:
    --    hasPermission(NAME)   --  Returns True if the permission NAME is granted
    --  ------------------------------
@@ -50,4 +50,4 @@ package body ASF.Security is
                            Func      => Has_Permission'Access);
    end Set_Functions;
 
-end ASF.Security;
+end Servlet.Security;
