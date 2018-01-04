@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-parts -- ASF Parts
+--  servlet-parts -- Servlet Parts
 --  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,9 +18,9 @@
 
 with Ada.Finalization;
 
---  The <b>ASF.Parts</b> package is an Ada implementation of the Java servlet part
+--  The <b>Servlet.Parts</b> package is an Ada implementation of the Java servlet part
 --  (JSR 315 3. The Request) provided by the <tt>javax.servlet.http.Part</tt> class.
-package ASF.Parts is
+package Servlet.Parts is
 
    --  ------------------------------
    --  Multi part content
@@ -57,4 +57,4 @@ private
 
    type Part is abstract new Ada.Finalization.Limited_Controlled with null record;
 
-end ASF.Parts;
+end Servlet.Parts;
