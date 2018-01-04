@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-requests-tests - Unit tests for requests
+--  servlet-requests-tests - Unit tests for requests
 --  Copyright (C) 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 
 with Util.Tests;
 
-package ASF.Requests.Tests is
+package Servlet.Requests.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -33,4 +33,4 @@ package ASF.Requests.Tests is
    --  Test the Set_Attribute procedure.
    procedure Test_Set_Attribute (T : in out Test);
 
-end ASF.Requests.Tests;
+end Servlet.Requests.Tests;
