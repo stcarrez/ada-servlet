@@ -16,30 +16,30 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Filters;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
-with ASF.Sessions;
-with ASF.Principals;
+with Servlet.Filters;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Servlets;
+with Servlet.Sessions;
+with Servlet.Principals;
 with Security.Policies;  use Security;
 
 --  The <b>Security.Filters</b> package defines a servlet filter that can be activated
 --  on requests to authenticate users and verify they have the permission to view
 --  a page.
-package ASF.Security.Filters is
+package Servlet.Security.Filters is
 
    SID_COOKIE : constant String := "SID";
 
    AID_COOKIE : constant String := "AID";
 
-   type Auth_Filter is new ASF.Filters.Filter with private;
+   type Auth_Filter is new Servlet.Filters.Filter with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    overriding
    procedure Initialize (Server  : in out Auth_Filter;
-                         Config  : in ASF.Servlets.Filter_Config);
+                         Config  : in Servlet.Servlets.Filter_Config);
 
    --  Set the permission manager that must be used to verify the permission.
    procedure Set_Permission_Manager (Filter  : in out Auth_Filter;
@@ -51,21 +51,21 @@ package ASF.Security.Filters is
    --  to view the page.  Invokes the <b>Do_Deny</b> procedure if the permission
    --  is denied.
    procedure Do_Filter (F        : in Auth_Filter;
-                        Request  : in out ASF.Requests.Request'Class;
-                        Response : in out ASF.Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain);
+                        Request  : in out Servlet.Requests.Request'Class;
+                        Response : in out Servlet.Responses.Response'Class;
+                        Chain    : in out Servlet.Servlets.Filter_Chain);
 
    --  Display or redirects the user to the login page.  This procedure is called when
    --  the user is not authenticated.
    procedure Do_Login (F        : in Auth_Filter;
-                       Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class);
+                       Request  : in out Servlet.Requests.Request'Class;
+                       Response : in out Servlet.Responses.Response'Class);
 
    --  Display the forbidden access page.  This procedure is called when the user is not
    --  authorized to see the page.  The default implementation returns the SC_FORBIDDEN error.
    procedure Do_Deny (F        : in Auth_Filter;
-                      Request  : in out ASF.Requests.Request'Class;
-                      Response : in out ASF.Responses.Response'Class);
+                      Request  : in out Servlet.Requests.Request'Class;
+                      Response : in out Servlet.Responses.Response'Class);
 
    --  Authenticate a user by using the auto-login cookie.  This procedure is called if the
    --  current session does not have any principal.  Based on the request and the optional
@@ -75,16 +75,16 @@ package ASF.Security.Filters is
    --
    --  The default implementation returns a null principal.
    procedure Authenticate (F        : in Auth_Filter;
-                           Request  : in out ASF.Requests.Request'Class;
-                           Response : in out ASF.Responses.Response'Class;
-                           Session  : in ASF.Sessions.Session;
+                           Request  : in out Servlet.Requests.Request'Class;
+                           Response : in out Servlet.Responses.Response'Class;
+                           Session  : in Servlet.Sessions.Session;
                            Auth_Id  : in String;
-                           Principal : out ASF.Principals.Principal_Access);
+                           Principal : out Servlet.Principals.Principal_Access);
 
 private
 
-   type Auth_Filter is new ASF.Filters.Filter with record
+   type Auth_Filter is new Servlet.Filters.Filter with record
       Manager : Policies.Policy_Manager_Access := null;
    end record;
 
-end ASF.Security.Filters;
+end Servlet.Security.Filters;
