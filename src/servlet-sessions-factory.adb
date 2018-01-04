@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.sessions.factory -- ASF Sessions factory
+--  servlet-sessions.factory -- Servlet Sessions factory
 --  Copyright (C) 2010, 2011, 2012, 2014, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -19,15 +19,15 @@
 with Util.Encoders.Base64;
 with Util.Log.Loggers;
 
---  The <b>ASF.Sessions.Factory</b> package is a factory for creating, searching
+--  The <b>Servlet.Sessions.Factory</b> package is a factory for creating, searching
 --  and deleting sessions.
-package body ASF.Sessions.Factory is
+package body Servlet.Sessions.Factory is
 
    use Ada.Finalization;
    use Ada.Strings.Unbounded;
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Sessions.Factory");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Sessions.Factory");
 
    --  ------------------------------
    --  Allocate a unique and random session identifier.  The default implementation
@@ -225,4 +225,4 @@ package body ASF.Sessions.Factory is
 
    end Session_Cache;
 
-end ASF.Sessions.Factory;
+end Servlet.Sessions.Factory;
