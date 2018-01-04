@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.servlets.files -- Static file servlet
+--  servlet-servlets.files -- Static file servlet
 --  Copyright (C) 2010, 2011, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -26,15 +26,15 @@ with Ada.Streams.Stream_IO;
 
 with Ada.Directories;
 
-with ASF.Streams;
-package body ASF.Servlets.Files is
+with Servlet.Streams;
+package body Servlet.Servlets.Files is
 
    use Ada.Streams;
    use Ada.Streams.Stream_IO;
    use Ada.Directories;
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Servlets.Files");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Servlets.Files");
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
@@ -180,7 +180,7 @@ package body ASF.Servlets.Files is
 
       File_Servlet'Class (Server).Set_Content_Type (Path, Response);
       declare
-         Output : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
+         Output : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
          Input  : Util.Streams.Files.File_Stream;
       begin
          Input.Open (Name => Path, Mode => In_File);
@@ -188,4 +188,4 @@ package body ASF.Servlets.Files is
       end;
    end Do_Get;
 
-end ASF.Servlets.Files;
+end Servlet.Servlets.Files;
