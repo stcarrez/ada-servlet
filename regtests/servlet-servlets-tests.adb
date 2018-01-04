@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Sessions Tests - Unit tests for Servlet.Sessions
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 
 with Util.Test_Caller;
 with Util.Measures;
-with Util.Beans.Objects;
 
 with EL.Contexts.Default;
 
@@ -85,7 +84,7 @@ package body Servlet.Servlets.Tests is
 
       ELContext      : aliased EL.Contexts.Default.Default_Context;
 --        Root_Resolver  : aliased Servlet.Beans.Resolvers.ELResolver;
-      Output         : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
+      Output         : Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       --  Minimal setting for the EL context creation to inject URI parameters in an Ada bean.
 --        Root_Resolver.Initialize (null, Request'Unchecked_Access);
@@ -115,12 +114,12 @@ package body Servlet.Servlets.Tests is
                             URI          : in String;
                             Servlet_Path : in String;
                             Path_Info    : in String) is
-      use type Servlet.Routes.Route_Type_Access;
+      use type Routes.Route_Type_Access;
 
       Dispatcher : constant Request_Dispatcher
         := Ctx.Get_Request_Dispatcher (Path => URI);
-      Req        : Servlet.Requests.Mockup.Request;
-      Resp       : Servlet.Responses.Mockup.Response;
+      Req        : Requests.Mockup.Request;
+      Resp       : Responses.Mockup.Response;
       Result     : Unbounded_String;
    begin
       T.Assert (Dispatcher.Context.Get_Route /= null, "No mapping found for " & URI);
@@ -135,13 +134,13 @@ package body Servlet.Servlets.Tests is
 
       --  Check the response after the Test_Servlet1.Do_Get method execution.
       Resp.Read_Content (Result);
-      Assert_Equals (T, Servlet.Responses.SC_OK, Resp.Get_Status, "Invalid status");
+      Assert_Equals (T, Responses.SC_OK, Resp.Get_Status, "Invalid status");
       Assert_Equals (T, "URI: test1", Result, "Invalid content");
 
       Req.Set_Method ("POST");
       Forward (Dispatcher, Req, Resp);
 
-      --  Assert_Equals (T, Servlet.Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
+      --  Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
       --               "Invalid status for an operation not implemented");
    end Check_Request;
 
@@ -189,8 +188,8 @@ package body Servlet.Servlets.Tests is
 
       S1  : aliased Test_Servlet1;
       S2  : aliased Test_Servlet2;
-      F1  : aliased Servlet.Filters.Dump.Dump_Filter;
-      F2  : aliased Servlet.Filters.Dump.Dump_Filter;
+      F1  : aliased Filters.Dump.Dump_Filter;
+      F2  : aliased Filters.Dump.Dump_Filter;
    begin
       Ctx.Add_Servlet ("Faces", S1'Unchecked_Access);
       Ctx.Add_Servlet ("Json", S2'Unchecked_Access);
@@ -218,8 +217,8 @@ package body Servlet.Servlets.Tests is
 
       S1  : aliased Test_Servlet1;
       S2  : aliased Test_Servlet2;
-      F1  : aliased Servlet.Filters.Tests.Test_Filter;
-      F2  : aliased Servlet.Filters.Tests.Test_Filter;
+      F1  : aliased Filters.Tests.Test_Filter;
+      F2  : aliased Filters.Tests.Test_Filter;
    begin
       Ctx.Add_Servlet ("Faces", S1'Unchecked_Access);
       Ctx.Add_Servlet ("Json", S2'Unchecked_Access);
@@ -303,23 +302,23 @@ package body Servlet.Servlets.Tests is
    --  ------------------------------
    procedure Test_Complex_Filter_Execution (T : in out Test) is
       use Util.Beans.Objects;
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref);
+      procedure Insert (Route : in out Routes.Route_Type_Ref);
 
       Ctx     : Servlet_Registry;
       S1      : aliased Test_Servlet1;
-      F1      : aliased Servlet.Filters.Tests.Test_Filter;
-      F2      : aliased Servlet.Filters.Tests.Test_Filter;
+      F1      : aliased Filters.Tests.Test_Filter;
+      F2      : aliased Filters.Tests.Test_Filter;
       User    : aliased Form_Bean;
       EL_Ctx  : EL.Contexts.Default.Default_Context;
-      Request : Servlet.Requests.Mockup.Request;
-      Reply   : Servlet.Responses.Mockup.Response;
+      Request : Requests.Mockup.Request;
+      Reply   : Responses.Mockup.Response;
 
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
-         To   : Servlet.Routes.Servlets.Faces.Faces_Route_Type_Access;
+      procedure Insert (Route : in out Routes.Route_Type_Ref) is
+         To   : Routes.Servlets.Faces.Faces_Route_Type_Access;
       begin
-         To := new Servlet.Routes.Servlets.Faces.Faces_Route_Type;
+         To := new Routes.Servlets.Faces.Faces_Route_Type;
          To.Servlet := S1'Unchecked_Access;
-         Route := Servlet.Routes.Route_Type_Refs.Create (To.all'Access);
+         Route := Routes.Route_Type_Refs.Create (To.all'Access);
       end Insert;
    begin
       Ctx.Add_Servlet ("Faces", S1'Unchecked_Access);
@@ -350,7 +349,7 @@ package body Servlet.Servlets.Tests is
 
          --  Check the response after the Test_Servlet1.Do_Get method execution.
          Reply.Read_Content (Result);
-         Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid status");
+         Assert_Equals (T, Responses.SC_OK, Reply.Get_Status, "Invalid status");
          Assert_Equals (T, "URI: /wikis/Gandalf/Mithrandir/view.html", Result, "Invalid content");
          Assert_Equals (T, "Gandalf", User.Name, "User name was not extracted from the URI");
 
@@ -371,7 +370,7 @@ package body Servlet.Servlets.Tests is
 
          --  Check the response after the Test_Servlet1.Do_Get method execution.
          Reply.Read_Content (Result);
-         Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid status");
+         Assert_Equals (T, Responses.SC_OK, Reply.Get_Status, "Invalid status");
          Assert_Equals (T, "URI: /wikis/Gandalf/Mithrandir/view", Result, "Invalid content");
          Assert_Equals (T, "Gandalf", User.Name, "User name was not extracted from the URI");
 
@@ -387,26 +386,26 @@ package body Servlet.Servlets.Tests is
    --  ------------------------------
    procedure Test_Cache_Control_Filter (T : in out Test) is
       use Util.Beans.Objects;
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref);
+      procedure Insert (Route : in out Routes.Route_Type_Ref);
 
       Ctx     : Servlet_Registry;
       S1      : aliased Test_Servlet1;
-      F1      : aliased Servlet.Filters.Cache_Control.Cache_Control_Filter;
-      F2      : aliased Servlet.Filters.Cache_Control.Cache_Control_Filter;
+      F1      : aliased Filters.Cache_Control.Cache_Control_Filter;
+      F2      : aliased Filters.Cache_Control.Cache_Control_Filter;
       User    : aliased Form_Bean;
       EL_Ctx  : EL.Contexts.Default.Default_Context;
-      Request : Servlet.Requests.Mockup.Request;
+      Request : Requests.Mockup.Request;
 
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
-         To   : Servlet.Routes.Servlets.Faces.Faces_Route_Type_Access;
+      procedure Insert (Route : in out Routes.Route_Type_Ref) is
+         To   : Routes.Servlets.Faces.Faces_Route_Type_Access;
       begin
-         To := new Servlet.Routes.Servlets.Faces.Faces_Route_Type;
+         To := new Routes.Servlets.Faces.Faces_Route_Type;
          To.Servlet := S1'Unchecked_Access;
-         Route := Servlet.Routes.Route_Type_Refs.Create (To.all'Access);
+         Route := Routes.Route_Type_Refs.Create (To.all'Access);
       end Insert;
    begin
-      Ctx.Set_Init_Parameter ("F1." & Servlet.Filters.Cache_Control.CACHE_CONTROL_PARAM, "no-cache");
-      Ctx.Set_Init_Parameter ("F2." & Servlet.Filters.Cache_Control.CACHE_CONTROL_PARAM,
+      Ctx.Set_Init_Parameter ("F1." & Filters.Cache_Control.CACHE_CONTROL_PARAM, "no-cache");
+      Ctx.Set_Init_Parameter ("F2." & Filters.Cache_Control.CACHE_CONTROL_PARAM,
                               "max-age: 10");
 
       Ctx.Add_Servlet ("Faces", S1'Unchecked_Access);
@@ -430,14 +429,14 @@ package body Servlet.Servlets.Tests is
          Dispatcher : constant Request_Dispatcher
            := Ctx.Get_Request_Dispatcher (Path => "/wikis/no-cache/view.html");
          Result : Ada.Strings.Unbounded.Unbounded_String;
-         Reply  : Servlet.Responses.Mockup.Response;
+         Reply  : Responses.Mockup.Response;
       begin
          Request.Set_Request_URI ("/wikis/no-cache/view.html");
          Forward (Dispatcher, Request, Reply);
 
          --  Check the response after the Test_Servlet1.Do_Get method execution.
          Reply.Read_Content (Result);
-         Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid status");
+         Assert_Equals (T, Responses.SC_OK, Reply.Get_Status, "Invalid status");
          T.Assert (Reply.Contains_Header ("Cache-Control"),
                    "A Cache-Control is missing in the response");
          Assert_Equals (T, "no-cache", Reply.Get_Header ("Cache-Control"),
@@ -448,14 +447,14 @@ package body Servlet.Servlets.Tests is
          Dispatcher : constant Request_Dispatcher
            := Ctx.Get_Request_Dispatcher (Path => "/wikis/cache/view.html");
          Result : Ada.Strings.Unbounded.Unbounded_String;
-         Reply  : Servlet.Responses.Mockup.Response;
+         Reply  : Responses.Mockup.Response;
       begin
          Request.Set_Request_URI ("/wikis/cache/view.html");
          Forward (Dispatcher, Request, Reply);
 
          --  Check the response after the Test_Servlet1.Do_Get method execution.
          Reply.Read_Content (Result);
-         Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid status");
+         Assert_Equals (T, Responses.SC_OK, Reply.Get_Status, "Invalid status");
          T.Assert (Reply.Contains_Header ("Cache-Control"),
                    "A Cache-Control is missing in the response");
          Assert_Equals (T, "max-age: 10", Reply.Get_Header ("Cache-Control"),
@@ -525,20 +524,19 @@ package body Servlet.Servlets.Tests is
                             URI    : in String;
                             Server : in Servlet_Access;
                             Filter : in Natural := 0) is
-      use type Servlet.Routes.Route_Type_Access;
-      use type Servlet.Filters.Filter_List_Access;
+      use type Filters.Filter_List_Access;
 
       Disp  : constant Request_Dispatcher := Ctx.Get_Request_Dispatcher (URI);
-      Route : constant Servlet.Routes.Route_Type_Access := Disp.Context.Get_Route;
-      Servlet_Route : Servlet.Routes.Servlets.Servlet_Route_Type_Access;
+      Route : constant Routes.Route_Type_Access := Disp.Context.Get_Route;
+      Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
    begin
       if Server = null then
          T.Assert (Route = null, "No mapping returned for URI: " & URI);
       else
          T.Assert (Route /= null, "A mapping is returned for URI: " & URI);
-         T.Assert (Route.all in Servlet.Routes.Servlets.Servlet_Route_Type'Class,
+         T.Assert (Route.all in Routes.Servlets.Servlet_Route_Type'Class,
                    "The route is not a Servlet route");
-         Servlet_Route := Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+         Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
          T.Assert (Servlet_Route.Servlet = Server,
                    "Invalid mapping returned for URI: " & URI);
          if Filter = 0 then
@@ -583,8 +581,6 @@ package body Servlet.Servlets.Tests is
       T.Check_Mapping (Ctx, "/1/2/3/4/5/6/7/8/A/server/list2", S1'Access);
 
       declare
-         use type Servlet.Routes.Route_Type_Access;
-
          St : Util.Measures.Stamp;
       begin
          for I in 1 .. 1000 loop
