@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets -- Servlet Servlets
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +48,6 @@ with Util.Log.Loggers;
 package body Servlet.Servlets is
 
    use Ada.Finalization;
-
-   use type Servlet.Routes.Route_Type_Access;
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Servlets");
@@ -393,14 +391,14 @@ package body Servlet.Servlets is
    procedure Forward (Dispatcher : in Request_Dispatcher;
                       Request    : in out Requests.Request'Class;
                       Response   : in out Responses.Response'Class) is
-      use type Servlet.Filters.Filter_List_Access;
+      use type Filters.Filter_List_Access;
    begin
       if Dispatcher.Servlet = null then
          Response.Send_Error (Responses.SC_NOT_FOUND);
       elsif Dispatcher.Filters = null then
-         Servlet.Requests.Tools.Set_Context (Request,
-                                         Response'Unchecked_Access,
-                                         Dispatcher.Context'Unrestricted_Access);
+         Requests.Tools.Set_Context (Request,
+                                     Response'Unchecked_Access,
+                                     Dispatcher.Context'Unrestricted_Access);
          Dispatcher.Servlet.Service (Request, Response);
       else
          --  If we have some filters, create the filter chain
@@ -408,9 +406,9 @@ package body Servlet.Servlets is
          declare
             Chain : Filter_Chain;
          begin
-            Servlet.Requests.Tools.Set_Context (Request,
-                                            Response'Unchecked_Access,
-                                            Dispatcher.Context'Unrestricted_Access);
+            Requests.Tools.Set_Context (Request,
+                                        Response'Unchecked_Access,
+                                        Dispatcher.Context'Unrestricted_Access);
             Chain.Filters := Dispatcher.Filters.all'Access;
             Chain.Servlet := Dispatcher.Servlet;
             Chain.Filter_Pos := Chain.Filters'Last;
@@ -461,26 +459,26 @@ package body Servlet.Servlets is
    function Get_Request_Dispatcher (Context : in Servlet_Registry;
                                     Path    : in String)
                                     return Request_Dispatcher is
-      use type Servlet.Filters.Filter_List_Access;
+      use type Filters.Filter_List_Access;
 
-      Route : Servlet.Routes.Route_Type_Access;
+      Route : Routes.Route_Type_Access;
    begin
       return R : Request_Dispatcher do
          Context.Routes.Find_Route (Path, R.Context);
-         Route := Servlet.Routes.Get_Route (R.Context);
+         Route := Routes.Get_Route (R.Context);
          if Route /= null then
-            if Route.all in Servlet.Routes.Servlets.Servlet_Route_Type'Class then
+            if Route.all in Routes.Servlets.Servlet_Route_Type'Class then
                declare
-                  Servlet_Route : constant Servlet.Routes.Servlets.Servlet_Route_Type_Access
-                    := Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
-                  Proxy : Servlet.Routes.Servlets.Proxy_Route_Type_Access;
+                  Servlet_Route : constant Routes.Servlets.Servlet_Route_Type_Access
+                    := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+                  Proxy : Routes.Servlets.Proxy_Route_Type_Access;
                begin
                   if Servlet_Route.Filters /= null then
                      R.Filters := Servlet_Route.Filters.all'Access;
                   end if;
-                  if Servlet_Route.all in Servlet.Routes.Servlets.Proxy_Route_Type'Class then
+                  if Servlet_Route.all in Routes.Servlets.Proxy_Route_Type'Class then
                      Proxy := Routes.Servlets.Proxy_Route_Type'Class (Servlet_Route.all)'Access;
-                     Servlet.Routes.Change_Route (R.Context, Proxy.Route.all'Access);
+                     Routes.Change_Route (R.Context, Proxy.Route.all'Access);
                      R.Servlet := Proxy.Route.Servlet;
                   else
                      R.Servlet := Servlet_Route.Servlet;
@@ -488,7 +486,7 @@ package body Servlet.Servlets is
                end;
             end if;
          end if;
-         R.Pos := Servlet.Routes.Get_Path_Pos (R.Context);
+         R.Pos := Routes.Get_Path_Pos (R.Context);
       end return;
    end Get_Request_Dispatcher;
 
@@ -666,7 +664,7 @@ package body Servlet.Servlets is
          Chain.Servlet.Service (Request, Response);
       else
          declare
-            Filter : constant Servlet.Filters.Filter_Access := Chain.Filters (Chain.Filter_Pos);
+            Filter : constant Filters.Filter_Access := Chain.Filters (Chain.Filter_Pos);
          begin
             Chain.Filter_Pos := Chain.Filter_Pos - 1;
             Filter.Do_Filter (Request, Response, Chain);
@@ -735,20 +733,20 @@ package body Servlet.Servlets is
    --  ------------------------------
    procedure Install_Filters (Registry : in out Servlet_Registry) is
       procedure Process (URI   : in String;
-                         Route : in Servlet.Routes.Route_Type_Access);
+                         Route : in Routes.Route_Type_Access);
       procedure Make_Route;
       procedure Initialize_Filter (Key    : in String;
                                    Filter : in Filter_Access);
 
       procedure Process (URI   : in String;
-                         Route : in Servlet.Routes.Route_Type_Access) is
+                         Route : in Routes.Route_Type_Access) is
          Iter : Util.Strings.Vectors.Cursor := Registry.Filter_Patterns.First;
-         Servlet_Route : Servlet.Routes.Servlets.Servlet_Route_Type_Access;
+         Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
       begin
-         if not (Route.all in Servlet.Routes.Servlets.Servlet_Route_Type'Class) then
+         if not (Route.all in Routes.Servlets.Servlet_Route_Type'Class) then
             return;
          end if;
-         Servlet_Route := Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+         Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
          while Util.Strings.Vectors.Has_Element (Iter) loop
             declare
                Pattern : constant String := Util.Strings.Vectors.Element (Iter);
@@ -757,7 +755,7 @@ package body Servlet.Servlets is
                if Match_Pattern (Pattern, URI) then
                   Filter := Registry.Filter_Rules.Element (Pattern);
                   for I in Filter'Range loop
-                     Servlet.Routes.Servlets.Append_Filter (Servlet_Route.all, Filter (I).all'Access);
+                     Routes.Servlets.Append_Filter (Servlet_Route.all, Filter (I).all'Access);
                   end loop;
                end if;
             end;
@@ -775,24 +773,24 @@ package body Servlet.Servlets is
       begin
          while Util.Strings.Vectors.Has_Element (Iter) loop
             declare
-               use Servlet.Routes.Servlets;
-               procedure Insert (Ref : in out Servlet.Routes.Route_Type_Ref);
+               use Routes.Servlets;
+               procedure Insert (Ref : in out Routes.Route_Type_Ref);
 
                Pattern : constant String := Util.Strings.Vectors.Element (Iter);
-               Route   : Servlet.Routes.Route_Context_Type;
+               Route   : Routes.Route_Context_Type;
 
-               procedure Insert (Ref : in out Servlet.Routes.Route_Type_Ref) is
-                  Proxy   : Servlet.Routes.Servlets.Proxy_Route_Type_Access;
+               procedure Insert (Ref : in out Routes.Route_Type_Ref) is
+                  Proxy   : Routes.Servlets.Proxy_Route_Type_Access;
                begin
                   if Ref.Is_Null then
-                     Proxy := new Servlet.Routes.Servlets.Proxy_Route_Type;
+                     Proxy := new Routes.Servlets.Proxy_Route_Type;
                      Proxy.Route := Servlet_Route_Type'Class (Route.Get_Route.all)'Access;
 
                      --  If the route is also a proxy, get the real route pointed to by the proxy.
                      if Proxy.Route.all in Proxy_Route_Type'Class then
                         Proxy.Route := Proxy_Route_Type'Class (Proxy.Route.all).Route;
                      end if;
-                     Ref := Servlet.Routes.Route_Type_Refs.Create (Proxy.all'Access);
+                     Ref := Routes.Route_Type_Refs.Create (Proxy.all'Access);
                   end if;
                end Insert;
 
@@ -831,13 +829,13 @@ package body Servlet.Servlets is
    --  ------------------------------
    procedure Dump_Routes (Registry : in out Servlet_Registry;
                           Level    : in Util.Log.Level_Type) is
-      use type Servlet.Filters.Filter_List_Access;
-      use type Servlet.Filters.Filter_Access;
+      use type Filters.Filter_List_Access;
+      use type Filters.Filter_Access;
 
       function Get_Servlet_Name (Servlet : in Servlet_Access) return String;
-      function Get_Filter_Names (Filters : in Servlet.Filters.Filter_List_Access) return String;
+      function Get_Filter_Names (List : in Filters.Filter_List_Access) return String;
       procedure Print_Route (URI   : in String;
-                             Route : in Servlet.Routes.Route_Type_Access);
+                             Route : in Routes.Route_Type_Access);
       procedure Collect_Servlet (Pos : in Servlet_Maps.Cursor);
       procedure Collect_Filter (Pos : in Filter_Maps.Cursor);
 
@@ -860,18 +858,18 @@ package body Servlet.Servlets is
          end if;
       end Get_Servlet_Name;
 
-      function Get_Filter_Names (Filters : in Servlet.Filters.Filter_List_Access) return String is
+      function Get_Filter_Names (List : in Filters.Filter_List_Access) return String is
          Result : Ada.Strings.Unbounded.Unbounded_String;
       begin
-         for I in Filters'Range loop
+         for I in List'Range loop
             if Length (Result) > 0 then
                Append (Result, ", ");
             end if;
-            if Filters (I) = null then
+            if List (I) = null then
                Append (Result, "null");
             else
                declare
-                  N : constant String := System.Address_Image (Filters (I).all'Address);
+                  N : constant String := System.Address_Image (List (I).all'Address);
                begin
                   if Maps.Contains (N) then
                      Append (Result, Maps.Element (N));
@@ -885,13 +883,13 @@ package body Servlet.Servlets is
       end Get_Filter_Names;
 
       procedure Print_Route (URI   : in String;
-                             Route : in Servlet.Routes.Route_Type_Access) is
-         Servlet_Route : Servlet.Routes.Servlets.Servlet_Route_Type_Access;
+                             Route : in Routes.Route_Type_Access) is
+         Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
       begin
-         if not (Route.all in Servlet.Routes.Servlets.Servlet_Route_Type'Class) then
+         if not (Route.all in Routes.Servlets.Servlet_Route_Type'Class) then
             Log.Print (Level, "Route {0} to {1}", URI, System.Address_Image (Route.all'Address));
          else
-            Servlet_Route := Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+            Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
             if Servlet_Route.Filters /= null then
                Log.Print (Level, "Route {0} to {1} with filters {2}",
                           URI, Get_Servlet_Name (Servlet_Route.Get_Servlet),
@@ -932,7 +930,7 @@ package body Servlet.Servlets is
    end Start;
 
    procedure Free is
-     new Ada.Unchecked_Deallocation (Object => Servlet.Filters.Filter_List,
+     new Ada.Unchecked_Deallocation (Object => Filters.Filter_List,
                                      Name   => Filter_List_Access);
 
    --  ------------------------------
@@ -955,11 +953,9 @@ package body Servlet.Servlets is
       procedure Append (Key  : in String;
                         List : in out Filter_List_Access) is
          pragma Unreferenced (Key);
-         use type Servlet.Filters.Filter_Access;
-         use type Servlet.Filters.Filter_List;
-         use Servlet.Filters;
+         use Filters;
 
-         Filter   : constant Servlet.Filters.Filter_Access := Filter_Maps.Element (Pos).all'Access;
+         Filter   : constant Filters.Filter_Access := Filter_Maps.Element (Pos).all'Access;
          New_List : Filter_List_Access;
       begin
          --  Check that the filter is not already executed.
@@ -969,7 +965,7 @@ package body Servlet.Servlets is
             end if;
          end loop;
 
-         New_List := new Servlet.Filters.Filter_List (1 .. List'Last + 1);
+         New_List := new Filters.Filter_List (1 .. List'Last + 1);
          New_List.all (2 .. New_List'Last) := List.all;
          New_List (New_List'First) := Filter;
          Free (List);
@@ -987,7 +983,7 @@ package body Servlet.Servlets is
       end if;
       if not Filter_List_Maps.Has_Element (Rule) then
          Registry.Filter_Patterns.Append (Pattern);
-         List := new Servlet.Filters.Filter_List (1 .. 1);
+         List := new Filters.Filter_List (1 .. 1);
          List (List'First) := Filter_Maps.Element (Pos).all'Access;
          Registry.Filter_Rules.Insert (Pattern, List);
       else
@@ -1022,15 +1018,15 @@ package body Servlet.Servlets is
    procedure Add_Mapping (Registry : in out Servlet_Registry;
                           Pattern  : in String;
                           Server   : in Servlet_Access) is
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref);
+      procedure Insert (Route : in out Routes.Route_Type_Ref);
 
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
-         To     : Servlet.Routes.Servlets.Servlet_Route_Type_Access;
+      procedure Insert (Route : in out Routes.Route_Type_Ref) is
+         To     : Routes.Servlets.Servlet_Route_Type_Access;
       begin
          if Route.Is_Null then
-            To := new Servlet.Routes.Servlets.Servlet_Route_Type;
+            To := new Routes.Servlets.Servlet_Route_Type;
             To.Servlet := Server;
-            Route := Servlet.Routes.Route_Type_Refs.Create (To.all'Access);
+            Route := Routes.Route_Type_Refs.Create (To.all'Access);
          else
             Log.Warn ("Mapping {0} already defined", Pattern);
          end if;
@@ -1055,7 +1051,7 @@ package body Servlet.Servlets is
                         Pattern   : in String;
                         ELContext : in EL.Contexts.ELContext'Class;
                         Process   : not null access
-                          procedure (Route : in out Servlet.Routes.Route_Type_Ref)) is
+                          procedure (Route : in out Routes.Route_Type_Ref)) is
    begin
       Registry.Routes.Add_Route (Pattern, ELContext, Process);
    end Add_Route;
@@ -1107,7 +1103,7 @@ package body Servlet.Servlets is
 
       Response.Set_Content_Type ("text/html");
       declare
-         Output : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
+         Output : Streams.Print_Stream := Response.Get_Output_Stream;
          Value  : EL.Objects.Object;
       begin
          Output.Write ("<html><head><title>Server error</title>"
@@ -1157,10 +1153,10 @@ package body Servlet.Servlets is
          end if;
 
          Output.Write ("<tr><td colspan='2'>");
-         Output.Write (Servlet.Requests.Tools.To_String (Req              => Request,
-                                                     Html             => True,
-                                                     Print_Headers    => True,
-                                                     Print_Attributes => True));
+         Output.Write (Requests.Tools.To_String (Req              => Request,
+                                                 Html             => True,
+                                                 Print_Headers    => True,
+                                                 Print_Attributes => True));
          Output.Write ("<td></tr></table></body>");
       end;
    end Send_Error_Page;
@@ -1219,7 +1215,7 @@ package body Servlet.Servlets is
             Registry.Filter_Rules.Delete (Pos);
          end;
       end loop;
-      Servlet.Sessions.Factory.Session_Factory (Registry).Finalize;
+      Sessions.Factory.Session_Factory (Registry).Finalize;
    end Finalize;
 
 end Servlet.Servlets;
