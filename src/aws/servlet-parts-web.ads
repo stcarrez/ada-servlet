@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-parts-web -- ASF Parts on top of AWS attachments
+--  servlet-parts-web -- Servlet Parts on top of AWS attachments
 --  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,8 +18,8 @@
 
 with AWS.Attachments;
 
---  The <b>ASF.Parts.Web</b> package implements ASF parts on top of AWS attachments.
-package ASF.Parts.Web is
+--  The <b>Servlet.Parts.Web</b> package implements Servlet parts on top of AWS attachments.
+package Servlet.Parts.Web is
 
    --  ------------------------------
    --  Multi part content
@@ -47,7 +47,7 @@ package ASF.Parts.Web is
 
    --  Build a part instance from the AWS attachment and execute the <b>Process</b> operation.
    procedure Process_Part (Part    : in AWS.Attachments.Element;
-                           Process : not null access procedure (Part : in ASF.Parts.Part'Class));
+                           Process : not null access procedure (Part : in Servlet.Parts.Part'Class));
 
 private
 
@@ -55,4 +55,4 @@ private
       Element      : AWS.Attachments.Element;
    end record;
 
-end ASF.Parts.Web;
+end Servlet.Parts.Web;
