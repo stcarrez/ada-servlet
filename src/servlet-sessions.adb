@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.sessions -- ASF Sessions
+--  servlet-sessions -- Servlet Sessions
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,9 +18,9 @@
 
 with Ada.Unchecked_Deallocation;
 
---  The <b>ASF.Sessions</b> package is an Ada implementation of the
+--  The <b>Servlet.Sessions</b> package is an Ada implementation of the
 --  Java servlet Specification (See JSR 315 at jcp.org).
-package body ASF.Sessions is
+package body Servlet.Sessions is
 
    use Ada.Strings.Unbounded;
 
@@ -172,7 +172,7 @@ package body ASF.Sessions is
    --  Gets the principal that authenticated to the session.
    --  Returns null if there is no principal authenticated.
    --  ------------------------------
-   function Get_Principal (Sess : in Session) return ASF.Principals.Principal_Access is
+   function Get_Principal (Sess : in Session) return Servlet.Principals.Principal_Access is
    begin
       if Sess.Impl = null or else not Sess.Impl.Is_Active then
          raise No_Session;
@@ -184,7 +184,7 @@ package body ASF.Sessions is
    --  Sets the principal associated with the session.
    --  ------------------------------
    procedure Set_Principal (Sess      : in out Session;
-                            Principal : in ASF.Principals.Principal_Access) is
+                            Principal : in Servlet.Principals.Principal_Access) is
    begin
       if Sess.Impl = null or else not Sess.Impl.Is_Active then
          raise No_Session;
@@ -219,8 +219,8 @@ package body ASF.Sessions is
                                      Name   => Session_Record_Access);
 
    procedure Free is
-     new Ada.Unchecked_Deallocation (Object => ASF.Principals.Principal'Class,
-                                     Name   => ASF.Principals.Principal_Access);
+     new Ada.Unchecked_Deallocation (Object => Servlet.Principals.Principal'Class,
+                                     Name   => Servlet.Principals.Principal_Access);
 
    --  ------------------------------
    --  Decrement the session record reference counter and free the session record
@@ -247,4 +247,4 @@ package body ASF.Sessions is
       Free (Object.Id);
    end Finalize;
 
-end ASF.Sessions;
+end Servlet.Sessions;
