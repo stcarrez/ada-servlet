@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.server -- ASF Server
+--  servlet-server -- Servlet Server
 --  Copyright (C) 2009, 2010, 2011, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,7 +20,7 @@ with Util.Strings;
 
 with Ada.Unchecked_Deallocation;
 with Ada.Task_Attributes;
-package body ASF.Server is
+package body Servlet.Server is
 
    Null_Context : constant Request_Context := Request_Context'(null, null, null);
 
@@ -35,7 +35,7 @@ package body ASF.Server is
    --  Get the current registry associated with the current request being processed
    --  by the current thread.  Returns null if there is no current request.
    --  ------------------------------
-   function Current return ASF.Servlets.Servlet_Registry_Access is
+   function Current return Servlet.Servlets.Servlet_Registry_Access is
    begin
       return Task_Context.Value.Application;
    end Current;
@@ -66,7 +66,7 @@ package body ASF.Server is
    --  ------------------------------
    procedure Register_Application (Server  : in out Container;
                                    URI     : in String;
-                                   Context : in ASF.Servlets.Servlet_Registry_Access) is
+                                   Context : in Servlet.Servlets.Servlet_Registry_Access) is
       Count : constant Natural := Server.Nb_Bindings;
       Apps  : constant Binding_Array_Access := new Binding_Array (1 .. Count + 1);
       Old   : Binding_Array_Access := Server.Applications;
@@ -97,8 +97,8 @@ package body ASF.Server is
    --  Remove the application
    --  ------------------------------
    procedure Remove_Application (Server  : in out Container;
-                                 Context : in ASF.Servlets.Servlet_Registry_Access) is
-      use type ASF.Servlets.Servlet_Registry_Access;
+                                 Context : in Servlet.Servlets.Servlet_Registry_Access) is
+      use type Servlet.Servlets.Servlet_Registry_Access;
 
       Count : constant Natural := Server.Nb_Bindings;
       Old   : Binding_Array_Access := Server.Applications;
@@ -221,4 +221,4 @@ package body ASF.Server is
       Free (Server.Applications);
    end Finalize;
 
-end ASF.Server;
+end Servlet.Server;
