@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  Sessions Tests - Unit tests for ASF.Sessions
+--  Sessions Tests - Unit tests for Servlet.Sessions
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,10 +17,10 @@
 -----------------------------------------------------------------------
 
 with Util.Test_Caller;
-with ASF.Sessions.Factory;
+with Servlet.Sessions.Factory;
 with Util.Measures;
 with EL.Objects;
-package body ASF.Sessions.Tests is
+package body Servlet.Sessions.Tests is
 
    use Util.Tests;
 
@@ -28,9 +28,9 @@ package body ASF.Sessions.Tests is
    --  Test session creation.
    --  ------------------------------
    procedure Test_Create_Session (T : in out Test) is
-      F : ASF.Sessions.Factory.Session_Factory;
+      F : Servlet.Sessions.Factory.Session_Factory;
 
-      S : ASF.Sessions.Session;
+      S : Servlet.Sessions.Session;
       St : Util.Measures.Stamp;
    begin
       for I in 1 .. 10 loop
@@ -46,7 +46,7 @@ package body ASF.Sessions.Tests is
          --  Ada.Text_IO.Put_Line ("ID=" & S.Get_Id);
 
          declare
-            S2 : ASF.Sessions.Session;
+            S2 : Servlet.Sessions.Session;
          begin
             F.Find_Session (Id => S.Get_Id, Result => S2);
             T.Assert (S2.Is_Valid, "Session was not found");
@@ -60,7 +60,7 @@ package body ASF.Sessions.Tests is
    --  Tests on an empty session object.
    --  ------------------------------
    procedure Test_Empty_Session (T : in out Test) is
-      S : ASF.Sessions.Session;
+      S : Servlet.Sessions.Session;
    begin
       T.Assert (not S.Is_Valid, "Session should be invalid");
 
@@ -69,9 +69,9 @@ package body ASF.Sessions.Tests is
    end Test_Empty_Session;
 
    procedure Test_Session_Attributes (T : in out Test) is
-      F : ASF.Sessions.Factory.Session_Factory;
+      F : Servlet.Sessions.Factory.Session_Factory;
 
-      S : ASF.Sessions.Session;
+      S : Servlet.Sessions.Session;
    begin
       F.Create_Session (S);
 
@@ -92,18 +92,18 @@ package body ASF.Sessions.Tests is
    begin
       --  To document what is tested, register the test methods for each
       --  operation that is tested.
-      Caller.Add_Test (Suite, "Test ASF.Sessions.Factory.Create_Session",
+      Caller.Add_Test (Suite, "Test Servlet.Sessions.Factory.Create_Session",
                        Test_Create_Session'Access);
-      Caller.Add_Test (Suite, "Test ASF.Sessions.Factory.Find_Session",
+      Caller.Add_Test (Suite, "Test Servlet.Sessions.Factory.Find_Session",
                        Test_Create_Session'Access);
-      Caller.Add_Test (Suite, "Test ASF.Sessions.Get_Id",
+      Caller.Add_Test (Suite, "Test Servlet.Sessions.Get_Id",
                        Test_Create_Session'Access);
-      Caller.Add_Test (Suite, "Test ASF.Sessions.Is_Valid",
+      Caller.Add_Test (Suite, "Test Servlet.Sessions.Is_Valid",
                        Test_Empty_Session'Access);
-      Caller.Add_Test (Suite, "Test ASF.Sessions.Set_Attribute",
+      Caller.Add_Test (Suite, "Test Servlet.Sessions.Set_Attribute",
                        Test_Session_Attributes'Access);
-      Caller.Add_Test (Suite, "Test ASF.Sessions.Get_Attribute",
+      Caller.Add_Test (Suite, "Test Servlet.Sessions.Get_Attribute",
                        Test_Session_Attributes'Access);
    end Add_Tests;
 
-end ASF.Sessions.Tests;
+end Servlet.Sessions.Tests;
