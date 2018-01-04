@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-routes-tests - Unit tests for ASF.Routes
+--  servlet-routes-tests - Unit tests for Servlet.Routes
 --  Copyright (C) 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,23 +20,23 @@ with Util.Measures;
 with Util.Log.Loggers;
 with Util.Test_Caller;
 
-package body ASF.Routes.Tests is
+package body Servlet.Routes.Tests is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Routes.Tests");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Routes.Tests");
 
    package Caller is new Util.Test_Caller (Test, "Routes");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test ASF.Routes.Add_Route (fixed path)",
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (fixed path)",
                        Test_Add_Route_With_Path'Access);
-      Caller.Add_Test (Suite, "Test ASF.Routes.Add_Route (:param path)",
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (:param path)",
                        Test_Add_Route_With_Param'Access);
-      Caller.Add_Test (Suite, "Test ASF.Routes.Add_Route (*.ext path)",
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (*.ext path)",
                        Test_Add_Route_With_Ext'Access);
-      Caller.Add_Test (Suite, "Test ASF.Routes.Add_Route (#{} path)",
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (#{} path)",
                        Test_Add_Route_With_EL'Access);
-      Caller.Add_Test (Suite, "Test ASF.Routes.Iterate",
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Iterate",
                        Test_Iterate'Access);
    end Add_Tests;
 
@@ -72,7 +72,7 @@ package body ASF.Routes.Tests is
    procedure Set_Up (T : in out Test) is
    begin
       T.Bean := new Test_Bean;
-      ASF.Tests.EL_Test (T).Set_Up;
+      Servlet.Tests.EL_Test (T).Set_Up;
       T.Root_Resolver.Register (Ada.Strings.Unbounded.To_Unbounded_String ("user"),
                                 Util.Beans.Objects.To_Object (T.Bean.all'Access));
       for I in T.Routes'Range loop
@@ -113,9 +113,9 @@ package body ASF.Routes.Tests is
                         Path   : in String;
                         Index  : in Positive;
                         Bean   : in out Test_Bean'Class) is
-      procedure Insert (Route : in out ASF.Routes.Route_Type_Ref);
+      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref);
 
-      procedure Insert (Route : in out ASF.Routes.Route_Type_Ref) is
+      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
       begin
          Route := T.Routes (Index);
       end Insert;
@@ -317,4 +317,4 @@ package body ASF.Routes.Tests is
       end;
    end Test_Iterate;
 
-end ASF.Routes.Tests;
+end Servlet.Routes.Tests;
