@@ -22,7 +22,7 @@ with Util.Beans.Objects;
 
 with EL.Contexts.Default;
 
-with ASF.Applications;
+--  with ASF.Applications;
 with ASF.Streams;
 with ASF.Routes.Servlets;
 with ASF.Requests.Mockup;
@@ -30,12 +30,53 @@ with ASF.Responses.Mockup;
 with ASF.Filters.Dump;
 with ASF.Filters.Cache_Control;
 with ASF.Filters.Tests;
-with ASF.Beans.Resolvers;
-with ASF.Applications.Tests;
+--  with ASF.Beans.Resolvers;
+--  with ASF.Applications.Tests;
 with ASF.Routes.Servlets.Faces;
 package body ASF.Servlets.Tests is
 
    use Util.Tests;
+
+   --  ------------------------------
+   --  Get the value identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Form_Bean;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "email" then
+         return Util.Beans.Objects.To_Object (From.Email);
+      elsif Name = "password" then
+         return Util.Beans.Objects.To_Object (From.Password);
+      elsif Name = "name" then
+         return Util.Beans.Objects.To_Object (From.Name);
+      elsif Name = "gender" then
+         return Util.Beans.Objects.To_Object (From.Gender);
+      elsif Name = "called" then
+         return Util.Beans.Objects.To_Object (From.Called);
+      else
+         return Util.Beans.Objects.Null_Object;
+      end if;
+   end Get_Value;
+
+   --  ------------------------------
+   --  Set the value identified by the name.
+   --  ------------------------------
+   overriding
+   procedure Set_Value (From  : in out Form_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "email" then
+         From.Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "password" then
+         From.Password := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "name" then
+         From.Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "gender" then
+         From.Gender := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
 
    procedure Do_Get (Server   : in Test_Servlet1;
                      Request  : in out Requests.Request'Class;
@@ -43,12 +84,12 @@ package body ASF.Servlets.Tests is
       pragma Unreferenced (Server);
 
       ELContext      : aliased EL.Contexts.Default.Default_Context;
-      Root_Resolver  : aliased ASF.Beans.Resolvers.ELResolver;
+--        Root_Resolver  : aliased ASF.Beans.Resolvers.ELResolver;
       Output         : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       --  Minimal setting for the EL context creation to inject URI parameters in an Ada bean.
-      Root_Resolver.Initialize (null, Request'Unchecked_Access);
-      ELContext.Set_Resolver (Root_Resolver'Unchecked_Access);
+--        Root_Resolver.Initialize (null, Request'Unchecked_Access);
+--       ELContext.Set_Resolver (Root_Resolver'Unchecked_Access);
       Request.Inject_Parameters (ELContext);
 
       Output.Write ("URI: " & Request.Get_Request_URI);
@@ -268,7 +309,7 @@ package body ASF.Servlets.Tests is
       S1      : aliased Test_Servlet1;
       F1      : aliased ASF.Filters.Tests.Test_Filter;
       F2      : aliased ASF.Filters.Tests.Test_Filter;
-      User    : aliased ASF.Applications.Tests.Form_Bean;
+      User    : aliased Form_Bean;
       EL_Ctx  : EL.Contexts.Default.Default_Context;
       Request : ASF.Requests.Mockup.Request;
       Reply   : ASF.Responses.Mockup.Response;
@@ -352,7 +393,7 @@ package body ASF.Servlets.Tests is
       S1      : aliased Test_Servlet1;
       F1      : aliased ASF.Filters.Cache_Control.Cache_Control_Filter;
       F2      : aliased ASF.Filters.Cache_Control.Cache_Control_Filter;
-      User    : aliased ASF.Applications.Tests.Form_Bean;
+      User    : aliased Form_Bean;
       EL_Ctx  : EL.Contexts.Default.Default_Context;
       Request : ASF.Requests.Mockup.Request;
 
@@ -450,7 +491,7 @@ package body ASF.Servlets.Tests is
    procedure Test_Get_Resource (T : in out Test) is
       Ctx : Servlet_Registry;
 
-      Conf  : Applications.Config;
+      Conf  : Util.Properties.Manager;
       S1    : aliased Test_Servlet1;
       Dir   : constant String := "regtests/files";
       Path  : constant String := Util.Tests.Get_Path (Dir);
