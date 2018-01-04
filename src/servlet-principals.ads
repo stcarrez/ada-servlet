@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-principals -- Component and tag factory
+--  servlet-principals -- Component and tag factory
 --  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Security;
-package ASF.Principals is
+package Servlet.Principals is
 
    --  ------------------------------
    --  Principal
@@ -24,4 +24,4 @@ package ASF.Principals is
    subtype Principal is Security.Principal;
    subtype Principal_Access is Security.Principal_Access;
 
-end ASF.Principals;
+end Servlet.Principals;
