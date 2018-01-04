@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-rest -- REST Support
+--  servlet-rest -- REST Support
 --  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,19 +17,19 @@
 -----------------------------------------------------------------------
 with Util.Strings;
 with Util.Serialize.IO;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Servlets;
 with EL.Contexts;
 with Security.Permissions;
 
 --  == REST ==
---  The <tt>ASF.Rest</tt> package provides support to implement easily some RESTful API.
-package ASF.Rest is
+--  The <tt>Servlet.Rest</tt> package provides support to implement easily some RESTful API.
+package Servlet.Rest is
 
-   subtype Request is ASF.Requests.Request;
+   subtype Request is Servlet.Requests.Request;
 
-   subtype Response is ASF.Responses.Response;
+   subtype Response is Servlet.Responses.Response;
 
    subtype Output_Stream is Util.Serialize.IO.Output_Stream;
 
@@ -45,17 +45,17 @@ package ASF.Rest is
 
    --  Dispatch the request to the API handler.
    procedure Dispatch (Handler : in Descriptor;
-                       Req     : in out ASF.Rest.Request'Class;
-                       Reply   : in out ASF.Rest.Response'Class;
+                       Req     : in out Servlet.Rest.Request'Class;
+                       Reply   : in out Servlet.Rest.Response'Class;
                        Stream  : in out Output_Stream'Class) is abstract;
 
    type Operation_Access is
-      access procedure (Req    : in out ASF.Rest.Request'Class;
-                        Reply  : in out ASF.Rest.Response'Class;
-                        Stream : in out ASF.Rest.Output_Stream'Class);
+      access procedure (Req    : in out Servlet.Rest.Request'Class;
+                        Reply  : in out Servlet.Rest.Response'Class;
+                        Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  Register the API definition in the servlet registry.
-   procedure Register (Registry   : in out ASF.Servlets.Servlet_Registry'Class;
+   procedure Register (Registry   : in out Servlet.Servlets.Servlet_Registry'Class;
                        Definition : in Descriptor_Access);
 
 private
@@ -72,7 +72,7 @@ private
                        Item : in Descriptor_Access);
 
    --  Register the list of API descriptors for a given servlet and a root path.
-   procedure Register (Registry  : in out ASF.Servlets.Servlet_Registry;
+   procedure Register (Registry  : in out Servlet.Servlets.Servlet_Registry;
                        Name      : in String;
                        URI       : in String;
                        ELContext : in EL.Contexts.ELContext'Class;
@@ -85,8 +85,8 @@ private
    --  Dispatch the request to the API handler.
    overriding
    procedure Dispatch (Handler : in Static_Descriptor;
-                       Req     : in out ASF.Rest.Request'Class;
-                       Reply   : in out ASF.Rest.Response'Class;
+                       Req     : in out Servlet.Rest.Request'Class;
+                       Reply   : in out Servlet.Rest.Response'Class;
                        Stream  : in out Output_Stream'Class);
 
-end ASF.Rest;
+end Servlet.Rest;
