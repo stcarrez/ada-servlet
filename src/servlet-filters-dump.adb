@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.filters.dump -- Filter to dump the request information
+--  servlet-filters.dump -- Filter to dump the request information
 --  Copyright (C) 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,15 +17,15 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
-with ASF.Requests.Tools;
+with Servlet.Requests.Tools;
 
---  The <b>ASF.Filters.Dump</b> package provides a debugging filter which
+--  The <b>Servlet.Filters.Dump</b> package provides a debugging filter which
 --  can be activated in the request flow to dump the request content into
 --  some log file before processing the request.
-package body ASF.Filters.Dump is
+package body Servlet.Filters.Dump is
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Filters.Dump");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Filters.Dump");
 
    --  ------------------------------
    --  The Do_Filter method of the Filter is called by the container each time
@@ -50,18 +50,18 @@ package body ASF.Filters.Dump is
    procedure Do_Filter (F        : in Dump_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is
+                        Chain    : in out Servlet.Servlets.Filter_Chain) is
       pragma Unreferenced (F);
 
-      Info : constant String := ASF.Requests.Tools.To_String (Req              => Request,
+      Info : constant String := Servlet.Requests.Tools.To_String (Req              => Request,
                                                               Html             => False,
                                                               Print_Headers    => True,
                                                               Print_Attributes => True);
    begin
       Log.Info ("Request {0}", Info);
-      ASF.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Servlets.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
    end Do_Filter;
 
-end ASF.Filters.Dump;
+end Servlet.Filters.Dump;
