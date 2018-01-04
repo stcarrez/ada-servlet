@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets.measures -- Dump performance measurements
---  Copyright (C) 2010, 2011, 2015 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,7 +96,7 @@ package body Servlet.Servlets.Measures is
 
       use type Util.Measures.Measure_Set_Access;
 
-      Output   : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
+      Output   : Streams.Print_Stream := Response.Get_Output_Stream;
 
       procedure Print (Into : in out Util.Streams.Texts.Print_Stream'Class);
 
@@ -137,14 +137,14 @@ package body Servlet.Servlets.Measures is
    procedure Do_Filter (F        : in Measure_Servlet;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain) is
+                        Chain    : in out Servlets.Filter_Chain) is
       URI   : constant String := Request.Get_Request_URI;
       Stamp : Util.Measures.Stamp;
    begin
       Util.Measures.Set_Current (F.Current);
-      Servlet.Servlets.Do_Filter (Chain    => Chain,
-                              Request  => Request,
-                              Response => Response);
+      Servlets.Do_Filter (Chain    => Chain,
+                          Request  => Request,
+                          Response => Response);
       Util.Measures.Report (Measures => F.Current.all,
                             S        => Stamp,
                             Title    => URI);
