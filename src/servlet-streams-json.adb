@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-streams-json -- JSON Print streams for servlets
+--  servlet-streams-json -- JSON Print streams for servlets
 --  Copyright (C) 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,15 +16,15 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package body ASF.Streams.JSON is
+package body Servlet.Streams.JSON is
 
    --  ------------------------------
    --  Initialize the stream
    --  ------------------------------
    procedure Initialize (Stream : in out Print_Stream;
-                         To     : in ASF.Streams.Print_Stream'Class) is
+                         To     : in Servlet.Streams.Print_Stream'Class) is
    begin
       Stream.Initialize (To.Target);
    end Initialize;
 
-end ASF.Streams.JSON;
+end Servlet.Streams.JSON;
