@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets -- Servlet Servlets
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -434,7 +434,7 @@ package Servlet.Servlets is
                         Pattern   : in String;
                         ELContext : in EL.Contexts.ELContext'Class;
                         Process   : not null access
-                          procedure (Route : in out Servlet.Routes.Route_Type_Ref));
+                          procedure (Route : in out Routes.Route_Type_Ref));
 
    --  Set the error page that will be used if a servlet returns an error.
    procedure Set_Error_Page (Server : in out Servlet_Registry;
@@ -490,7 +490,7 @@ private
    end record;
 
    type Request_Dispatcher is limited record
-      Context : aliased Servlet.Routes.Route_Context_Type;
+      Context : aliased Routes.Route_Context_Type;
       Filters : Filter_List_Access;
       Servlet : Servlet_Access := null;
       Pos     : Natural := 0;
@@ -527,7 +527,9 @@ private
                                             Hash                => Hash,
                                             Equivalent_Keys     => "=");
 
-   type Servlet_Registry is new Servlet.Sessions.Factory.Session_Factory with record
+   use Routes;
+
+   type Servlet_Registry is new Sessions.Factory.Session_Factory with record
       Config            : Util.Properties.Manager;
       Servlets          : Servlet_Maps.Map;
       Filters           : Filter_Maps.Map;
@@ -535,7 +537,7 @@ private
       Filter_Patterns   : Util.Strings.Vectors.Vector;
       Error_Pages       : Error_Maps.Map;
       Context_Path      : Unbounded_String;
-      Routes            : Servlet.Routes.Router_Type;
+      Routes            : Router_Type;
    end record;
 
    --  Install the servlet filters after all the mappings have been registered.
