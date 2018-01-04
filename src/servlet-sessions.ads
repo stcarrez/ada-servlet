@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.sessions -- ASF Sessions
+--  servlet-sessions -- Servlet Sessions
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -19,14 +19,14 @@ with EL.Objects;
 with Ada.Calendar;
 with Ada.Finalization;
 with Ada.Strings.Unbounded;
-with ASF.Principals;
+with Servlet.Principals;
 private with Util.Beans.Objects.Maps;
 private with Util.Concurrent.Locks;
 private with Util.Concurrent.Counters;
 
---  The <b>ASF.Sessions</b> package is an Ada implementation of the
+--  The <b>Servlet.Sessions</b> package is an Ada implementation of the
 --  Java servlet Specification (See JSR 315 at jcp.org).
-package ASF.Sessions is
+package Servlet.Sessions is
 
    --  Raised if there is no session.
    No_Session : exception;
@@ -111,11 +111,11 @@ package ASF.Sessions is
 
    --  Gets the principal that authenticated to the session.
    --  Returns null if there is no principal authenticated.
-   function Get_Principal (Sess : in Session) return ASF.Principals.Principal_Access;
+   function Get_Principal (Sess : in Session) return Servlet.Principals.Principal_Access;
 
    --  Sets the principal associated with the session.
    procedure Set_Principal (Sess      : in out Session;
-                            Principal : in ASF.Principals.Principal_Access);
+                            Principal : in Servlet.Principals.Principal_Access);
 
    --  Invalidates this session then unbinds any objects bound to it.
    procedure Invalidate (Sess : in out Session);
@@ -152,7 +152,7 @@ private
       Is_Active    : Boolean := True;
 
       --  When not null, the principal that authenticated to this session.
-      Principal  : ASF.Principals.Principal_Access := null;
+      Principal  : Servlet.Principals.Principal_Access := null;
    end record;
 
    overriding
@@ -173,4 +173,4 @@ private
 
    Null_Session : constant Session := Session'(Ada.Finalization.Controlled with Impl => null);
 
-end ASF.Sessions;
+end Servlet.Sessions;
