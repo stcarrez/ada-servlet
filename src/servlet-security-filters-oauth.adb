@@ -18,10 +18,10 @@
 
 with Util.Log.Loggers;
 
---  with ASF.Applications.Main;
+--  with Servlet.Applications.Main;
 
 with Security.Policies.URLs;
-package body ASF.Security.Filters.OAuth is
+package body Servlet.Security.Filters.OAuth is
 
    use Ada.Strings.Unbounded;
    use Servers;
@@ -29,15 +29,15 @@ package body ASF.Security.Filters.OAuth is
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Filters.OAuth");
 
-   function Get_Access_Token (Request : in ASF.Requests.Request'Class) return String;
+   function Get_Access_Token (Request : in Servlet.Requests.Request'Class) return String;
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
-                         Config  : in ASF.Servlets.Filter_Config) is
---      use ASF.Applications;
+                         Config  : in Servlet.Servlets.Filter_Config) is
+--      use Servlet.Applications;
 
       Context : constant Servlets.Servlet_Registry_Access := Servlets.Get_Servlet_Context (Config);
    begin
@@ -56,7 +56,7 @@ null;
       Filter.Manager := Manager;
    end Set_Permission_Manager;
 
-   function Get_Access_Token (Request : in ASF.Requests.Request'Class) return String is
+   function Get_Access_Token (Request : in Servlet.Requests.Request'Class) return String is
       Header : constant String := Request.Get_Header (AUTHORIZATION_HEADER_NAME);
    begin
       if Header'Length > 0 then
@@ -73,9 +73,9 @@ null;
    --  is denied.
    --  ------------------------------
    procedure Do_Filter (F        : in Auth_Filter;
-                        Request  : in out ASF.Requests.Request'Class;
-                        Response : in out ASF.Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is
+                        Request  : in out Servlet.Requests.Request'Class;
+                        Response : in out Servlet.Responses.Response'Class;
+                        Chain    : in out Servlet.Servlets.Filter_Chain) is
       use Policies.URLs;
       use type Policies.Policy_Manager_Access;
 
@@ -110,7 +110,7 @@ null;
          --     -- deny
          --  Request.Set_Attribute ("application", Grant.Application);
          --  Request is authorized, proceed to the next filter.
-         ASF.Servlets.Do_Filter (Chain    => Chain,
+         Servlet.Servlets.Do_Filter (Chain    => Chain,
                                  Request  => Request,
                                  Response => Response);
       end;
@@ -121,11 +121,11 @@ null;
    --  the user is not authenticated.
    --  ------------------------------
    procedure Do_Login (F        : in Auth_Filter;
-                       Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class) is
+                       Request  : in out Servlet.Requests.Request'Class;
+                       Response : in out Servlet.Responses.Response'Class) is
       pragma Unreferenced (F, Request);
    begin
-      Response.Send_Error (ASF.Responses.SC_UNAUTHORIZED);
+      Response.Send_Error (Servlet.Responses.SC_UNAUTHORIZED);
    end Do_Login;
 
    --  ------------------------------
@@ -133,14 +133,14 @@ null;
    --  authorized to see the page.  The default implementation returns the SC_FORBIDDEN error.
    --  ------------------------------
    procedure Do_Deny (F        : in Auth_Filter;
-                      Request  : in out ASF.Requests.Request'Class;
-                      Response : in out ASF.Responses.Response'Class) is
+                      Request  : in out Servlet.Requests.Request'Class;
+                      Response : in out Servlet.Responses.Response'Class) is
       pragma Unreferenced (Request);
    begin
       Response.Add_Header (WWW_AUTHENTICATE_HEADER_NAME,
                            "Bearer realm=""" & To_String (F.Realm_URL)
                            & """, error=""invalid_token""");
-      Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+      Response.Set_Status (Servlet.Responses.SC_FORBIDDEN);
    end Do_Deny;
 
-end ASF.Security.Filters.OAuth;
+end Servlet.Security.Filters.OAuth;
