@@ -16,10 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Servlets;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Principals;
+with Servlet.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Principals;
 
 with Security.Auth; use Security;
 
@@ -65,20 +65,20 @@ with Security.Auth; use Security;
 --
 --  </ul>
 --
-package ASF.Security.Servlets is
+package Servlet.Security.Servlets is
 
    --  ------------------------------
    --  OpenID Servlet
    --  ------------------------------
    --  The <b>Openid_Servlet</b> is the OpenID root servlet for OpenID 2.0 authentication.
    --  It is defined to provide a common basis for the authentication and verification servlets.
-   type Openid_Servlet is abstract new ASF.Servlets.Servlet and Auth.Parameters with private;
+   type Openid_Servlet is abstract new Servlet.Servlets.Servlet and Auth.Parameters with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    overriding
    procedure Initialize (Server  : in out Openid_Servlet;
-                         Context : in ASF.Servlets.Servlet_Registry'Class);
+                         Context : in Servlet.Servlets.Servlet_Registry'Class);
 
    --  Get a configuration parameter from the servlet context for the security Auth provider.
    overriding
@@ -99,8 +99,8 @@ package ASF.Security.Servlets is
    --  the OpenID provider.
    overriding
    procedure Do_Get (Server   : in Request_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class);
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class);
 
    --  ------------------------------
    --  OpenID Verification Servlet
@@ -114,27 +114,27 @@ package ASF.Security.Servlets is
    --  user principals on the session.
    overriding
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class);
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class);
 
    --  Create a principal object that correspond to the authenticated user identified
    --  by the <b>Credential</b> information.  The principal will be attached to the session
    --  and will be destroyed when the session is closed.
    procedure Create_Principal (Server     : in Verify_Auth_Servlet;
                                Credential : in Auth.Authentication;
-                               Result     : out ASF.Principals.Principal_Access);
+                               Result     : out Servlet.Principals.Principal_Access);
 
 private
    function Get_Provider_URL (Server   : in Request_Auth_Servlet;
-                              Request  : in ASF.Requests.Request'Class) return String;
+                              Request  : in Servlet.Requests.Request'Class) return String;
 
    procedure Initialize (Server   : in Openid_Servlet;
                          Provider : in String;
                          Manager  : in out Auth.Manager);
 
-   type Openid_Servlet is new ASF.Servlets.Servlet and Auth.Parameters with null record;
+   type Openid_Servlet is new Servlet.Servlets.Servlet and Auth.Parameters with null record;
 
    type Request_Auth_Servlet is new Openid_Servlet with null record;
    type Verify_Auth_Servlet is new Openid_Servlet with null record;
 
-end ASF.Security.Servlets;
+end Servlet.Security.Servlets;
