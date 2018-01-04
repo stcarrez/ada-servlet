@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-security-tests - Unit tests for ASF.Security
+--  servlet-security-tests - Unit tests for Servlet.Security
 --  Copyright (C) 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 
 with Util.Tests;
 
-package ASF.Security.Tests is
+package Servlet.Security.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -37,4 +37,4 @@ private
                              URI    : in String;
                              Result : in Natural);
 
-end ASF.Security.Tests;
+end Servlet.Security.Tests;
