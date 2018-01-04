@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests.tools -- ASF Requests Tools
+--  servlet-requests.tools -- Servlet Requests Tools
 --  Copyright (C) 2010, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package ASF.Requests.Tools is
+package Servlet.Requests.Tools is
 
    --  Builds a printable representation of the request for debugging purposes.
    --  When <b>Html</b> is true, the returned content contains an HTML presentation.
@@ -31,7 +31,7 @@ package ASF.Requests.Tools is
    --     <li>The response associated with the request
    --  </ul/
    procedure Set_Context (Req      : in out Request'Class;
-                          Response : in ASF.Responses.Response_Access;
-                          Context  : access ASF.Routes.Route_Context_Type);
+                          Response : in Servlet.Responses.Response_Access;
+                          Context  : access Servlet.Routes.Route_Context_Type);
 
-end ASF.Requests.Tools;
+end Servlet.Requests.Tools;
