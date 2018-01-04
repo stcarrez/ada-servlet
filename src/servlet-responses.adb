@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses -- ASF Responses
+--  servlet-responses -- Servlet Responses
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,9 +18,9 @@
 
 with Util.Strings;
 
---  The <b>ASF.Responses</b> package is an Ada implementation of
+--  The <b>Servlet.Responses</b> package is an Ada implementation of
 --  the Java servlet response (JSR 315 5. The Response).
-package body ASF.Responses is
+package body Servlet.Responses is
 
    --  Returns the name of the character encoding (MIME charset) used for the body
    --  sent in this response. The character encoding may have been specified explicitly
@@ -166,10 +166,10 @@ package body ASF.Responses is
    --  times to set more than one cookie.
    --  ------------------------------
    procedure Add_Cookie (Resp   : in out Response;
-                         Cookie : in ASF.Cookies.Cookie) is
+                         Cookie : in Servlet.Cookies.Cookie) is
    begin
       Response'Class (Resp).Add_Header (Name  => "Set-Cookie",
-                                        Value => ASF.Cookies.To_Http_Header (Cookie));
+                                        Value => Servlet.Cookies.To_Http_Header (Cookie));
    end Add_Cookie;
 
    --  Encodes the specified URL by including the session ID in it, or, if encoding
@@ -352,11 +352,11 @@ package body ASF.Responses is
    --  ------------------------------
    --  Get the output stream
    --  ------------------------------
-   function Get_Output_Stream (Resp : in Response) return ASF.Streams.Print_Stream is
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Print_Stream is
    begin
-      return Result : ASF.Streams.Print_Stream do
+      return Result : Servlet.Streams.Print_Stream do
          Result.Initialize (Resp.Stream.all'Access);
       end return;
    end Get_Output_Stream;
 
-end ASF.Responses;
+end Servlet.Responses;
