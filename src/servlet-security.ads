@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-security -- ASF Security
+--  servlet-security -- Servlet Security
 --  Copyright (C) 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,18 +16,18 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with EL.Functions;
-package ASF.Security is
+package Servlet.Security is
 
    --  EL function name exposed by Set_Functions.
    HAS_PERMISSION_FN  : constant String := "hasPermission";
 
    --  URI for the EL functions exposed by the security package (See Set_Functions).
-   AUTH_NAMESPACE_URI : constant String := "http://code.google.com/p/ada-asf/auth";
+   AUTH_NAMESPACE_URI : constant String := "http://code.google.com/p/ada-servlet-auth";
 
    --  Register a set of functions in the namespace
-   --  xmlns:fn="http://code.google.com/p/ada-asf/auth"
+   --  xmlns:fn="http://code.google.com/p/ada-servlet-auth"
    --  Functions:
    --    hasPermission(NAME)   --  Returns True if the permission NAME is granted
    procedure Set_Functions (Mapper : in out EL.Functions.Function_Mapper'Class);
 
-end ASF.Security;
+end Servlet.Security;
