@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  Sessions Tests - Unit tests for ASF.Sessions
+--  Sessions Tests - Unit tests for Servlet.Sessions
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 
 with Util.Tests;
 
-package ASF.Sessions.Tests is
+package Servlet.Sessions.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -31,4 +31,4 @@ package ASF.Sessions.Tests is
    procedure Test_Empty_Session (T : in out Test);
    procedure Test_Session_Attributes (T : in out Test);
 
-end ASF.Sessions.Tests;
+end Servlet.Sessions.Tests;
