@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses.mockup -- ASF Response mockup
+--  servlet-responses.mockup -- Servlet Response mockup
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -19,15 +19,15 @@
 private with Util.Streams.Texts;
 private with Util.Strings.Maps;
 
---  The <b>ASF.Responses.Mockup</b> provides a fake response object to simulate
+--  The <b>Servlet.Responses.Mockup</b> provides a fake response object to simulate
 --  an HTTP response.
-package ASF.Responses.Mockup is
+package Servlet.Responses.Mockup is
 
    --  ------------------------------
    --  Response Mockup
    --  ------------------------------
    --  The response mockup implements a fake HTTP response object
-   type Response is new ASF.Responses.Response with private;
+   type Response is new Servlet.Responses.Response with private;
 
    --  Returns a boolean indicating whether the named response header has already
    --  been set.
@@ -76,9 +76,9 @@ private
    overriding
    procedure Initialize (Resp : in out Response);
 
-   type Response is new ASF.Responses.Response with record
+   type Response is new Servlet.Responses.Response with record
       Content : aliased Util.Streams.Texts.Print_Stream;
       Headers : Util.Strings.Maps.Map;
    end record;
 
-end ASF.Responses.Mockup;
+end Servlet.Responses.Mockup;
