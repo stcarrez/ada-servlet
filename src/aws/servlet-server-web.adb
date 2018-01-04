@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.server -- ASF Server for AWS
+--  servlet-server -- Servlet Server for AWS
 --  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -19,16 +19,16 @@ with AWS.Config.Set;
 with AWS.Status;
 with AWS.Response;
 
-with ASF.Requests.Web;
-with ASF.Responses.Web;
+with Servlet.Requests.Web;
+with Servlet.Responses.Web;
 with Util.Http.Clients.Web;
 
 with Util.Log.Loggers;
-package body ASF.Server.Web is
+package body Servlet.Server.Web is
 
    use Util.Log;
 
-   Log : constant Loggers.Logger := Loggers.Create ("ASF.Server.Web");
+   Log : constant Loggers.Logger := Loggers.Create ("Servlet.Server.Web");
    --  The logger
 
    function Server_Callback (Request : in AWS.Status.Data) return AWS.Response.Data;
@@ -54,7 +54,7 @@ package body ASF.Server.Web is
       AWS.Config.Set.Upload_Directory (Server.Conf, "upload");
       AWS.Server.Start (Web_Server => Server.WS,
                         Config     => Server.Conf,
-                        Callback   => ASF.Server.Web.Server_Callback'Access);
+                        Callback   => Servlet.Server.Web.Server_Callback'Access);
    end Start;
 
    ----------------------
@@ -70,8 +70,8 @@ package body ASF.Server.Web is
    --  Main server callback
    ----------------------
    function Server_Callback (Request : in AWS.Status.Data) return AWS.Response.Data is
-      Req   : ASF.Requests.Web.Request;
-      Resp  : ASF.Responses.Web.Response;
+      Req   : Servlet.Requests.Web.Request;
+      Resp  : Servlet.Responses.Web.Response;
    begin
       Req.Set_Request (Request'Unrestricted_Access);
 
@@ -83,4 +83,4 @@ package body ASF.Server.Web is
 
 begin
    Util.Http.Clients.Web.Register;
-end ASF.Server.Web;
+end Servlet.Server.Web;
