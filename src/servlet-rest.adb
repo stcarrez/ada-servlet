@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,24 +103,24 @@ package body Servlet.Rest is
 
       Dispatcher : constant Servlet.Servlets.Request_Dispatcher
          := Registry.Get_Request_Dispatcher (Definition.Pattern.all);
-      Servlet    : constant Servlet.Servlets.Servlet_Access := Servlet.Servlets.Get_Servlet (Dispatcher);
+      Servlet    : constant Servlets.Servlet_Access := Servlets.Get_Servlet (Dispatcher);
 
-      procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
-         R : constant Servlet.Routes.Route_Type_Access := Route.Value;
-         D : Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
+      procedure Insert (Route : in out Routes.Route_Type_Ref) is
+         R : constant Routes.Route_Type_Access := Route.Value;
+         D : Routes.Servlets.Rest.API_Route_Type_Access;
       begin
          if R /= null then
-            if not (R.all in Servlet.Routes.Servlets.Rest.API_Route_Type'Class) then
+            if not (R.all in Routes.Servlets.Rest.API_Route_Type'Class) then
                Log.Error ("Route API for {0} already used by another page",
                           Definition.Pattern.all);
-               D := Servlet.Servlets.Rest.Create_Route (Servlet);
-               Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
+               D := Servlets.Rest.Create_Route (Servlet);
+               Route := Routes.Route_Type_Refs.Create (D.all'Access);
             else
-               D := Servlet.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
+               D := Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
             end if;
          else
-            D := Servlet.Servlets.Rest.Create_Route (Servlet);
-            Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
+            D := Servlets.Rest.Create_Route (Servlet);
+            Route := Routes.Route_Type_Refs.Create (D.all'Access);
          end if;
          if D.Descriptors (Definition.Method) /= null then
             Log.Error ("Route API for {0} is already used", Definition.Pattern.all);
