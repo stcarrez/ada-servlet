@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests.mockup -- ASF Requests mockup
+--  servlet-requests.mockup -- Servlet Requests mockup
 --  Copyright (C) 2010, 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,18 +16,18 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Strings.Maps;
-with ASF.Responses.Mockup;
+with Servlet.Responses.Mockup;
 
---  The <b>ASF.Requests.Mockup</b> provides a fake request object to simulate
+--  The <b>Servlet.Requests.Mockup</b> provides a fake request object to simulate
 --  an HTTP request.
-package ASF.Requests.Mockup is
+package Servlet.Requests.Mockup is
 
    --  ------------------------------
    --  Request Mockup
    --  ------------------------------
    --  The request mockup provides additional procedures to set the request
    --  parameters, the URI, the peer address and other read-only values.
-   type Request is new ASF.Requests.Request with private;
+   type Request is new Servlet.Requests.Request with private;
    type Request_Access is access all Request'Class;
 
    --  Returns the value of a request parameter as a String, or null if the
@@ -141,22 +141,22 @@ package ASF.Requests.Mockup is
    procedure Process_Part (Req      : in out Request;
                            Position : in Positive;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class));
+                             procedure (Data : in Servlet.Parts.Part'Class));
 
    --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class));
+                             procedure (Data : in Servlet.Parts.Part'Class));
 
    --  Set the request cookie by using the cookie returned in the response.
    procedure Set_Cookie (Req  : in out Request;
-                         From : in ASF.Responses.Mockup.Response'Class);
+                         From : in Servlet.Responses.Mockup.Response'Class);
 
 private
 
-   type Request is new ASF.Requests.Request with record
+   type Request is new Servlet.Requests.Request with record
       Headers    : Util.Strings.Maps.Map;
       Parameters : Util.Strings.Maps.Map;
       URI        : Unbounded_String;
@@ -165,4 +165,4 @@ private
       Peer       : Unbounded_String;
    end record;
 
-end ASF.Requests.Mockup;
+end Servlet.Requests.Mockup;
