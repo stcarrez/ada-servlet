@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  ASF tests - ASF Tests Framework
+--  Servlet tests - Servlet Tests Framework
 --  Copyright (C) 2011, 2012, 2013, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -23,51 +23,51 @@ with Ada.Unchecked_Deallocation;
 
 with Util.Files;
 
-with ASF.Streams;
---  with ASF.Servlets.Faces;
-with ASF.Servlets.Files;
---  with ASF.Servlets.Ajax;
-with ASF.Servlets.Measures;
-with ASF.Responses;
-with ASF.Responses.Tools;
+with Servlet.Streams;
+--  with Servlet.Servlets.Faces;
+with Servlet.Servlets.Files;
+--  with Servlet.Servlets.Ajax;
+with Servlet.Servlets.Measures;
+with Servlet.Responses;
+with Servlet.Responses.Tools;
 
-with ASF.Filters.Dump;
---  with ASF.Contexts.Faces;
+with Servlet.Filters.Dump;
+--  with Servlet.Contexts.Faces;
 with EL.Variables.Default;
 
-package body ASF.Tests is
+package body Servlet.Tests is
 
    use Ada.Strings.Unbounded;
    use Util.Tests;
 
-   CONTEXT_PATH : constant String := "/asfunit";
+   CONTEXT_PATH : constant String := "/servlet-nit";
 
-   type Container_Access is access ASF.Server.Container;
+   type Container_Access is access Servlet.Server.Container;
 
    Server      : Container_Access;
 
-   App_Created : ASF.Servlets.Servlet_Registry_Access;
-   App         : ASF.Servlets.Servlet_Registry_Access;
---     App_Created : ASF.Applications.Main.Application_Access;
---     App         : ASF.Applications.Main.Application_Access;
---     Faces       : aliased ASF.Servlets.Faces.Faces_Servlet;
-   Files       : aliased ASF.Servlets.Files.File_Servlet;
---     Ajax        : aliased ASF.Servlets.Ajax.Ajax_Servlet;
-   Dump        : aliased ASF.Filters.Dump.Dump_Filter;
-   Measures    : aliased ASF.Servlets.Measures.Measure_Servlet;
+   App_Created : Servlet.Servlets.Servlet_Registry_Access;
+   App         : Servlet.Servlets.Servlet_Registry_Access;
+--     App_Created : Servlet.Applications.Main.Application_Access;
+--     App         : Servlet.Applications.Main.Application_Access;
+--     Faces       : aliased Servlet.Servlets.Faces.Faces_Servlet;
+   Files       : aliased Servlet.Servlets.Files.File_Servlet;
+--     Ajax        : aliased Servlet.Servlets.Ajax.Ajax_Servlet;
+   Dump        : aliased Servlet.Filters.Dump.Dump_Filter;
+   Measures    : aliased Servlet.Servlets.Measures.Measure_Servlet;
 
    --  Save the response headers and content in a file
    procedure Save_Response (Name     : in String;
-                            Response : in out ASF.Responses.Mockup.Response);
+                            Response : in out Servlet.Responses.Mockup.Response);
 
    --  ------------------------------
    --  Initialize the awa test framework mockup.
    --  ------------------------------
    procedure Initialize (Props       : in Util.Properties.Manager;
-                         Registry    : in ASF.Servlets.Servlet_Registry_Access := null) is
---                           Application : in ASF.Applications.Main.Application_Access := null;
---                           Factory     : in out ASF.Applications.Main.Application_Factory'Class) is
-      use type ASF.Servlets.Servlet_Registry_Access;
+                         Registry    : in Servlet.Servlets.Servlet_Registry_Access := null) is
+--                           Application : in Servlet.Applications.Main.Application_Access := null;
+--                           Factory     : in out Servlet.Applications.Main.Application_Factory'Class) is
+      use type Servlet.Servlets.Servlet_Registry_Access;
 
       C        : Util.Properties.Manager;
    begin
@@ -75,12 +75,12 @@ package body ASF.Tests is
          App := Registry;
       else
          if App_Created = null then
-            App_Created := new ASF.Servlets.Servlet_Registry;
+            App_Created := new Servlet.Servlets.Servlet_Registry;
          end if;
          App := App_Created;
       end if;
 
-      Server := new ASF.Server.Container;
+      Server := new Servlet.Server.Container;
       Server.Register_Application (CONTEXT_PATH, App.all'Access);
 
       C.Copy (Props);
@@ -94,7 +94,7 @@ package body ASF.Tests is
 --        App.Add_Servlet (Name => "ajax", Server => Ajax'Access);
       App.Add_Servlet (Name => "measures", Server => Measures'Access);
       App.Add_Filter (Name => "dump", Filter => Dump'Access);
-      App.Add_Filter (Name => "measures", Filter => ASF.Filters.Filter'Class (Measures)'Access);
+      App.Add_Filter (Name => "measures", Filter => Servlet.Filters.Filter'Class (Measures)'Access);
 
       --  Define servlet mappings
 --        App.Add_Mapping (Name => "faces", Pattern => "*.html");
@@ -121,11 +121,11 @@ package body ASF.Tests is
       pragma Unreferenced (Status);
 
 --        procedure Free is
---          new Ada.Unchecked_Deallocation (Object => ASF.Applications.Main.Application'Class,
---                                          Name   => ASF.Applications.Main.Application_Access);
+--          new Ada.Unchecked_Deallocation (Object => Servlet.Applications.Main.Application'Class,
+--                                          Name   => Servlet.Applications.Main.Application_Access);
 
       procedure Free is
-        new Ada.Unchecked_Deallocation (Object => ASF.Server.Container,
+        new Ada.Unchecked_Deallocation (Object => Servlet.Server.Container,
                                         Name   => Container_Access);
 
    begin
@@ -136,7 +136,7 @@ package body ASF.Tests is
    --  ------------------------------
    --  Get the server
    --  ------------------------------
-   function Get_Server return access ASF.Server.Container is
+   function Get_Server return access Servlet.Server.Container is
    begin
       return Server;
    end Get_Server;
@@ -144,7 +144,7 @@ package body ASF.Tests is
    --  ------------------------------
    --  Get the test application.
    --  ------------------------------
---     function Get_Application return ASF.Applications.Main.Application_Access is
+--     function Get_Application return Servlet.Applications.Main.Application_Access is
 --     begin
 --        return App;
 --     end Get_Application;
@@ -153,15 +153,15 @@ package body ASF.Tests is
    --  Save the response headers and content in a file
    --  ------------------------------
    procedure Save_Response (Name     : in String;
-                            Response : in out ASF.Responses.Mockup.Response) is
-      use ASF.Responses;
+                            Response : in out Servlet.Responses.Mockup.Response) is
+      use Servlet.Responses;
 
       Info        : constant String := Tools.To_String (Reply         => Response,
                                                         Html          => False,
                                                         Print_Headers => True);
       Result_Path : constant String := Util.Tests.Get_Test_Path ("regtests/result");
       Content     : Unbounded_String;
-      Stream      : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
+      Stream      : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       Response.Read_Content (Content);
       Stream.Write (Content);
@@ -174,8 +174,8 @@ package body ASF.Tests is
    --  ------------------------------
    --  Simulate a raw request.  The URI and method must have been set on the Request object.
    --  ------------------------------
-   procedure Do_Req (Request  : in out ASF.Requests.Mockup.Request;
-                     Response : in out ASF.Responses.Mockup.Response) is
+   procedure Do_Req (Request  : in out Servlet.Requests.Mockup.Request;
+                     Response : in out Servlet.Responses.Mockup.Response) is
    begin
       --  For the purpose of writing tests, clear the buffer before invoking the service.
       Response.Clear;
@@ -187,8 +187,8 @@ package body ASF.Tests is
    --  Simulate a GET request on the given URI with the request parameters.
    --  Get the result in the response object.
    --  ------------------------------
-   procedure Do_Get (Request  : in out ASF.Requests.Mockup.Request;
-                     Response : in out ASF.Responses.Mockup.Response;
+   procedure Do_Get (Request  : in out Servlet.Requests.Mockup.Request;
+                     Response : in out Servlet.Responses.Mockup.Response;
                      URI      : in String;
                      Save     : in String := "") is
    begin
@@ -206,8 +206,8 @@ package body ASF.Tests is
    --  Simulate a POST request on the given URI with the request parameters.
    --  Get the result in the response object.
    --  ------------------------------
-   procedure Do_Post (Request  : in out ASF.Requests.Mockup.Request;
-                      Response : in out ASF.Responses.Mockup.Response;
+   procedure Do_Post (Request  : in out Servlet.Requests.Mockup.Request;
+                      Response : in out Servlet.Responses.Mockup.Response;
                       URI      : in String;
                       Save     : in String := "") is
    begin
@@ -226,17 +226,17 @@ package body ASF.Tests is
    --  ------------------------------
    procedure Assert_Contains (T       : in Util.Tests.Test'Class;
                               Value   : in String;
-                              Reply   : in out ASF.Responses.Mockup.Response;
+                              Reply   : in out Servlet.Responses.Mockup.Response;
                               Message : in String := "Test failed";
                               Source  : String := GNAT.Source_Info.File;
                               Line    : Natural := GNAT.Source_Info.Line) is
-      Stream  : ASF.Streams.Print_Stream := Reply.Get_Output_Stream;
+      Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
       Content : Unbounded_String;
    begin
       Reply.Read_Content (Content);
       Stream.Write (Content);
 
-      Assert_Equals (T, ASF.Responses.SC_OK, Reply.Get_Status, "Invalid response", Source, Line);
+      Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid response", Source, Line);
 
       T.Assert (Condition => Index (Content, Value) > 0,
                 Message   => Message & ": value '" & Value & "' not found",
@@ -249,14 +249,14 @@ package body ASF.Tests is
    --  ------------------------------
    procedure Assert_Matches (T       : in Util.Tests.Test'Class;
                              Pattern : in String;
-                             Reply   : in out ASF.Responses.Mockup.Response;
+                             Reply   : in out Servlet.Responses.Mockup.Response;
                              Message : in String := "Test failed";
-                             Status  : in Natural := ASF.Responses.SC_OK;
+                             Status  : in Natural := Servlet.Responses.SC_OK;
                              Source  : String := GNAT.Source_Info.File;
                              Line    : Natural := GNAT.Source_Info.Line) is
       use GNAT.Regpat;
 
-      Stream  : ASF.Streams.Print_Stream := Reply.Get_Output_Stream;
+      Stream  : Servlet.Streams.Print_Stream := Reply.Get_Output_Stream;
       Content : Unbounded_String;
       Regexp  : constant Pattern_Matcher := Compile (Expression => Pattern,
                                                      Flags      => Multiple_Lines);
@@ -278,9 +278,9 @@ package body ASF.Tests is
    procedure Assert_Header (T       : in Util.Tests.Test'Class;
                             Header  : in String;
                             Value   : in String;
-                            Reply   : in out ASF.Responses.Mockup.Response;
+                            Reply   : in out Servlet.Responses.Mockup.Response;
                             Message : in String := "Test failed";
-                            Status  : in Natural := ASF.Responses.SC_OK;
+                            Status  : in Natural := Servlet.Responses.SC_OK;
                             Source  : String := GNAT.Source_Info.File;
                             Line    : Natural := GNAT.Source_Info.Line) is
    begin
@@ -298,12 +298,12 @@ package body ASF.Tests is
    --  ------------------------------
    procedure Assert_Redirect (T       : in Util.Tests.Test'Class;
                               Value   : in String;
-                              Reply   : in out ASF.Responses.Mockup.Response;
+                              Reply   : in out Servlet.Responses.Mockup.Response;
                               Message : in String := "Test failed";
                               Source  : String := GNAT.Source_Info.File;
                               Line    : Natural := GNAT.Source_Info.Line) is
    begin
-      Assert_Equals (T, ASF.Responses.SC_MOVED_TEMPORARILY, Reply.Get_Status,
+      Assert_Equals (T, Servlet.Responses.SC_MOVED_TEMPORARILY, Reply.Get_Status,
                      "Invalid response", Source, Line);
 
       Util.Tests.Assert_Equals (T, Value, Reply.Get_Header ("Location"),
@@ -326,7 +326,7 @@ package body ASF.Tests is
         new Ada.Unchecked_Deallocation (EL.Contexts.Default.Default_ELResolver'Class,
                                         EL.Contexts.Default.Default_ELResolver_Access);
    begin
---        ASF.Contexts.Faces.Restore (null);
+--        Servlet.Contexts.Faces.Restore (null);
       Free (T.ELContext);
       Free (T.Variables);
       Free (T.Root_Resolver);
@@ -345,4 +345,4 @@ package body ASF.Tests is
       T.ELContext.Set_Variable_Mapper (T.Variables.all'Access);
    end Set_Up;
 
-end ASF.Tests;
+end Servlet.Tests;
