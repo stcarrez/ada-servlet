@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.servlets.files -- Static file servlet
+--  servlet-servlets.files -- Static file servlet
 --  Copyright (C) 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package ASF.Servlets.Files is
+package Servlet.Servlets.Files is
 
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
@@ -91,4 +91,4 @@ private
       Default_Content_Type : String_Access;
    end record;
 
-end ASF.Servlets.Files;
+end Servlet.Servlets.Files;
