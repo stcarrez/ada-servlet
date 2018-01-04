@@ -16,12 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Sessions;
+with Servlet.Sessions;
 
 with Util.Beans.Objects;
 with Util.Beans.Objects.Records;
 with Util.Log.Loggers;
-package body ASF.Security.Servlets is
+package body Servlet.Security.Servlets is
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Servlets");
@@ -36,7 +36,7 @@ package body ASF.Security.Servlets is
    --  is being placed into service.
    --  ------------------------------
    procedure Initialize (Server  : in out Openid_Servlet;
-                         Context : in ASF.Servlets.Servlet_Registry'Class) is
+                         Context : in Servlet.Servlets.Servlet_Registry'Class) is
    begin
       null;
    end Initialize;
@@ -56,13 +56,13 @@ package body ASF.Security.Servlets is
    overriding
    function Get_Parameter (Server : in Openid_Servlet;
                            Name   : in String) return String is
-      Ctx          : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx          : constant Servlet.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       return Ctx.Get_Init_Parameter (Name);
    end Get_Parameter;
 
    function Get_Provider_URL (Server   : in Request_Auth_Servlet;
-                              Request  : in ASF.Requests.Request'Class) return String is
+                              Request  : in Servlet.Requests.Request'Class) return String is
       pragma Unreferenced (Server);
 
       URI  : constant String := Request.Get_Path_Info;
@@ -82,17 +82,17 @@ package body ASF.Security.Servlets is
    --  the OpenID provider.
    --  ------------------------------
    procedure Do_Get (Server   : in Request_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class) is
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class) is
 
-      Ctx      : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx      : constant Servlet.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
       Name     : constant String := Server.Get_Provider_URL (Request);
       URL      : constant String := Ctx.Get_Init_Parameter ("auth.url." & Name);
    begin
       Log.Info ("Request OpenId authentication to {0} - {1}", Name, URL);
 
       if Name'Length = 0 or URL'Length = 0 then
-         Response.Set_Status (ASF.Responses.SC_NOT_FOUND);
+         Response.Set_Status (Servlet.Responses.SC_NOT_FOUND);
          return;
       end if;
 
@@ -114,7 +114,7 @@ package body ASF.Security.Servlets is
          --  redirect the user to the OpenID provider.
          declare
             Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
-            Session  : ASF.Sessions.Session := Request.Get_Session (Create => True);
+            Session  : Servlet.Sessions.Session := Request.Get_Session (Create => True);
          begin
             Log.Info ("Redirect to auth URL: {0}", Auth_URL);
 
@@ -131,8 +131,8 @@ package body ASF.Security.Servlets is
    --  user principals on the session.
    --  ------------------------------
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
-                     Request  : in out ASF.Requests.Request'Class;
-                     Response : in out ASF.Responses.Response'Class) is
+                     Request  : in out Servlet.Requests.Request'Class;
+                     Response : in out Servlet.Responses.Response'Class) is
       use type Auth.Auth_Result;
 
       type Auth_Params is new Auth.Parameters with null record;
@@ -149,19 +149,19 @@ package body ASF.Security.Servlets is
          return Request.Get_Parameter (Name);
       end Get_Parameter;
 
-      Session    : ASF.Sessions.Session := Request.Get_Session (Create => False);
+      Session    : Servlet.Sessions.Session := Request.Get_Session (Create => False);
       Bean       : Util.Beans.Objects.Object;
       Mgr        : Auth.Manager;
       Assoc      : Association_Access;
       Credential : Auth.Authentication;
       Params     : Auth_Params;
-      Ctx        : constant ASF.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx        : constant Servlet.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       Log.Info ("Verify openid authentication");
 
       if not Session.Is_Valid then
          Log.Warn ("Session has expired during OpenID authentication process");
-         Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+         Response.Set_Status (Servlet.Responses.SC_FORBIDDEN);
          return;
       end if;
 
@@ -171,7 +171,7 @@ package body ASF.Security.Servlets is
       Session.Remove_Attribute (OPENID_ASSOC_ATTRIBUTE);
       if Util.Beans.Objects.Is_Null (Bean) then
          Log.Warn ("Verify openid request without active session");
-         Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+         Response.Set_Status (Servlet.Responses.SC_FORBIDDEN);
          return;
       end if;
 
@@ -182,7 +182,7 @@ package body ASF.Security.Servlets is
       Mgr.Verify (Assoc.all, Params, Credential);
       if Auth.Get_Status (Credential) /= Auth.AUTHENTICATED then
          Log.Info ("Authentication has failed");
-         Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+         Response.Set_Status (Servlet.Responses.SC_FORBIDDEN);
          return;
       end if;
 
@@ -190,7 +190,7 @@ package body ASF.Security.Servlets is
 
       --  Get a user principal and set it on the session.
       declare
-         User : ASF.Principals.Principal_Access;
+         User : Servlet.Principals.Principal_Access;
          URL  : constant String := Ctx.Get_Init_Parameter ("openid.success_url");
       begin
          Verify_Auth_Servlet'Class (Server).Create_Principal (Credential, User);
@@ -208,7 +208,7 @@ package body ASF.Security.Servlets is
    --  ------------------------------
    procedure Create_Principal (Server     : in Verify_Auth_Servlet;
                                Credential : in Auth.Authentication;
-                               Result     : out ASF.Principals.Principal_Access) is
+                               Result     : out Servlet.Principals.Principal_Access) is
       pragma Unreferenced (Server);
 
       P : constant Auth.Principal_Access := Auth.Create_Principal (Credential);
@@ -216,4 +216,4 @@ package body ASF.Security.Servlets is
       Result := P.all'Access;
    end Create_Principal;
 
-end ASF.Security.Servlets;
+end Servlet.Security.Servlets;
