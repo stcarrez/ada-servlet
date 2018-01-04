@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses -- ASF Requests
+--  servlet-responses -- Servlet Requests
 --  Copyright (C) 2010, 2011, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,9 +16,9 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  The <b>ASF.Responses</b> package is an Ada implementation of
+--  The <b>Servlet.Responses</b> package is an Ada implementation of
 --  the Java servlet response (JSR 315 5. The Response).
-package body ASF.Responses.Mockup is
+package body Servlet.Responses.Mockup is
 
    --  ------------------------------
    --  Returns a boolean indicating whether the named response header has already
@@ -130,4 +130,4 @@ package body ASF.Responses.Mockup is
       Resp.Stream := Resp.Content'Unchecked_Access;
    end Initialize;
 
-end ASF.Responses.Mockup;
+end Servlet.Responses.Mockup;
