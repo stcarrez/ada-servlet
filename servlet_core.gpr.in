@@ -3,24 +3,24 @@ with "@UTIL_DIR@util";
 with "@EL_DIR@el";
 with "@SECURITY_DIR@security";
 
-project Asf_Core is
+project Servlet_Core is
 
-   Version := "@ASF_VERSION@";
-   Library_Dir := "@ASF_LIBDIR@";
-   Library_Type : Config.Library_Type_Type := external ("ASF_LIBRARY_TYPE", "static");
+   Version := "@SERVLET_VERSION@";
+   Library_Dir := "@SERVLET_LIBDIR@";
+   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
    for Source_Dirs use ("src");
 
-   for Library_Name use "ada_asf";
+   for Library_Name use "ada_servlet";
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use Library_Dir & "/asf/" & Project'Library_Kind;
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/asf/" & Project'Library_Kind;
+   for Library_Dir use Library_Dir & "/servlet/" & Project'Library_Kind;
+   for Object_Dir use "./" & Config'Object_Dir & "/obj/servlet/" & Project'Library_Kind;
 
    package Binder renames Config.Binder;
    package Builder renames Config.Builder;
    package Compiler renames Config.Compiler;
    package Ide      renames Config.Ide;
 
-end Asf_Core;
+end Servlet_Core;
