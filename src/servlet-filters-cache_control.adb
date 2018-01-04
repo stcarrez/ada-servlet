@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-filters-cache_control -- HTTP response Cache-Control settings
+--  servlet-filters-cache_control -- HTTP response Cache-Control settings
 --  Copyright (C) 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package body ASF.Filters.Cache_Control is
+package body Servlet.Filters.Cache_Control is
 
    --  ------------------------------
    --  The Do_Filter method of the Filter is called by the container each time
@@ -29,7 +29,7 @@ package body ASF.Filters.Cache_Control is
    procedure Do_Filter (F        : in Cache_Control_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is
+                        Chain    : in out Servlet.Servlets.Filter_Chain) is
       use Ada.Strings.Unbounded;
    begin
       if Length (F.Cache_Control_Header) > 0 then
@@ -38,7 +38,7 @@ package body ASF.Filters.Cache_Control is
       if Length (F.Vary) > 0 then
          Response.Add_Header ("Vary", To_String (F.Vary));
       end if;
-      ASF.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Servlets.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
    end Do_Filter;
@@ -48,10 +48,10 @@ package body ASF.Filters.Cache_Control is
    --  instance is being placed into service.
    --  ------------------------------
    procedure Initialize (Server  : in out Cache_Control_Filter;
-                         Config  : in ASF.Servlets.Filter_Config) is
+                         Config  : in Servlet.Servlets.Filter_Config) is
    begin
       Server.Vary                 := Servlets.Get_Init_Parameter (Config, VARY_HEADER_PARAM);
       Server.Cache_Control_Header := Servlets.Get_Init_Parameter (Config, CACHE_CONTROL_PARAM);
    end Initialize;
 
-end ASF.Filters.Cache_Control;
+end Servlet.Filters.Cache_Control;
