@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.server -- ASF Server
+--  servlet-server -- Servlet Server
 --  Copyright (C) 2009, 2010, 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,8 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package ASF.Server.Tests is
+package Servlet.Server.Tests is
 
-   procedure Set_Context (Context : in ASF.Servlets.Servlet_Registry_Access);
+   procedure Set_Context (Context : in Servlet.Servlets.Servlet_Registry_Access);
 
-end ASF.Server.Tests;
+end Servlet.Server.Tests;
