@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses.tools -- ASF Responses Tools
+--  servlet-responses.tools -- Servlet Responses Tools
 --  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package ASF.Responses.Tools is
+package Servlet.Responses.Tools is
 
    --  Builds a printable representation of the response for debugging purposes.
    --  When <b>Html</b> is true, the returned content contains an HTML presentation.
@@ -24,4 +24,4 @@ package ASF.Responses.Tools is
                        Html             : in Boolean := False;
                        Print_Headers    : in Boolean := True) return String;
 
-end ASF.Responses.Tools;
+end Servlet.Responses.Tools;
