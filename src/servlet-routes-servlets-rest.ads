@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-reoutes-servlets-rest -- Route for the REST API
+--  servlet-reoutes-servlets-rest -- Route for the REST API
 --  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,16 +15,16 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Rest;
+with Servlet.Rest;
 
-package ASF.Routes.Servlets.Rest is
+package Servlet.Routes.Servlets.Rest is
 
-   type Descriptor_Array is array (ASF.Rest.Method_Type) of ASF.Rest.Descriptor_Access;
+   type Descriptor_Array is array (Servlet.Rest.Method_Type) of Servlet.Rest.Descriptor_Access;
 
    --  The route has one descriptor for each REST method.
-   type API_Route_Type is new ASF.Routes.Servlets.Servlet_Route_Type with record
+   type API_Route_Type is new Servlet.Routes.Servlets.Servlet_Route_Type with record
       Descriptors : Descriptor_Array;
    end record;
    type API_Route_Type_Access is access all API_Route_Type'Class;
 
-end ASF.Routes.Servlets.Rest;
+end Servlet.Routes.Servlets.Rest;
