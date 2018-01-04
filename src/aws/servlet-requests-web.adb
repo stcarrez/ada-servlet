@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.requests -- ASF Requests
+--  servlet-requests -- Servlet Requests
 --  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -21,8 +21,8 @@ with AWS.Parameters;
 
 with Util.Strings;
 
-with ASF.Parts.Web;
-package body ASF.Requests.Web is
+with Servlet.Parts.Web;
+package body Servlet.Requests.Web is
 
    function Get_Parameter (R : Request; Name : String) return String is
    begin
@@ -177,10 +177,10 @@ package body ASF.Requests.Web is
    procedure Process_Part (Req      : in out Request;
                            Position : in Positive;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class)) is
+                             procedure (Data : in Servlet.Parts.Part'Class)) is
       Attachs : constant AWS.Attachments.List := AWS.Status.Attachments (Req.Data.all);
    begin
-      ASF.Parts.Web.Process_Part (AWS.Attachments.Get (Attachs, Position), Process);
+      Servlet.Parts.Web.Process_Part (AWS.Attachments.Get (Attachs, Position), Process);
    end Process_Part;
 
    --  ------------------------------
@@ -190,21 +190,21 @@ package body ASF.Requests.Web is
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
                            Process  : not null access
-                             procedure (Data : in ASF.Parts.Part'Class)) is
+                             procedure (Data : in Servlet.Parts.Part'Class)) is
       procedure Process_Part (E : in AWS.Attachments.Element);
 
       procedure Process_Part (E : in AWS.Attachments.Element) is
          Name : constant String := AWS.Attachments.Extend.Get_Name (E);
       begin
          if Id = Name then
-            ASF.Parts.Web.Process_Part (E, Process);
+            Servlet.Parts.Web.Process_Part (E, Process);
          end if;
       end Process_Part;
 
       Attachs : constant AWS.Attachments.List := AWS.Status.Attachments (Req.Data.all);
    begin
       AWS.Attachments.Iterate (Attachs, Process_Part'Access);
---        ASF.Parts.Web.Process_Part (AWS.Attachments.Get (Attachs, Id), Process);
+--        Servlet.Parts.Web.Process_Part (AWS.Attachments.Get (Attachs, Id), Process);
    end Process_Part;
 
    --  ------------------------------
@@ -222,12 +222,12 @@ package body ASF.Requests.Web is
    end Read;
 
    overriding
-   function Create_Input_Stream (Req : in Request) return ASF.Streams.Input_Stream_Access is
-      Result : constant ASF.Streams.Input_Stream_Access := new ASF.Streams.Input_Stream;
+   function Create_Input_Stream (Req : in Request) return Servlet.Streams.Input_Stream_Access is
+      Result : constant Servlet.Streams.Input_Stream_Access := new Servlet.Streams.Input_Stream;
    begin
       Result.Initialize (Input  => Req'Unrestricted_Access,
                          Size   => 8192);
       return Result;
    end Create_Input_Stream;
 
-end ASF.Requests.Web;
+end Servlet.Requests.Web;
