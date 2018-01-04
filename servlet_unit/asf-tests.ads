@@ -20,7 +20,8 @@ with Util.Properties;
 with ASF.Requests.Mockup;
 with ASF.Responses.Mockup;
 with ASF.Server;
-with ASF.Applications.Main;
+with ASF.Servlets;
+--  with ASF.Applications.Main;
 with Util.Tests;
 with Util.XUnit;
 
@@ -36,8 +37,9 @@ package ASF.Tests is
    --  Initialize the asf test framework mockup.  If the application is not specified,
    --  a default ASF application is created.
    procedure Initialize (Props       : in Util.Properties.Manager;
-                         Application : in ASF.Applications.Main.Application_Access := null;
-                         Factory     : in out ASF.Applications.Main.Application_Factory'Class);
+                         Registry    : in ASF.Servlets.Servlet_Registry_Access := null);
+--                           Application : in ASF.Applications.Main.Application_Access := null;
+--                           Factory     : in out ASF.Applications.Main.Application_Factory'Class);
 
    --  Called when the testsuite execution has finished.
    procedure Finish (Status : in Util.XUnit.Status);
@@ -46,7 +48,7 @@ package ASF.Tests is
    function Get_Server return access ASF.Server.Container;
 
    --  Get the test application.
-   function Get_Application return ASF.Applications.Main.Application_Access;
+--     function Get_Application return ASF.Applications.Main.Application_Access;
 
    --  Simulate a GET request on the given URI with the request parameters.
    --  Get the result in the response object.

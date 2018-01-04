@@ -24,15 +24,15 @@ with Ada.Unchecked_Deallocation;
 with Util.Files;
 
 with ASF.Streams;
-with ASF.Servlets.Faces;
+--  with ASF.Servlets.Faces;
 with ASF.Servlets.Files;
-with ASF.Servlets.Ajax;
+--  with ASF.Servlets.Ajax;
 with ASF.Servlets.Measures;
 with ASF.Responses;
 with ASF.Responses.Tools;
 
 with ASF.Filters.Dump;
-with ASF.Contexts.Faces;
+--  with ASF.Contexts.Faces;
 with EL.Variables.Default;
 
 package body ASF.Tests is
@@ -46,11 +46,13 @@ package body ASF.Tests is
 
    Server      : Container_Access;
 
-   App_Created : ASF.Applications.Main.Application_Access;
-   App         : ASF.Applications.Main.Application_Access;
-   Faces       : aliased ASF.Servlets.Faces.Faces_Servlet;
+   App_Created : ASF.Servlets.Servlet_Registry_Access;
+   App         : ASF.Servlets.Servlet_Registry_Access;
+--     App_Created : ASF.Applications.Main.Application_Access;
+--     App         : ASF.Applications.Main.Application_Access;
+--     Faces       : aliased ASF.Servlets.Faces.Faces_Servlet;
    Files       : aliased ASF.Servlets.Files.File_Servlet;
-   Ajax        : aliased ASF.Servlets.Ajax.Ajax_Servlet;
+--     Ajax        : aliased ASF.Servlets.Ajax.Ajax_Servlet;
    Dump        : aliased ASF.Filters.Dump.Dump_Filter;
    Measures    : aliased ASF.Servlets.Measures.Measure_Servlet;
 
@@ -62,17 +64,18 @@ package body ASF.Tests is
    --  Initialize the awa test framework mockup.
    --  ------------------------------
    procedure Initialize (Props       : in Util.Properties.Manager;
-                         Application : in ASF.Applications.Main.Application_Access := null;
-                         Factory     : in out ASF.Applications.Main.Application_Factory'Class) is
-      use type ASF.Applications.Main.Application_Access;
+                         Registry    : in ASF.Servlets.Servlet_Registry_Access := null) is
+--                           Application : in ASF.Applications.Main.Application_Access := null;
+--                           Factory     : in out ASF.Applications.Main.Application_Factory'Class) is
+      use type ASF.Servlets.Servlet_Registry_Access;
 
-      C        : ASF.Applications.Config;
+      C        : Util.Properties.Manager;
    begin
-      if Application /= null then
-         App := Application;
+      if Registry /= null then
+         App := Registry;
       else
          if App_Created = null then
-            App_Created := new ASF.Applications.Main.Application;
+            App_Created := new ASF.Servlets.Servlet_Registry;
          end if;
          App := App_Created;
       end if;
@@ -81,25 +84,25 @@ package body ASF.Tests is
       Server.Register_Application (CONTEXT_PATH, App.all'Access);
 
       C.Copy (Props);
-      App.Initialize (C, Factory);
-      App.Register ("layoutMsg", "layout");
-      App.Set_Global ("contextPath", CONTEXT_PATH);
+--        App.Initialize (C, Factory);
+--        App.Register ("layoutMsg", "layout");
+--        App.Set_Global ("contextPath", CONTEXT_PATH);
 
       --  Register the servlets and filters
-      App.Add_Servlet (Name => "faces", Server => Faces'Access);
+--        App.Add_Servlet (Name => "faces", Server => Faces'Access);
       App.Add_Servlet (Name => "files", Server => Files'Access);
-      App.Add_Servlet (Name => "ajax", Server => Ajax'Access);
+--        App.Add_Servlet (Name => "ajax", Server => Ajax'Access);
       App.Add_Servlet (Name => "measures", Server => Measures'Access);
       App.Add_Filter (Name => "dump", Filter => Dump'Access);
       App.Add_Filter (Name => "measures", Filter => ASF.Filters.Filter'Class (Measures)'Access);
 
       --  Define servlet mappings
-      App.Add_Mapping (Name => "faces", Pattern => "*.html");
+--        App.Add_Mapping (Name => "faces", Pattern => "*.html");
       App.Add_Mapping (Name => "files", Pattern => "*.css");
       App.Add_Mapping (Name => "files", Pattern => "*.js");
       App.Add_Mapping (Name => "files", Pattern => "*.properties");
       App.Add_Mapping (Name => "files", Pattern => "*.xhtml");
-      App.Add_Mapping (Name => "ajax", Pattern => "/ajax/*");
+--        App.Add_Mapping (Name => "ajax", Pattern => "/ajax/*");
       App.Add_Mapping (Name => "measures", Pattern => "stats.xml");
 
       App.Add_Filter_Mapping (Name => "measures", Pattern => "*");
@@ -117,16 +120,16 @@ package body ASF.Tests is
    procedure Finish (Status : in Util.XUnit.Status) is
       pragma Unreferenced (Status);
 
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Object => ASF.Applications.Main.Application'Class,
-                                        Name   => ASF.Applications.Main.Application_Access);
+--        procedure Free is
+--          new Ada.Unchecked_Deallocation (Object => ASF.Applications.Main.Application'Class,
+--                                          Name   => ASF.Applications.Main.Application_Access);
 
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => ASF.Server.Container,
                                         Name   => Container_Access);
 
    begin
-      Free (App_Created);
+--        Free (App_Created);
       Free (Server);
    end Finish;
 
@@ -141,10 +144,10 @@ package body ASF.Tests is
    --  ------------------------------
    --  Get the test application.
    --  ------------------------------
-   function Get_Application return ASF.Applications.Main.Application_Access is
-   begin
-      return App;
-   end Get_Application;
+--     function Get_Application return ASF.Applications.Main.Application_Access is
+--     begin
+--        return App;
+--     end Get_Application;
 
    --  ------------------------------
    --  Save the response headers and content in a file
@@ -323,7 +326,7 @@ package body ASF.Tests is
         new Ada.Unchecked_Deallocation (EL.Contexts.Default.Default_ELResolver'Class,
                                         EL.Contexts.Default.Default_ELResolver_Access);
    begin
-      ASF.Contexts.Faces.Restore (null);
+--        ASF.Contexts.Faces.Restore (null);
       Free (T.ELContext);
       Free (T.Variables);
       Free (T.Root_Resolver);
