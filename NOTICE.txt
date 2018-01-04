@@ -1,4 +1,4 @@
-Ada Server Faces
+Ada Servlet
 Copyright 2009-2018 Stephane Carrez
 
 This product includes software developed by:
