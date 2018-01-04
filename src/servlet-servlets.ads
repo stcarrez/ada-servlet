@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.servlets -- ASF Servlets
+--  servlet-servlets -- Servlet Servlets
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,12 +15,12 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Sessions;
-with ASF.Sessions.Factory;
-with ASF.Routes;
-limited with ASF.Filters;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Sessions;
+with Servlet.Sessions.Factory;
+with Servlet.Routes;
+limited with Servlet.Filters;
 
 with Ada.Finalization;
 with Ada.Strings.Unbounded;
@@ -36,18 +36,18 @@ with EL.Contexts;
 
 private with Ada.Containers.Indefinite_Hashed_Maps;
 
---  The <b>ASF.Servlets</b> package implements a subset of the
+--  The <b>Servlet.Servlets</b> package implements a subset of the
 --  Java Servlet Specification adapted for the Ada language.
 --
 --  The rationale for this implementation is to provide a set of
 --  interfaces and ways of developing a Web application which
 --  benefit from the architecture expertise defined in Java applications.
 --
---  The <b>ASF.Servlets</b>, <b>ASF.Requests</b>, <b>ASF.Responses</b>
---  and <b>ASF.Sessions</b> packages are independent of the web server
+--  The <b>Servlet.Servlets</b>, <b>Servlet.Requests</b>, <b>Servlet.Responses</b>
+--  and <b>Servlet.Sessions</b> packages are independent of the web server
 --  which will be used (such as <b>AWS</b>, <b>Apache</b> or <b>Lighthttpd</b>).
 --
-package ASF.Servlets is
+package Servlet.Servlets is
 
    Servlet_Error : exception;
 
@@ -55,8 +55,8 @@ package ASF.Servlets is
    type Filter_Chain is limited private;
    type Filter_Config is private;
 
-   type Filter_Access is access all ASF.Filters.Filter'Class;
-   type Filter_List_Access is access all ASF.Filters.Filter_List;
+   type Filter_Access is access all Servlet.Filters.Filter'Class;
+   type Filter_List_Access is access all Servlet.Filters.Filter_List;
 
    --  Causes the next filter in the chain to be invoked, or if the calling
    --  filter is the last filter in the chain, causes the resource at the end
@@ -81,7 +81,7 @@ package ASF.Servlets is
                                 return Ada.Strings.Unbounded.Unbounded_String;
 
    --  type Servlet_Registry;
-   type Servlet_Registry is new ASF.Sessions.Factory.Session_Factory with private;
+   type Servlet_Registry is new Servlet.Sessions.Factory.Session_Factory with private;
 
    type Servlet_Registry_Access is access all Servlet_Registry'Class;
 
@@ -434,7 +434,7 @@ package ASF.Servlets is
                         Pattern   : in String;
                         ELContext : in EL.Contexts.ELContext'Class;
                         Process   : not null access
-                          procedure (Route : in out ASF.Routes.Route_Type_Ref));
+                          procedure (Route : in out Servlet.Routes.Route_Type_Ref));
 
    --  Set the error page that will be used if a servlet returns an error.
    procedure Set_Error_Page (Server : in out Servlet_Registry;
@@ -490,7 +490,7 @@ private
    end record;
 
    type Request_Dispatcher is limited record
-      Context : aliased ASF.Routes.Route_Context_Type;
+      Context : aliased Servlet.Routes.Route_Context_Type;
       Filters : Filter_List_Access;
       Servlet : Servlet_Access := null;
       Pos     : Natural := 0;
@@ -527,7 +527,7 @@ private
                                             Hash                => Hash,
                                             Equivalent_Keys     => "=");
 
-   type Servlet_Registry is new ASF.Sessions.Factory.Session_Factory with record
+   type Servlet_Registry is new Servlet.Sessions.Factory.Session_Factory with record
       Config            : Util.Properties.Manager;
       Servlets          : Servlet_Maps.Map;
       Filters           : Filter_Maps.Map;
@@ -535,7 +535,7 @@ private
       Filter_Patterns   : Util.Strings.Vectors.Vector;
       Error_Pages       : Error_Maps.Map;
       Context_Path      : Unbounded_String;
-      Routes            : ASF.Routes.Router_Type;
+      Routes            : Servlet.Routes.Router_Type;
    end record;
 
    --  Install the servlet filters after all the mappings have been registered.
@@ -546,4 +546,4 @@ private
       Context   : Servlet_Registry_Access := null;
    end record;
 
-end ASF.Servlets;
+end Servlet.Servlets;
