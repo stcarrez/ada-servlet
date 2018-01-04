@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.servlets.measures -- Dump performance measurements
+--  servlet-servlets.measures -- Dump performance measurements
 --  Copyright (C) 2010, 2011, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,8 +17,8 @@
 -----------------------------------------------------------------------
 
 with Util.Streams.Texts;
-with ASF.Streams;
-package body ASF.Servlets.Measures is
+with Servlet.Streams;
+package body Servlet.Servlets.Measures is
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
@@ -96,7 +96,7 @@ package body ASF.Servlets.Measures is
 
       use type Util.Measures.Measure_Set_Access;
 
-      Output   : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
+      Output   : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
 
       procedure Print (Into : in out Util.Streams.Texts.Print_Stream'Class);
 
@@ -137,12 +137,12 @@ package body ASF.Servlets.Measures is
    procedure Do_Filter (F        : in Measure_Servlet;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is
+                        Chain    : in out Servlet.Servlets.Filter_Chain) is
       URI   : constant String := Request.Get_Request_URI;
       Stamp : Util.Measures.Stamp;
    begin
       Util.Measures.Set_Current (F.Current);
-      ASF.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Servlets.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
       Util.Measures.Report (Measures => F.Current.all,
@@ -159,4 +159,4 @@ package body ASF.Servlets.Measures is
          raise;
    end Do_Filter;
 
-end ASF.Servlets.Measures;
+end Servlet.Servlets.Measures;
