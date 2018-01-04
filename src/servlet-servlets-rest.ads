@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-servlets-rest -- REST servlet
+--  servlet-servlets-rest -- REST servlet
 --  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,10 +15,10 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Rest;
-with ASF.Routes.Servlets.Rest;
+with Servlet.Rest;
+with Servlet.Routes.Servlets.Rest;
 
-package ASF.Servlets.Rest is
+package Servlet.Servlets.Rest is
 
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
@@ -40,14 +40,14 @@ package ASF.Servlets.Rest is
                       Response : in out Responses.Response'Class);
 
    --  Create a route for the REST API.
-   function Create_Route (Registry : in ASF.Servlets.Servlet_Registry;
+   function Create_Route (Registry : in Servlet.Servlets.Servlet_Registry;
                           Name     : in String)
-                          return ASF.Routes.Servlets.Rest.API_Route_Type_Access;
-   function Create_Route (Servlet  : in ASF.Servlets.Servlet_Access)
-                          return ASF.Routes.Servlets.Rest.API_Route_Type_Access;
+                          return Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
+   function Create_Route (Servlet  : in Servlet.Servlets.Servlet_Access)
+                          return Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
 
    procedure Dispatch (Server   : in Rest_Servlet;
-                       Method   : in ASF.Rest.Method_Type;
+                       Method   : in Servlet.Rest.Method_Type;
                        Request  : in out Requests.Request'Class;
                        Response : in out Responses.Response'Class);
 
@@ -55,4 +55,4 @@ private
 
    type Rest_Servlet is new Servlet with null record;
 
-end ASF.Servlets.Rest;
+end Servlet.Servlets.Rest;
