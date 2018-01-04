@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-cookies -- ASF Cookies
+--  servlet-cookies -- Servlet Cookies
 --  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -17,4 +17,4 @@
 -----------------------------------------------------------------------
 
 with Util.Http.Cookies;
-package ASF.Cookies renames Util.Http.Cookies;
+package Servlet.Cookies renames Util.Http.Cookies;
