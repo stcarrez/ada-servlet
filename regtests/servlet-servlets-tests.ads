@@ -15,10 +15,15 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Strings.Unbounded;
 with Util.Tests;
+with Util.Beans.Basic;
+with Util.Beans.Methods;
+with Util.Beans.Objects;
 
 package ASF.Servlets.Tests is
+
+   use Ada.Strings.Unbounded;
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -78,5 +83,47 @@ package ASF.Servlets.Tests is
                             URI          : in String;
                             Servlet_Path : in String;
                             Path_Info    : in String);
+
+   type Form_Bean is new Util.Beans.Basic.Bean with record --  and Util.Beans.Methods.Method_Bean with record
+      Name       : Unbounded_String;
+      Password   : Unbounded_String;
+      Email      : Unbounded_String;
+      Called     : Natural := 0;
+      Gender     : Unbounded_String;
+      Use_Flash  : Boolean := False;
+      Def_Nav    : Boolean := False;
+      Perm_Error : Boolean := False;
+   end record;
+   type Form_Bean_Access is access all Form_Bean'Class;
+
+   --  Get the value identified by the name.
+   overriding
+   function Get_Value (From : in Form_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the value identified by the name.
+   overriding
+   procedure Set_Value (From  : in out Form_Bean;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+   --  This bean provides some methods that can be used in a Method_Expression
+--     overriding
+--     function Get_Method_Bindings (From : in Form_Bean)
+--                                   return Util.Beans.Methods.Method_Binding_Array_Access;
+--
+--     --  Action to save the form
+--     procedure Save (Data    : in out Form_Bean;
+--                     Outcome : in out Unbounded_String);
+
+   --  Create a form bean.
+--     function Create_Form_Bean return Util.Beans.Basic.Readonly_Bean_Access;
+
+   --  Create a list of forms.
+--     package Form_Lists is
+--       new Util.Beans.Basic.Lists (Form_Bean);
+
+   --  Create a list of forms.
+--     function Create_Form_List return Util.Beans.Basic.Readonly_Bean_Access;
 
 end ASF.Servlets.Tests;
