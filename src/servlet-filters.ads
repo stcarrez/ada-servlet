@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.filters -- ASF Filters
+--  servlet-filters -- Servlet Filters
 --  Copyright (C) 2010, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -15,14 +15,14 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Servlets;
 
---  The <b>ASF.Filters</b> package defines the servlet filter
+--  The <b>Servlet.Filters</b> package defines the servlet filter
 --  interface described in Java Servlet Specification, JSR 315, 6. Filtering.
 --
-package ASF.Filters is
+package Servlet.Filters is
 
    --  ------------------------------
    --  Filter interface
@@ -59,11 +59,11 @@ package ASF.Filters is
    procedure Do_Filter (F        : in Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is abstract;
+                        Chain    : in out Servlet.Servlets.Filter_Chain) is abstract;
 
    --  Called by the servlet container to indicate to a filter that the filter
    --  instance is being placed into service.
    procedure Initialize (Server  : in out Filter;
-                         Config  : in ASF.Servlets.Filter_Config) is null;
+                         Config  : in Servlet.Servlets.Filter_Config) is null;
 
-end ASF.Filters;
+end Servlet.Filters;
