@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-cookies-tests - Unit tests for Cookies
+--  servlet-cookies-tests - Unit tests for Cookies
 --  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,7 +18,7 @@
 
 with Util.Tests;
 
-package ASF.Cookies.Tests is
+package Servlet.Cookies.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -29,4 +29,4 @@ package ASF.Cookies.Tests is
    procedure Test_To_Http_Header (T : in out Test);
    procedure Test_Parse_Http_Header (T : in out Test);
 
-end ASF.Cookies.Tests;
+end Servlet.Cookies.Tests;
