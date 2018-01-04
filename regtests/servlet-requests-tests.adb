@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-requests-tests - Unit tests for requests
+--  servlet-requests-tests - Unit tests for requests
 --  Copyright (C) 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,23 +18,23 @@
 
 with Util.Test_Caller;
 with Util.Log.Loggers;
-with ASF.Requests.Mockup;
-package body ASF.Requests.Tests is
+with Servlet.Requests.Mockup;
+package body Servlet.Requests.Tests is
 
    use Util.Tests;
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Requests.Tests");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Requests.Tests");
 
    package Caller is new Util.Test_Caller (Test, "Requests");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test ASF.Requests.Split_Header",
+      Caller.Add_Test (Suite, "Test Servlet.Requests.Split_Header",
                        Test_Split_Header'Access);
-      Caller.Add_Test (Suite, "Test ASF.Requests.Accept_Locales",
+      Caller.Add_Test (Suite, "Test Servlet.Requests.Accept_Locales",
                        Test_Accept_Locales'Access);
-      Caller.Add_Test (Suite, "Test ASF.Requests.Set_Attribute",
+      Caller.Add_Test (Suite, "Test Servlet.Requests.Set_Attribute",
                        Test_Set_Attribute'Access);
    end Add_Tests;
 
@@ -81,7 +81,7 @@ package body ASF.Requests.Tests is
 
       use Util.Locales;
 
-      Req : ASF.Requests.Mockup.Request;
+      Req : Servlet.Requests.Mockup.Request;
 
       Count : Natural := 0;
 
@@ -115,7 +115,7 @@ package body ASF.Requests.Tests is
    --  ------------------------------
    procedure Test_Set_Attribute (T : in out Test) is
       use Util.Beans.Objects;
-      Req : ASF.Requests.Mockup.Request;
+      Req : Servlet.Requests.Mockup.Request;
    begin
       Req.Set_Attribute ("page", Util.Beans.Objects.To_Object (Integer (1)));
       Util.Tests.Assert_Equals (T, 1, Util.Beans.Objects.To_Integer (Req.Get_Attribute ("page")),
@@ -131,4 +131,4 @@ package body ASF.Requests.Tests is
                 "Attribute page is not null");
    end Test_Set_Attribute;
 
-end ASF.Requests.Tests;
+end Servlet.Requests.Tests;
