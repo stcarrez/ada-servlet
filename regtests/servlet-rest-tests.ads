@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-rest-tests - Unit tests for ASF.Rest and ASF.Servlets.Rest
+--  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Servlets.Rest
 --  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,23 +20,23 @@ with Ada.Strings.Unbounded;
 
 with Util.Tests;
 with Util.Beans.Objects;
-with ASF.Tests;
+with Servlet.Tests;
 
-package ASF.Rest.Tests is
+package Servlet.Rest.Tests is
 
    --  Test API with simple operations.
-   procedure Simple_Get (Req    : in out ASF.Rest.Request'Class;
-                         Reply  : in out ASF.Rest.Response'Class;
-                         Stream : in out ASF.Rest.Output_Stream'Class);
-   procedure Simple_Put (Req    : in out ASF.Rest.Request'Class;
-                         Reply  : in out ASF.Rest.Response'Class;
-                         Stream : in out ASF.Rest.Output_Stream'Class);
-   procedure Simple_Post (Req    : in out ASF.Rest.Request'Class;
-                          Reply  : in out ASF.Rest.Response'Class;
-                          Stream : in out ASF.Rest.Output_Stream'Class);
-   procedure Simple_Delete (Req    : in out ASF.Rest.Request'Class;
-                            Reply  : in out ASF.Rest.Response'Class;
-                            Stream : in out ASF.Rest.Output_Stream'Class);
+   procedure Simple_Get (Req    : in out Servlet.Rest.Request'Class;
+                         Reply  : in out Servlet.Rest.Response'Class;
+                         Stream : in out Servlet.Rest.Output_Stream'Class);
+   procedure Simple_Put (Req    : in out Servlet.Rest.Request'Class;
+                         Reply  : in out Servlet.Rest.Response'Class;
+                         Stream : in out Servlet.Rest.Output_Stream'Class);
+   procedure Simple_Post (Req    : in out Servlet.Rest.Request'Class;
+                          Reply  : in out Servlet.Rest.Response'Class;
+                          Stream : in out Servlet.Rest.Output_Stream'Class);
+   procedure Simple_Delete (Req    : in out Servlet.Rest.Request'Class;
+                            Reply  : in out Servlet.Rest.Response'Class;
+                            Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  Test API with an object created for each request.
    type Test_API is record
@@ -44,24 +44,24 @@ package ASF.Rest.Tests is
    end record;
 
    procedure Create (Data   : in out Test_API;
-                     Req    : in out ASF.Rest.Request'Class;
-                     Reply  : in out ASF.Rest.Response'Class;
-                     Stream : in out ASF.Rest.Output_Stream'Class);
+                     Req    : in out Servlet.Rest.Request'Class;
+                     Reply  : in out Servlet.Rest.Response'Class;
+                     Stream : in out Servlet.Rest.Output_Stream'Class);
 
    procedure Update (Data   : in out Test_API;
-                     Req    : in out ASF.Rest.Request'Class;
-                     Reply  : in out ASF.Rest.Response'Class;
-                     Stream : in out ASF.Rest.Output_Stream'Class);
+                     Req    : in out Servlet.Rest.Request'Class;
+                     Reply  : in out Servlet.Rest.Response'Class;
+                     Stream : in out Servlet.Rest.Output_Stream'Class);
 
    procedure Delete (Data   : in out Test_API;
-                     Req    : in out ASF.Rest.Request'Class;
-                     Reply  : in out ASF.Rest.Response'Class;
-                     Stream : in out ASF.Rest.Output_Stream'Class);
+                     Req    : in out Servlet.Rest.Request'Class;
+                     Reply  : in out Servlet.Rest.Response'Class;
+                     Stream : in out Servlet.Rest.Output_Stream'Class);
 
    procedure List (Data   : in out Test_API;
-                   Req    : in out ASF.Rest.Request'Class;
-                   Reply  : in out ASF.Rest.Response'Class;
-                   Stream : in out ASF.Rest.Output_Stream'Class);
+                   Req    : in out Servlet.Rest.Request'Class;
+                   Reply  : in out Servlet.Rest.Response'Class;
+                   Stream : in out Servlet.Rest.Output_Stream'Class);
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -87,4 +87,4 @@ package ASF.Rest.Tests is
                              URI    : in String;
                              Status : in Natural);
 
-end ASF.Rest.Tests;
+end Servlet.Rest.Tests;
