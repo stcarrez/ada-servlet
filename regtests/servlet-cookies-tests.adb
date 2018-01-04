@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-cookies-tests - Unit tests for Cookies
+--  servlet-cookies-tests - Unit tests for Cookies
 --  Copyright (C) 2011 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -21,7 +21,7 @@ with Util.Log.Loggers;
 with Util.Measures;
 with Ada.Strings.Fixed;
 with Ada.Unchecked_Deallocation;
-package body ASF.Cookies.Tests is
+package body Servlet.Cookies.Tests is
 
 
    use Ada.Strings.Fixed;
@@ -29,7 +29,7 @@ package body ASF.Cookies.Tests is
    use Util.Log;
 
    --  The logger
-   Log : constant Loggers.Logger := Loggers.Create ("ASF.Cookies.Tests");
+   Log : constant Loggers.Logger := Loggers.Create ("Servlet.Cookies.Tests");
 
    procedure Free is new Ada.Unchecked_Deallocation (Cookie_Array, Cookie_Array_Access);
 
@@ -37,11 +37,11 @@ package body ASF.Cookies.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
-      Caller.Add_Test (Suite, "Test ASF.Cookies.Create_Cookie",
+      Caller.Add_Test (Suite, "Test Servlet.Cookies.Create_Cookie",
                        Test_Create_Cookie'Access);
-      Caller.Add_Test (Suite, "Test ASF.Cookies.To_Http_Header",
+      Caller.Add_Test (Suite, "Test Servlet.Cookies.To_Http_Header",
                        Test_To_Http_Header'Access);
-      Caller.Add_Test (Suite, "Test ASF.Cookies.Get_Cookies",
+      Caller.Add_Test (Suite, "Test Servlet.Cookies.Get_Cookies",
                        Test_Parse_Http_Header'Access);
    end Add_Tests;
 
@@ -195,4 +195,4 @@ package body ASF.Cookies.Tests is
 
    end Test_Parse_Http_Header;
 
-end ASF.Cookies.Tests;
+end Servlet.Cookies.Tests;
