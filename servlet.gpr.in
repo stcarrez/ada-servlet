@@ -1,18 +1,18 @@
 with "@UTIL_DIR@config";
-with "asf_core";
+with "servlet_core";
 with "@UTIL_DIR@util";
 with "@EL_DIR@el";
 with "@SECURITY_DIR@security";
-@WITH_ASF_AWS@
+@WITH_SERVLET_AWS@
 
-abstract project Asf is
+abstract project Servlet is
 
-   Version := Asf_Core.Version;
-   Library_Dir := Asf_Core.Library_Dir;
+   Version := Servlet_Core.Version;
+   Library_Dir := Servlet_Core.Library_Dir;
    Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
    type Server_Type is ("none", "aws");
-   Server : Server_Type := external ("SERVER", "@ASF_SERVER@");
+   Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
 
    for Source_Files use ();
-end Asf;
+end Servlet;
