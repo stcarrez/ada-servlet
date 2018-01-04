@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.responses.web -- ASF Responses with AWS server
+--  servlet-responses.web -- Servlet Responses with AWS server
 --  Copyright (C) 2009, 2010, 2011, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,7 +20,7 @@ with AWS.Headers;
 with AWS.Messages;
 with AWS.Response.Set;
 with AWS.Containers.Tables;
-package body ASF.Responses.Web is
+package body Servlet.Responses.Web is
 
    procedure Initialize (Resp : in out Response) is
    begin
@@ -185,4 +185,4 @@ package body ASF.Responses.Web is
       return Resp.Data;
    end Get_Data;
 
-end ASF.Responses.Web;
+end Servlet.Responses.Web;
