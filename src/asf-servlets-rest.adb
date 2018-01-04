@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  asf-servlets-rest -- REST servlet
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Applications;
 with ASF.Streams.JSON;
 package body ASF.Servlets.Rest is
 
@@ -27,12 +26,8 @@ package body ASF.Servlets.Rest is
    procedure Initialize (Server  : in out Rest_Servlet;
                          Context : in Servlet_Registry'Class) is
       pragma Unreferenced (Context);
-
-      Ctx : constant Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
-      if Ctx.all in ASF.Applications.Main.Application'Class then
-         Server.App := ASF.Applications.Main.Application'Class (Ctx.all)'Unchecked_Access;
-      end if;
+      null;
    end Initialize;
 
    --  ------------------------------
