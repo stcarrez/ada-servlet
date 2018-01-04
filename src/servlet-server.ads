@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf.server -- ASF Server
+--  servlet-server -- Servlet Server
 --  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -18,21 +18,21 @@
 with Ada.Finalization;
 with Ada.Strings.Unbounded;
 
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Servlets;
-package ASF.Server is
+with Servlet.Requests;
+with Servlet.Responses;
+with Servlet.Servlets;
+package Servlet.Server is
 
    type Container is tagged limited private;
 
    --  Register the application to serve requests
    procedure Register_Application (Server  : in out Container;
                                    URI     : in String;
-                                   Context : in ASF.Servlets.Servlet_Registry_Access);
+                                   Context : in Servlet.Servlets.Servlet_Registry_Access);
 
    --  Remove the application
    procedure Remove_Application (Server  : in out Container;
-                                 Context : in ASF.Servlets.Servlet_Registry_Access);
+                                 Context : in Servlet.Servlets.Servlet_Registry_Access);
 
    --  Start the applications that have been registered.
    procedure Start (Server : in out Container);
@@ -47,7 +47,7 @@ package ASF.Server is
 
    --  Get the current registry associated with the current request being processed
    --  by the current thread.  Returns null if there is no current request.
-   function Current return ASF.Servlets.Servlet_Registry_Access;
+   function Current return Servlet.Servlets.Servlet_Registry_Access;
 
    --  Give access to the current request and response object to the <b>Process</b>
    --  procedure.  If there is no current request for the thread, do nothing.
@@ -57,10 +57,10 @@ package ASF.Server is
 
 private
 
-   --  Binding to record the ASF applications and bind them to URI prefixes.
-   --  It is expected that the number of ASF applications is small (1-10 per server).
+   --  Binding to record the Servlet applications and bind them to URI prefixes.
+   --  It is expected that the number of Servlet applications is small (1-10 per server).
    type Binding is record
-      Context  : ASF.Servlets.Servlet_Registry_Access;
+      Context  : Servlet.Servlets.Servlet_Registry_Access;
       Base_URI : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
@@ -70,14 +70,14 @@ private
    type Container is new Ada.Finalization.Limited_Controlled with record
       Nb_Bindings  : Natural := 0;
       Applications : Binding_Array_Access := null;
-      Default      : ASF.Servlets.Servlet_Registry;
+      Default      : Servlet.Servlets.Servlet_Registry;
       Is_Started   : Boolean := False;
    end record;
 
    type Request_Context is record
-      Application : ASF.Servlets.Servlet_Registry_Access;
-      Request     : ASF.Requests.Request_Access;
-      Response    : ASF.Responses.Response_Access;
+      Application : Servlet.Servlets.Servlet_Registry_Access;
+      Request     : Servlet.Requests.Request_Access;
+      Response    : Servlet.Responses.Response_Access;
    end record;
 
    --  Set the current registry.  This is called by <b>Service</b> once the
@@ -88,4 +88,4 @@ private
    overriding
    procedure Finalize (Server : in out Container);
 
-end ASF.Server;
+end Servlet.Server;
