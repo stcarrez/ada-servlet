@@ -20,12 +20,12 @@ with Ada.Strings.Unbounded;
 
 with Util.Log.Loggers;
 
-with ASF.Cookies;
---  with ASF.Applications.Main;
+with Servlet.Cookies;
+--  with Servlet.Applications.Main;
 
 with Security.Contexts;
 with Security.Policies.URLs;
-package body ASF.Security.Filters is
+package body Servlet.Security.Filters is
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Filters");
@@ -35,8 +35,8 @@ package body ASF.Security.Filters is
    --  is being placed into service.
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
-                         Config  : in ASF.Servlets.Filter_Config) is
---      use ASF.Applications.Main;
+                         Config  : in Servlet.Servlets.Filter_Config) is
+--      use Servlet.Applications.Main;
 
       Context : constant Servlets.Servlet_Registry_Access := Servlets.Get_Servlet_Context (Config);
    begin
@@ -63,32 +63,32 @@ null;
    --  is denied.
    --  ------------------------------
    procedure Do_Filter (F        : in Auth_Filter;
-                        Request  : in out ASF.Requests.Request'Class;
-                        Response : in out ASF.Responses.Response'Class;
-                        Chain    : in out ASF.Servlets.Filter_Chain) is
+                        Request  : in out Servlet.Requests.Request'Class;
+                        Response : in out Servlet.Responses.Response'Class;
+                        Chain    : in out Servlet.Servlets.Filter_Chain) is
       use Ada.Strings.Unbounded;
       use Policies.URLs;
       use type Policies.Policy_Manager_Access;
 
-      Session : ASF.Sessions.Session;
+      Session : Servlet.Sessions.Session;
       SID     : Unbounded_String;
       AID     : Unbounded_String;
-      Auth    : ASF.Principals.Principal_Access;
+      Auth    : Servlet.Principals.Principal_Access;
 
       pragma Unreferenced (SID);
 
-      procedure Fetch_Cookie (Cookie : in ASF.Cookies.Cookie);
+      procedure Fetch_Cookie (Cookie : in Servlet.Cookies.Cookie);
 
       --  ------------------------------
       --  Collect the AID and SID cookies.
       --  ------------------------------
-      procedure Fetch_Cookie (Cookie : in ASF.Cookies.Cookie) is
-         Name : constant String := ASF.Cookies.Get_Name (Cookie);
+      procedure Fetch_Cookie (Cookie : in Servlet.Cookies.Cookie) is
+         Name : constant String := Servlet.Cookies.Get_Name (Cookie);
       begin
          if Name = SID_COOKIE then
-            SID := To_Unbounded_String (ASF.Cookies.Get_Value (Cookie));
+            SID := To_Unbounded_String (Servlet.Cookies.Get_Value (Cookie));
          elsif Name = AID_COOKIE then
-            AID := To_Unbounded_String (ASF.Cookies.Get_Value (Cookie));
+            AID := To_Unbounded_String (Servlet.Cookies.Get_Value (Cookie));
          end if;
       end Fetch_Cookie;
 
@@ -136,7 +136,7 @@ null;
       end if;
 
       --  Request is authorized, proceed to the next filter.
-      ASF.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Servlets.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
    end Do_Filter;
@@ -146,11 +146,11 @@ null;
    --  the user is not authenticated.
    --  ------------------------------
    procedure Do_Login (F        : in Auth_Filter;
-                       Request  : in out ASF.Requests.Request'Class;
-                       Response : in out ASF.Responses.Response'Class) is
+                       Request  : in out Servlet.Requests.Request'Class;
+                       Response : in out Servlet.Responses.Response'Class) is
       pragma Unreferenced (F, Request);
    begin
-      Response.Send_Error (ASF.Responses.SC_UNAUTHORIZED);
+      Response.Send_Error (Servlet.Responses.SC_UNAUTHORIZED);
    end Do_Login;
 
    --  ------------------------------
@@ -158,11 +158,11 @@ null;
    --  authorized to see the page.  The default implementation returns the SC_FORBIDDEN error.
    --  ------------------------------
    procedure Do_Deny (F        : in Auth_Filter;
-                      Request  : in out ASF.Requests.Request'Class;
-                      Response : in out ASF.Responses.Response'Class) is
+                      Request  : in out Servlet.Requests.Request'Class;
+                      Response : in out Servlet.Responses.Response'Class) is
       pragma Unreferenced (F, Request);
    begin
-      Response.Set_Status (ASF.Responses.SC_FORBIDDEN);
+      Response.Set_Status (Servlet.Responses.SC_FORBIDDEN);
    end Do_Deny;
 
    --  ------------------------------
@@ -175,14 +175,14 @@ null;
    --  The default implementation returns a null principal.
    --  ------------------------------
    procedure Authenticate (F        : in Auth_Filter;
-                           Request  : in out ASF.Requests.Request'Class;
-                           Response : in out ASF.Responses.Response'Class;
-                           Session  : in ASF.Sessions.Session;
+                           Request  : in out Servlet.Requests.Request'Class;
+                           Response : in out Servlet.Responses.Response'Class;
+                           Session  : in Servlet.Sessions.Session;
                            Auth_Id  : in String;
-                           Principal : out ASF.Principals.Principal_Access) is
+                           Principal : out Servlet.Principals.Principal_Access) is
       pragma Unreferenced (F, Request, Response, Session, Auth_Id);
    begin
       Principal := null;
    end Authenticate;
 
-end ASF.Security.Filters;
+end Servlet.Security.Filters;
