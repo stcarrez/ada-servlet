@@ -180,7 +180,7 @@ package body Servlet.Servlets.Files is
 
       File_Servlet'Class (Server).Set_Content_Type (Path, Response);
       declare
-         Output : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
+         Output : Streams.Print_Stream := Response.Get_Output_Stream;
          Input  : Util.Streams.Files.File_Stream;
       begin
          Input.Open (Name => Path, Mode => In_File);
