@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  asf-servlets-rest -- REST servlet
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 with ASF.Rest;
 with ASF.Routes.Servlets.Rest;
-with ASF.Applications.Main;
 
 package ASF.Servlets.Rest is
 
@@ -54,8 +53,6 @@ package ASF.Servlets.Rest is
 
 private
 
-   type Rest_Servlet is new Servlet with record
-      App    : ASF.Applications.Main.Application_Access;
-   end record;
+   type Rest_Servlet is new Servlet with null record;
 
 end ASF.Servlets.Rest;
