@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  asf-routes -- Request routing
+--  servlet-routes -- Request routing
 --  Copyright (C) 2015, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,9 +20,9 @@ with Util.Strings;
 with Util.Beans.Objects;
 with Util.Log.Loggers;
 
-package body ASF.Routes is
+package body Servlet.Routes is
 
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("ASF.Routes");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Routes");
 
    --  ------------------------------
    --  Get path information after the routing.
@@ -781,4 +781,4 @@ package body ASF.Routes is
       end loop;
    end Finalize;
 
-end ASF.Routes;
+end Servlet.Routes;
