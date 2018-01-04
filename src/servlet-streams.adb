@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  ASF.Streams -- Print streams for servlets
+--  Servlet.Streams -- Print streams for servlets
 --  Copyright (C) 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package body ASF.Streams is
+package body Servlet.Streams is
 
    procedure Initialize (Stream : in out Print_Stream;
                          To     : in Util.Streams.Texts.Print_Stream_Access) is
@@ -135,4 +135,4 @@ package body ASF.Streams is
       Print (Into => Stream.Target.all);
    end Write;
 
-end ASF.Streams;
+end Servlet.Streams;
