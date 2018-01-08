@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_servlet -- Servlet example to upload files on the server
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +16,14 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Servlets;
-with ASF.Requests;
-with ASF.Responses;
-with ASF.Streams;
+with Servlet.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
+with servlet.Streams;
 
 package Upload_Servlet is
 
-   use ASF;
+   use Servlet;
 
    type File_Type is (IMAGE, PDF, TAR_GZ, TAR, ZIP, UNKNOWN);
 
@@ -33,11 +33,11 @@ package Upload_Servlet is
 
    --  Execute a command and write the result to the output stream.
    procedure Execute (Command : in String;
-                      Output  : in out ASF.Streams.Print_Stream);
+                      Output  : in out Streams.Print_Stream);
 
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
-   type Servlet is new ASF.Servlets.Servlet with null record;
+   type Servlet is new Servlets.Servlet with null record;
 
    --  Called by the servlet container when a GET request is received.
    --  Display the upload form page.
