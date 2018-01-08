@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  monitor - A simple monitor API
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with ASF.Responses;
-with ASF.Rest.Definition;
+with Servlet.Responses;
+with Servlet.Rest.Definition;
 package body Monitor is
 
    type Monitor_Array is array (1 .. MAX_MONITOR) of Monitor_Data;
@@ -24,9 +24,9 @@ package body Monitor is
    Monitors : Monitor_Array;
 
    --  Get values of the monitor.
-   procedure Get_Values (Req    : in out ASF.Rest.Request'Class;
-                         Reply  : in out ASF.Rest.Response'Class;
-                         Stream : in out ASF.Rest.Output_Stream'Class) is
+   procedure Get_Values (Req    : in out Servlet.Rest.Request'Class;
+                         Reply  : in out Servlet.Rest.Response'Class;
+                         Stream : in out Servlet.Rest.Output_Stream'Class) is
       Id  : constant String := Req.Get_Path_Parameter (1);
       Pos : Positive;
    begin
@@ -50,13 +50,13 @@ package body Monitor is
 
    exception
       when others =>
-         Reply.Set_Status (ASF.Responses.SC_NOT_FOUND);
+         Reply.Set_Status (Servlet.Responses.SC_NOT_FOUND);
    end Get_Values;
 
    --  PUT /mon/:id
-   procedure Put_Value (Req    : in out ASF.Rest.Request'Class;
-                        Reply  : in out ASF.Rest.Response'Class;
-                        Stream : in out ASF.Rest.Output_Stream'Class) is
+   procedure Put_Value (Req    : in out Servlet.Rest.Request'Class;
+                        Reply  : in out Servlet.Rest.Response'Class;
+                        Stream : in out Servlet.Rest.Output_Stream'Class) is
       Id  : constant String := Req.Get_Path_Parameter (1);
       Pos : Positive;
       Val : Natural;
@@ -68,12 +68,12 @@ package body Monitor is
 
       exception
          when others =>
-            Reply.Set_Status (ASF.Responses.SC_BAD_REQUEST);
+            Reply.Set_Status (Servlet.Responses.SC_BAD_REQUEST);
       end;
 
    exception
       when others =>
-         Reply.Set_Status (ASF.Responses.SC_NOT_FOUND);
+         Reply.Set_Status (Servlet.Responses.SC_NOT_FOUND);
    end Put_Value;
 
    protected body Monitor_Data is
