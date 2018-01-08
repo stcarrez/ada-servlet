@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Servlet tests - Servlet Tests Framework
---  Copyright (C) 2011, 2012, 2013, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,8 +37,6 @@ package body Servlet.Tests is
    use Ada.Strings.Unbounded;
    use Util.Tests;
 
-   CONTEXT_PATH : constant String := "/servlet-nit";
-
    type Container_Access is access Servlet.Server.Container;
 
    Server      : Container_Access;
@@ -61,8 +59,6 @@ package body Servlet.Tests is
                          Context_Path : in String := "/servlet-unit";
                          Registry     : in Servlet.Servlets.Servlet_Registry_Access := null) is
       use type Servlet.Servlets.Servlet_Registry_Access;
-
-      C        : Util.Properties.Manager;
    begin
       if Registry /= null then
          App := Registry;
@@ -77,24 +73,18 @@ package body Servlet.Tests is
       Server := new Servlet.Server.Container;
       Server.Register_Application (Context_Path, App.all'Access);
 
-      C.Copy (Props);
---        App.Initialize (C, Factory);
---        App.Register ("layoutMsg", "layout");
---        App.Set_Global ("contextPath", CONTEXT_PATH);
-
       --  Register the servlets and filters
       App.Add_Servlet (Name => "files", Server => Files'Access);
       App.Add_Servlet (Name => "measures", Server => Measures'Access);
       App.Add_Filter (Name => "dump", Filter => Dump'Access);
-      App.Add_Filter (Name => "measures", Filter => Servlet.Filters.Filter'Class (Measures)'Access);
+      App.Add_Filter (Name => "measures",
+                      Filter => Servlet.Filters.Filter'Class (Measures)'Access);
 
       --  Define servlet mappings
---        App.Add_Mapping (Name => "faces", Pattern => "*.html");
       App.Add_Mapping (Name => "files", Pattern => "*.css");
       App.Add_Mapping (Name => "files", Pattern => "*.js");
       App.Add_Mapping (Name => "files", Pattern => "*.properties");
       App.Add_Mapping (Name => "files", Pattern => "*.xhtml");
---        App.Add_Mapping (Name => "ajax", Pattern => "/ajax/*");
       App.Add_Mapping (Name => "measures", Pattern => "stats.xml");
 
       App.Add_Filter_Mapping (Name => "measures", Pattern => "*");
@@ -112,16 +102,11 @@ package body Servlet.Tests is
    procedure Finish (Status : in Util.XUnit.Status) is
       pragma Unreferenced (Status);
 
---        procedure Free is
---          new Ada.Unchecked_Deallocation (Object => Servlet.Applications.Main.Application'Class,
---                                          Name   => Servlet.Applications.Main.Application_Access);
-
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => Servlet.Server.Container,
                                         Name   => Container_Access);
 
    begin
---        Free (App_Created);
       Free (Server);
    end Finish;
 
@@ -228,7 +213,8 @@ package body Servlet.Tests is
       Reply.Read_Content (Content);
       Stream.Write (Content);
 
-      Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid response", Source, Line);
+      Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status,
+                     "Invalid response", Source, Line);
 
       T.Assert (Condition => Index (Content, Value) > 0,
                 Message   => Message & ": value '" & Value & "' not found",
