@@ -35,4 +35,13 @@ package Servlet.Server.Tests is
    --  Test the Service procedure.
    procedure Test_Service (T : in out Test);
 
+   --  Test a GET request on a static file served by the File_Servlet.
+   procedure Test_Get_File (T : in out Test);
+
+   --  Test a GET 404 error on missing static file served by the File_Servlet.
+   procedure Test_Get_404 (T : in out Test);
+
+   --  Test a GET request on the measure servlet
+   procedure Test_Get_Measures (T : in out Test);
+
 end Servlet.Server.Tests;
