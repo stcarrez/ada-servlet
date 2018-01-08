@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  monitor - A simple monitor API
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,29 +16,29 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Calendar;
-with ASF.Rest.Operation;
+with Servlet.Rest.Operation;
 package Monitor is
 
    --  Get values of the monitor.
-   procedure Get_Values (Req    : in out ASF.Rest.Request'Class;
-                         Reply  : in out ASF.Rest.Response'Class;
-                         Stream : in out ASF.Rest.Output_Stream'Class);
+   procedure Get_Values (Req    : in out Servlet.Rest.Request'Class;
+                         Reply  : in out Servlet.Rest.Response'Class;
+                         Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  PUT /mon/:id
-   procedure Put_Value (Req    : in out ASF.Rest.Request'Class;
-                        Reply  : in out ASF.Rest.Response'Class;
-                        Stream : in out ASF.Rest.Output_Stream'Class);
+   procedure Put_Value (Req    : in out Servlet.Rest.Request'Class;
+                        Reply  : in out Servlet.Rest.Response'Class;
+                        Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  Declare each REST API with a relative URI from Mon_API definition.
    --  GET /api/monitor/:id
-   package API_Get_Values is new ASF.Rest.Operation (Handler    => Get_Values'Access,
-                                                     Method     => ASF.Rest.GET,
-                                                     URI        => "/mon/:id");
+   package API_Get_Values is new Servlet.Rest.Operation (Handler    => Get_Values'Access,
+                                                         Method     => Servlet.Rest.GET,
+                                                         URI        => "/mon/:id");
 
    --  PUT /api/monitor/:id
-   package API_Put_Value is new ASF.Rest.Operation (Handler    => Put_Value'Access,
-                                                    Method     => ASF.Rest.PUT,
-                                                    URI        => "/mon/:id");
+   package API_Put_Value is new Servlet.Rest.Operation (Handler    => Put_Value'Access,
+                                                        Method     => Servlet.Rest.PUT,
+                                                        URI        => "/mon/:id");
 
 private
 
