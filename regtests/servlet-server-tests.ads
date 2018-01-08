@@ -44,4 +44,7 @@ package Servlet.Server.Tests is
    --  Test a GET request on the measure servlet
    procedure Test_Get_Measures (T : in out Test);
 
+   --  Test a POST on a file served by the File_Servlet.
+   procedure Test_Post_File (T : in out Test);
+
 end Servlet.Server.Tests;
