@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  volume_servlet -- Servlet example to compute some volumes
---  Copyright (C) 2010 Stephane Carrez
+--  Copyright (C) 2010, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,17 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with ASF.Servlets;
-with ASF.Requests;
-with ASF.Responses;
+with Servlet.Servlets;
+with Servlet.Requests;
+with Servlet.Responses;
 
 package Volume_Servlet is
 
-   use ASF;
+   use Servlet;
 
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
-   type Servlet is new ASF.Servlets.Servlet with null record;
+   type Servlet is new Servlets.Servlet with null record;
 
    --  Called by the servlet container when a GET request is received.
    --  Display the volume form page.
