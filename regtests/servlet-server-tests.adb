@@ -42,6 +42,8 @@ package body Servlet.Server.Tests is
                        Test_Get_404'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (POST)",
                        Test_Post_File'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET measures)",
+                       Test_Get_Measures'Access);
     end Add_Tests;
 
    --  Initialize the test.
