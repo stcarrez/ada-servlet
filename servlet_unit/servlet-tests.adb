@@ -24,15 +24,12 @@ with Ada.Unchecked_Deallocation;
 with Util.Files;
 
 with Servlet.Streams;
---  with Servlet.Servlets.Faces;
 with Servlet.Servlets.Files;
---  with Servlet.Servlets.Ajax;
 with Servlet.Servlets.Measures;
 with Servlet.Responses;
 with Servlet.Responses.Tools;
 
 with Servlet.Filters.Dump;
---  with Servlet.Contexts.Faces;
 with EL.Variables.Default;
 
 package body Servlet.Tests is
@@ -48,13 +45,10 @@ package body Servlet.Tests is
 
    App_Created : Servlet.Servlets.Servlet_Registry_Access;
    App         : Servlet.Servlets.Servlet_Registry_Access;
---     App_Created : Servlet.Applications.Main.Application_Access;
---     App         : Servlet.Applications.Main.Application_Access;
---     Faces       : aliased Servlet.Servlets.Faces.Faces_Servlet;
    Files       : aliased Servlet.Servlets.Files.File_Servlet;
---     Ajax        : aliased Servlet.Servlets.Ajax.Ajax_Servlet;
    Dump        : aliased Servlet.Filters.Dump.Dump_Filter;
    Measures    : aliased Servlet.Servlets.Measures.Measure_Servlet;
+   App_URI     : Unbounded_String;
 
    --  Save the response headers and content in a file
    procedure Save_Response (Name     : in String;
@@ -63,10 +57,9 @@ package body Servlet.Tests is
    --  ------------------------------
    --  Initialize the awa test framework mockup.
    --  ------------------------------
-   procedure Initialize (Props       : in Util.Properties.Manager;
-                         Registry    : in Servlet.Servlets.Servlet_Registry_Access := null) is
---                           Application : in Servlet.Applications.Main.Application_Access := null;
---                           Factory     : in out Servlet.Applications.Main.Application_Factory'Class) is
+   procedure Initialize (Props        : in Util.Properties.Manager;
+                         Context_Path : in String := "/servlet-unit";
+                         Registry     : in Servlet.Servlets.Servlet_Registry_Access := null) is
       use type Servlet.Servlets.Servlet_Registry_Access;
 
       C        : Util.Properties.Manager;
@@ -80,8 +73,9 @@ package body Servlet.Tests is
          App := App_Created;
       end if;
 
+      App_URI := To_Unbounded_String (Context_Path);
       Server := new Servlet.Server.Container;
-      Server.Register_Application (CONTEXT_PATH, App.all'Access);
+      Server.Register_Application (Context_Path, App.all'Access);
 
       C.Copy (Props);
 --        App.Initialize (C, Factory);
@@ -89,9 +83,7 @@ package body Servlet.Tests is
 --        App.Set_Global ("contextPath", CONTEXT_PATH);
 
       --  Register the servlets and filters
---        App.Add_Servlet (Name => "faces", Server => Faces'Access);
       App.Add_Servlet (Name => "files", Server => Files'Access);
---        App.Add_Servlet (Name => "ajax", Server => Ajax'Access);
       App.Add_Servlet (Name => "measures", Server => Measures'Access);
       App.Add_Filter (Name => "dump", Filter => Dump'Access);
       App.Add_Filter (Name => "measures", Filter => Servlet.Filters.Filter'Class (Measures)'Access);
@@ -144,10 +136,10 @@ package body Servlet.Tests is
    --  ------------------------------
    --  Get the test application.
    --  ------------------------------
---     function Get_Application return Servlet.Applications.Main.Application_Access is
---     begin
---        return App;
---     end Get_Application;
+   function Get_Application return Servlet.Servlets.Servlet_Registry_Access is
+   begin
+      return App;
+   end Get_Application;
 
    --  ------------------------------
    --  Save the response headers and content in a file
@@ -193,7 +185,7 @@ package body Servlet.Tests is
                      Save     : in String := "") is
    begin
       Request.Set_Method (Method => "GET");
-      Request.Set_Request_URI (URI => CONTEXT_PATH & URI, Split => True);
+      Request.Set_Request_URI (URI => To_String (App_URI) & URI, Split => True);
       Request.Set_Protocol (Protocol => "HTTP/1.1");
       Do_Req (Request, Response);
 
@@ -212,7 +204,7 @@ package body Servlet.Tests is
                       Save     : in String := "") is
    begin
       Request.Set_Method (Method => "POST");
-      Request.Set_Request_URI (URI => CONTEXT_PATH & URI, Split => False);
+      Request.Set_Request_URI (URI => To_String (App_URI) & URI, Split => False);
       Request.Set_Protocol (Protocol => "HTTP/1.1");
       Do_Req (Request, Response);
 
