@@ -20,6 +20,7 @@ with Servlet.Servlets.Tests;
 with Servlet.Security.Tests;
 with Servlet.Requests.Tests;
 with Servlet.Routes.Tests;
+with Servlet.Server.Tests;
 
 package body Servlet.Testsuite is
 
@@ -33,6 +34,7 @@ package body Servlet.Testsuite is
       Servlet.Sessions.Tests.Add_Tests (Ret);
       Servlet.Servlets.Tests.Add_Tests (Ret);
       Servlet.Security.Tests.Add_Tests (Ret);
+      Servlet.Server.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
