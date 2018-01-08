@@ -44,7 +44,7 @@ package body Servlet.Security.Filters.OAuth is
 --      if Context.all in Main.Application'Class then
 --         Server.Set_Permission_Manager (Main.Application'Class (Context.all).Get_Security_Manager);
 --      end if;
-null;
+      null;
    end Initialize;
 
    --  ------------------------------
@@ -110,9 +110,9 @@ null;
          --     -- deny
          --  Request.Set_Attribute ("application", Grant.Application);
          --  Request is authorized, proceed to the next filter.
-         Servlet.Servlets.Do_Filter (Chain    => Chain,
-                                 Request  => Request,
-                                 Response => Response);
+         Servlets.Do_Filter (Chain    => Chain,
+                             Request  => Request,
+                             Response => Response);
       end;
    end Do_Filter;
 
