@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_servlet -- Servlet example to upload files on the server
---  Copyright (C) 2012, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ with Ada.Streams;
 with Util.Streams.Pipes;
 with Util.Strings;
 
-with ASF.Parts;
+with Servlet.Parts;
 package body Upload_Servlet is
 
    --  ------------------------------
@@ -29,7 +29,7 @@ package body Upload_Servlet is
    --  ------------------------------
    procedure Write (Response : in out Responses.Response'Class;
                     Message  : in String) is
-      Output : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
+      Output : Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       Output.Write ("<html><head><title>Upload servlet example</title></head>"
                     & "<style></style>"
@@ -75,7 +75,7 @@ package body Upload_Servlet is
    --  Execute a command and write the result to the output stream.
    --  ------------------------------
    procedure Execute (Command : in String;
-                      Output  : in out ASF.Streams.Print_Stream) is
+                      Output  : in out Streams.Print_Stream) is
       use type Ada.Streams.Stream_Element_Offset;
 
       Proc     : Util.Streams.Pipes.Pipe_Stream;
@@ -151,11 +151,11 @@ package body Upload_Servlet is
                       Response : in out Responses.Response'Class) is
       pragma Unreferenced (Server);
 
-      procedure Process_Part (Part : in ASF.Parts.Part'Class);
+      procedure Process_Part (Part : in Parts.Part'Class);
 
-      Output : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
+      Output : Streams.Print_Stream := Response.Get_Output_Stream;
 
-      procedure Process_Part (Part : in ASF.Parts.Part'Class) is
+      procedure Process_Part (Part : in Parts.Part'Class) is
          Name         : constant String := Part.Get_Name;
          Content_Type : constant String := Part.Get_Content_Type;
          Path         : constant String := Part.Get_Local_Filename;
