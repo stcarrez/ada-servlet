@@ -38,8 +38,10 @@ package body Servlet.Server.Tests is
                        Test_Service'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET)",
                        Test_Get_File'Access);
-      Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET 404",
+      Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET 404)",
                        Test_Get_404'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Server.Service (POST)",
+                       Test_Post_File'Access);
     end Add_Tests;
 
    --  Initialize the test.
@@ -126,5 +128,13 @@ package body Servlet.Server.Tests is
       Assert_Matches (T, "<time count=""\d+"" time=""\d+.\d+ [um]s"" title="".*""/>",
                       Reply, "Wrong content");
    end Test_Get_Measures;
+
+   --  Test a POST on a file served by the File_Servlet.
+   procedure Test_Post_File (T : in out Test) is
+      Request : Servlet.Requests.Mockup.Request;
+      Reply   : Servlet.Responses.Mockup.Response;
+   begin
+      Do_Post (Request, Reply, "/tests/file.css", "post-file.css");
+   end Test_Post_File;
 
 end Servlet.Server.Tests;
