@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  volume_servlet -- Servlet example to compute some volumes
---  Copyright (C) 2010, 2015 Stephane Carrez
+--  Copyright (C) 2010, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with Ada.Numerics;
-with ASF.Streams;
+with Servlet.Streams;
 package body Volume_Servlet is
 
    procedure Write (Response : in out Responses.Response'Class;
@@ -32,7 +32,7 @@ package body Volume_Servlet is
                     Message  : in String;
                     Height   : in String;
                     Radius   : in String) is
-      Output : ASF.Streams.Print_Stream := Response.Get_Output_Stream;
+      Output : Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       Output.Write ("<html><head><title>Volume servlet example</title></head>"
                     & "<style></style>"
