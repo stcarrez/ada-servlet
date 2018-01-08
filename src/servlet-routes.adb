@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -176,8 +176,9 @@ package body Servlet.Routes is
          when EXT_MATCH =>
             while Current /= null loop
                if not (Current.all in Path_Node_Type'Class)
-                  and not (Current.all in Param_Node_Type'Class)
-                  and not (Current.all in EL_Node_Type'Class) then
+                 and not (Current.all in Param_Node_Type'Class)
+                 and not (Current.all in EL_Node_Type'Class)
+               then
                   exit;
                end if;
                Previous := Current;
