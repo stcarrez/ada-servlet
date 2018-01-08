@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-servlets -- Servlet request routing
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,12 @@
 
 with Servlet.Filters;
 with Servlet.Servlets;
+use Servlet.Servlets;
 package Servlet.Routes.Servlets is
 
    type Servlet_Route_Type is new Servlet.Routes.Route_Type with record
       Filters : Servlet.Filters.Filter_List_Access;
-      Servlet : Servlet.Servlets.Servlet_Access;
+      Servlet : Servlet_Access;
    end record;
    type Servlet_Route_Type_Access is access all Servlet_Route_Type'Class;
 
