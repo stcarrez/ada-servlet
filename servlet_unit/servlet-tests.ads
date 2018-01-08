@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Servlet tests - Servlet Tests Framework
---  Copyright (C) 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,10 +36,9 @@ package Servlet.Tests is
 
    --  Initialize the servlet-test framework mockup.  If the application is not specified,
    --  a default Servlet application is created.
-   procedure Initialize (Props       : in Util.Properties.Manager;
-                         Registry    : in Servlet.Servlets.Servlet_Registry_Access := null);
---                           Application : in Servlet.Applications.Main.Application_Access := null;
---                           Factory     : in out Servlet.Applications.Main.Application_Factory'Class);
+   procedure Initialize (Props        : in Util.Properties.Manager;
+                         Context_Path : in String := "/servlet-unit";
+                         Registry     : in Servlet.Servlets.Servlet_Registry_Access := null);
 
    --  Called when the testsuite execution has finished.
    procedure Finish (Status : in Util.XUnit.Status);
@@ -48,7 +47,7 @@ package Servlet.Tests is
    function Get_Server return access Servlet.Server.Container;
 
    --  Get the test application.
---     function Get_Application return Servlet.Applications.Main.Application_Access;
+   function Get_Application return Servlet.Servlets.Servlet_Registry_Access;
 
    --  Simulate a GET request on the given URI with the request parameters.
    --  Get the result in the response object.
