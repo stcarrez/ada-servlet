@@ -69,6 +69,7 @@ package body Servlet.Tests is
          App := App_Created;
       end if;
 
+      App.Set_Init_Parameters (Props);
       App_URI := To_Unbounded_String (Context_Path);
       Server := new Servlet.Server.Container;
       Server.Register_Application (Context_Path, App.all'Access);
@@ -83,6 +84,12 @@ package body Servlet.Tests is
       --  Define servlet mappings
       App.Add_Mapping (Name => "files", Pattern => "*.css");
       App.Add_Mapping (Name => "files", Pattern => "*.js");
+      App.Add_Mapping (Name => "files", Pattern => "*.html");
+      App.Add_Mapping (Name => "files", Pattern => "*.txt");
+      App.Add_Mapping (Name => "files", Pattern => "*.png");
+      App.Add_Mapping (Name => "files", Pattern => "*.jpg");
+      App.Add_Mapping (Name => "files", Pattern => "*.gif");
+      App.Add_Mapping (Name => "files", Pattern => "*.pdf");
       App.Add_Mapping (Name => "files", Pattern => "*.properties");
       App.Add_Mapping (Name => "files", Pattern => "*.xhtml");
       App.Add_Mapping (Name => "measures", Pattern => "stats.xml");
