@@ -35,10 +35,10 @@ package body Servlet.Security.Filters is
    --  is being placed into service.
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
-                         Config  : in Servlet.Servlets.Filter_Config) is
+                         Config  : in Servlet.Core.Filter_Config) is
 --      use Servlet.Applications.Main;
 
-      Context : constant Servlets.Servlet_Registry_Access := Servlets.Get_Servlet_Context (Config);
+      Context : constant Core.Servlet_Registry_Access := Core.Get_Servlet_Context (Config);
    begin
 --      if Context.all in Application'Class then
 --         Server.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
@@ -65,7 +65,7 @@ null;
    procedure Do_Filter (F        : in Auth_Filter;
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain) is
+                        Chain    : in out Servlet.Core.Filter_Chain) is
       use Ada.Strings.Unbounded;
       use Policies.URLs;
       use type Policies.Policy_Manager_Access;
@@ -136,7 +136,7 @@ null;
       end if;
 
       --  Request is authorized, proceed to the next filter.
-      Servlet.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Core.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
    end Do_Filter;
