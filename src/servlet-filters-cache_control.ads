@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded;
 
 with Servlet.Requests;
 with Servlet.Responses;
-with Servlet.Servlets;
+with Servlet.Core;
 
 --  The <b>Servlet.Filters.Cache_Control</b> package implements a servlet filter to add
 --  cache control headers in a response.
@@ -47,11 +47,11 @@ package Servlet.Filters.Cache_Control is
    procedure Do_Filter (F        : in Cache_Control_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain);
+                        Chain    : in out Servlet.Core.Filter_Chain);
 
    --  Called by the servlet container to indicate to a filter that the filter
    --  instance is being placed into service.
    procedure Initialize (Server  : in out Cache_Control_Filter;
-                         Config  : in Servlet.Servlets.Filter_Config);
+                         Config  : in Servlet.Core.Filter_Config);
 
 end Servlet.Filters.Cache_Control;
