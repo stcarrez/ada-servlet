@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Servlets.Rest
+--  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
 --  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
