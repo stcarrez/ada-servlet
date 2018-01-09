@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Servlet.Routes;
 with Servlet.Routes.Servlets.Rest;
-with Servlet.Servlets.Rest;
+with Servlet.Core.Rest;
 with EL.Contexts.Default;
 with Util.Log.Loggers;
 package body Servlet.Rest is
@@ -46,7 +46,7 @@ package body Servlet.Rest is
    --  ------------------------------
    --  Register the list of API descriptors for a given servlet and a root path.
    --  ------------------------------
-   procedure Register (Registry  : in out Servlet.Servlets.Servlet_Registry;
+   procedure Register (Registry  : in out Servlet.Core.Servlet_Registry;
                        Name      : in String;
                        URI       : in String;
                        ELContext : in EL.Contexts.ELContext'Class;
@@ -67,7 +67,7 @@ package body Servlet.Rest is
             end if;
             D := Servlet.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
          else
-            D := Servlet.Servlets.Rest.Create_Route (Registry, Name);
+            D := Servlet.Core.Rest.Create_Route (Registry, Name);
             Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
          end if;
          if D.Descriptors (Item.Method) /= null then
@@ -96,14 +96,14 @@ package body Servlet.Rest is
    end Dispatch;
 
    --  Register the API definition in the servlet registry.
-   procedure Register (Registry   : in out Servlet.Servlets.Servlet_Registry'Class;
+   procedure Register (Registry   : in out Servlet.Core.Servlet_Registry'Class;
                        Definition : in Descriptor_Access) is
       use type Servlet.Routes.Route_Type_Access;
-      use type Servlet.Servlets.Servlet_Access;
+      use type Servlet.Core.Servlet_Access;
 
-      Dispatcher : constant Servlet.Servlets.Request_Dispatcher
+      Dispatcher : constant Servlet.Core.Request_Dispatcher
          := Registry.Get_Request_Dispatcher (Definition.Pattern.all);
-      Servlet    : constant Servlets.Servlet_Access := Servlets.Get_Servlet (Dispatcher);
+      Servlet    : constant Core.Servlet_Access := Core.Get_Servlet (Dispatcher);
 
       procedure Insert (Route : in out Routes.Route_Type_Ref) is
          R : constant Routes.Route_Type_Access := Route.Value;
@@ -113,13 +113,13 @@ package body Servlet.Rest is
             if not (R.all in Routes.Servlets.Rest.API_Route_Type'Class) then
                Log.Error ("Route API for {0} already used by another page",
                           Definition.Pattern.all);
-               D := Servlets.Rest.Create_Route (Servlet);
+               D := Core.Rest.Create_Route (Servlet);
                Route := Routes.Route_Type_Refs.Create (D.all'Access);
             else
                D := Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
             end if;
          else
-            D := Servlets.Rest.Create_Route (Servlet);
+            D := Core.Rest.Create_Route (Servlet);
             Route := Routes.Route_Type_Refs.Create (D.all'Access);
          end if;
          if D.Descriptors (Definition.Method) /= null then
