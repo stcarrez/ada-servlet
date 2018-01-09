@@ -18,7 +18,7 @@
 
 with Util.Measures;
 with Servlet.Filters;
-package Servlet.Servlets.Measures is
+package Servlet.Core.Measures is
 
    --  The <b>Measure_Servlet</b> reports the measures collected by the
    --  application with the <b>Util.Measures</b> library.
@@ -105,7 +105,7 @@ package Servlet.Servlets.Measures is
    procedure Do_Filter (F        : in Measure_Servlet;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlets.Filter_Chain);
+                        Chain    : in out Core.Filter_Chain);
 
 private
 
@@ -114,4 +114,4 @@ private
       Current   : Util.Measures.Measure_Set_Access;
    end record;
 
-end Servlet.Servlets.Measures;
+end Servlet.Core.Measures;
