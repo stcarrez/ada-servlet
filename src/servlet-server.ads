@@ -20,7 +20,7 @@ with Ada.Strings.Unbounded;
 
 with Servlet.Requests;
 with Servlet.Responses;
-with Servlet.Servlets;
+with Servlet.Core;
 package Servlet.Server is
 
    type Container is tagged limited private;
@@ -28,11 +28,11 @@ package Servlet.Server is
    --  Register the application to serve requests
    procedure Register_Application (Server  : in out Container;
                                    URI     : in String;
-                                   Context : in Servlet.Servlets.Servlet_Registry_Access);
+                                   Context : in Servlet.Core.Servlet_Registry_Access);
 
    --  Remove the application
    procedure Remove_Application (Server  : in out Container;
-                                 Context : in Servlet.Servlets.Servlet_Registry_Access);
+                                 Context : in Servlet.Core.Servlet_Registry_Access);
 
    --  Start the applications that have been registered.
    procedure Start (Server : in out Container);
@@ -47,7 +47,7 @@ package Servlet.Server is
 
    --  Get the current registry associated with the current request being processed
    --  by the current thread.  Returns null if there is no current request.
-   function Current return Servlet.Servlets.Servlet_Registry_Access;
+   function Current return Servlet.Core.Servlet_Registry_Access;
 
    --  Give access to the current request and response object to the <b>Process</b>
    --  procedure.  If there is no current request for the thread, do nothing.
@@ -60,7 +60,7 @@ private
    --  Binding to record the Servlet applications and bind them to URI prefixes.
    --  It is expected that the number of Servlet applications is small (1-10 per server).
    type Binding is record
-      Context  : Servlet.Servlets.Servlet_Registry_Access;
+      Context  : Servlet.Core.Servlet_Registry_Access;
       Base_URI : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
@@ -70,12 +70,12 @@ private
    type Container is new Ada.Finalization.Limited_Controlled with record
       Nb_Bindings  : Natural := 0;
       Applications : Binding_Array_Access := null;
-      Default      : Servlet.Servlets.Servlet_Registry;
+      Default      : Servlet.Core.Servlet_Registry;
       Is_Started   : Boolean := False;
    end record;
 
    type Request_Context is record
-      Application : Servlet.Servlets.Servlet_Registry_Access;
+      Application : Servlet.Core.Servlet_Registry_Access;
       Request     : Servlet.Requests.Request_Access;
       Response    : Servlet.Responses.Response_Access;
    end record;
