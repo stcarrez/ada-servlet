@@ -28,11 +28,11 @@ package Servlet.Filters.Tests is
    procedure Do_Filter (F        : in Test_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain);
+                        Chain    : in out Servlet.Core.Filter_Chain);
 
    --  Initialize the test filter.
    overriding
    procedure Initialize (Server  : in out Test_Filter;
-                         Config  : in Servlet.Servlets.Filter_Config);
+                         Config  : in Servlet.Core.Filter_Config);
 
 end Servlet.Filters.Tests;
