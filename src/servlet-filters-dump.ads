@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Servlet.Requests;
 with Servlet.Responses;
-with Servlet.Servlets;
+with Servlet.Core;
 
 --  The <b>Servlet.Filters.Dump</b> package provides a debugging filter which
 --  can be activated in the request flow to dump the request content into
@@ -47,6 +47,6 @@ package Servlet.Filters.Dump is
    procedure Do_Filter (F        : in Dump_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain);
+                        Chain    : in out Servlet.Core.Filter_Chain);
 
 end Servlet.Filters.Dump;
