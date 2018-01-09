@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  servlet-servlets -- Servlet Servlets
+--  servlet-servlets -- Servlet.Core
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -36,18 +36,18 @@ with EL.Contexts;
 
 private with Ada.Containers.Indefinite_Hashed_Maps;
 
---  The <b>Servlet.Servlets</b> package implements a subset of the
+--  The <b>Servlet.Core</b> package implements a subset of the
 --  Java Servlet Specification adapted for the Ada language.
 --
 --  The rationale for this implementation is to provide a set of
 --  interfaces and ways of developing a Web application which
 --  benefit from the architecture expertise defined in Java applications.
 --
---  The <b>Servlet.Servlets</b>, <b>Servlet.Requests</b>, <b>Servlet.Responses</b>
+--  The <b>Servlet.Core</b>, <b>Servlet.Requests</b>, <b>Servlet.Responses</b>
 --  and <b>Servlet.Sessions</b> packages are independent of the web server
 --  which will be used (such as <b>AWS</b>, <b>Apache</b> or <b>Lighthttpd</b>).
 --
-package Servlet.Servlets is
+package Servlet.Core is
 
    Servlet_Error : exception;
 
@@ -548,4 +548,4 @@ private
       Context   : Servlet_Registry_Access := null;
    end record;
 
-end Servlet.Servlets;
+end Servlet.Core;
