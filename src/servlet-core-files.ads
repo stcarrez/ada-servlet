@@ -16,7 +16,14 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-package Servlet.Servlets.Files is
+package Servlet.Core.Files is
+
+   --  Directory configuration parameter that indicates the path of the
+   --  directory to serve files.
+   VIEW_DIR_PARAM : constant String := "view.dir";
+
+   --  The default content type parameter name.
+   CONTENT_TYPE_PARAM : constant String := "content-type.default";
 
    --  The <b>Servlet</b> represents the component that will handle
    --  an HTTP request received by the server.
@@ -91,4 +98,4 @@ private
       Default_Content_Type : String_Access;
    end record;
 
-end Servlet.Servlets.Files;
+end Servlet.Core.Files;
