@@ -20,7 +20,7 @@ with Util.Properties;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 with Servlet.Server;
-with Servlet.Servlets;
+with Servlet.Core;
 --  with Servlet.Applications.Main;
 with Util.Tests;
 with Util.XUnit;
@@ -38,7 +38,7 @@ package Servlet.Tests is
    --  a default Servlet application is created.
    procedure Initialize (Props        : in Util.Properties.Manager;
                          Context_Path : in String := "/servlet-unit";
-                         Registry     : in Servlet.Servlets.Servlet_Registry_Access := null);
+                         Registry     : in Servlet.Core.Servlet_Registry_Access := null);
 
    --  Called when the testsuite execution has finished.
    procedure Finish (Status : in Util.XUnit.Status);
@@ -47,7 +47,7 @@ package Servlet.Tests is
    function Get_Server return access Servlet.Server.Container;
 
    --  Get the test application.
-   function Get_Application return Servlet.Servlets.Servlet_Registry_Access;
+   function Get_Application return Servlet.Core.Servlet_Registry_Access;
 
    --  Simulate a GET request on the given URI with the request parameters.
    --  Get the result in the response object.
