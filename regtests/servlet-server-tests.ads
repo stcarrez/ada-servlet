@@ -47,4 +47,7 @@ package Servlet.Server.Tests is
    --  Test a POST on a file served by the File_Servlet.
    procedure Test_Post_File (T : in out Test);
 
+   --  Test a Register_Application and Remove_Application.
+   procedure Test_Register_Remove_Application (T : in out Test);
+
 end Servlet.Server.Tests;
