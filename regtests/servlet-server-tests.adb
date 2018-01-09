@@ -44,12 +44,14 @@ package body Servlet.Server.Tests is
                        Test_Post_File'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET measures)",
                        Test_Get_Measures'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Server.Register_Application",
+                       Test_Register_Remove_Application'Access);
     end Add_Tests;
 
    --  Initialize the test.
    overriding
    procedure Set_Up (T : in out Test) is
-      use type Servlet.Servlets.Servlet_Registry_Access;
+      use type Servlet.Core.Servlet_Registry_Access;
    begin
       if Servlet.Tests.Get_Application = null then
          Servlet.Tests.Initialize (Util.Tests.Get_Properties);
@@ -131,12 +133,28 @@ package body Servlet.Server.Tests is
                       Reply, "Wrong content");
    end Test_Get_Measures;
 
+   --  ------------------------------
    --  Test a POST on a file served by the File_Servlet.
+   --  ------------------------------
    procedure Test_Post_File (T : in out Test) is
       Request : Servlet.Requests.Mockup.Request;
       Reply   : Servlet.Responses.Mockup.Response;
    begin
       Do_Post (Request, Reply, "/tests/file.css", "post-file.css");
    end Test_Post_File;
+
+   --  ------------------------------
+   --  Test a Register_Application and Remove_Application.
+   --  ------------------------------
+   procedure Test_Register_Remove_Application (T : in out Test) is
+      App1 : aliased Servlet.Core.Servlet_Registry;
+   begin
+      Servlet.Tests.Get_Server.Register_Application ("my-app", App1'Unchecked_Access);
+      T.Test_Get_File;
+      for I in 1 .. 2 loop
+          Servlet.Tests.Get_Server.Remove_Application (App1'Unchecked_Access);
+          T.Test_Get_File;
+      end loop;
+   end Test_Register_Remove_Application;
 
 end Servlet.Server.Tests;
