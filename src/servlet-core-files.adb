@@ -27,14 +27,14 @@ with Ada.Streams.Stream_IO;
 with Ada.Directories;
 
 with Servlet.Streams;
-package body Servlet.Servlets.Files is
+package body Servlet.Core.Files is
 
    use Ada.Streams;
    use Ada.Streams.Stream_IO;
    use Ada.Directories;
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Servlets.Files");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Core.Files");
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
@@ -42,8 +42,8 @@ package body Servlet.Servlets.Files is
    --  ------------------------------
    procedure Initialize (Server  : in out File_Servlet;
                          Context : in Servlet_Registry'Class) is
-      Dir      : constant String := Context.Get_Init_Parameter ("view.dir");
-      Def_Type : constant String := Context.Get_Init_Parameter ("content-type.default");
+      Dir      : constant String := Context.Get_Init_Parameter (VIEW_DIR_PARAM);
+      Def_Type : constant String := Context.Get_Init_Parameter (CONTENT_TYPE_PARAM);
    begin
       if Dir = "" then
          Server.Dir := new String '("./");
@@ -188,4 +188,4 @@ package body Servlet.Servlets.Files is
       end;
    end Do_Get;
 
-end Servlet.Servlets.Files;
+end Servlet.Core.Files;
