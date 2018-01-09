@@ -18,7 +18,7 @@
 with Ada.Containers;
 with EL.Utils;
 
-package body Servlet.Servlets.Mappers is
+package body Servlet.Core.Mappers is
 
    --  ------------------------------
    --  Save in the servlet config object the value associated with the given field.
@@ -167,4 +167,4 @@ begin
    SMapper.Add_Mapping ("error-page/error-code", ERROR_CODE);
    SMapper.Add_Mapping ("error-page/location", LOCATION);
 
-end Servlet.Servlets.Mappers;
+end Servlet.Core.Mappers;
