@@ -24,10 +24,10 @@ package body Servlet.Filters.Tests is
    procedure Do_Filter (F        : in Test_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain) is
+                        Chain    : in out Servlet.Core.Filter_Chain) is
    begin
       F.Count.all := F.Count.all + 1;
-      Servlet.Servlets.Do_Filter (Chain => Chain, Request => Request, Response => Response);
+      Servlet.Core.Do_Filter (Chain => Chain, Request => Request, Response => Response);
    end Do_Filter;
 
    --  ------------------------------
@@ -35,7 +35,7 @@ package body Servlet.Filters.Tests is
    --  ------------------------------
    overriding
    procedure Initialize (Server  : in out Test_Filter;
-                         Config  : in Servlet.Servlets.Filter_Config) is
+                         Config  : in Servlet.Core.Filter_Config) is
       pragma Unreferenced (Config);
    begin
       Server.Count := Server.Counter'Unchecked_Access;
