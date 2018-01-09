@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server
---  Copyright (C) 2009, 2010, 2011, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2015, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ package body Servlet.Server is
    --  Get the current registry associated with the current request being processed
    --  by the current thread.  Returns null if there is no current request.
    --  ------------------------------
-   function Current return Servlet.Servlets.Servlet_Registry_Access is
+   function Current return Servlet.Core.Servlet_Registry_Access is
    begin
       return Task_Context.Value.Application;
    end Current;
@@ -66,7 +66,7 @@ package body Servlet.Server is
    --  ------------------------------
    procedure Register_Application (Server  : in out Container;
                                    URI     : in String;
-                                   Context : in Servlet.Servlets.Servlet_Registry_Access) is
+                                   Context : in Servlet.Core.Servlet_Registry_Access) is
       Count : constant Natural := Server.Nb_Bindings;
       Apps  : constant Binding_Array_Access := new Binding_Array (1 .. Count + 1);
       Old   : Binding_Array_Access := Server.Applications;
@@ -97,8 +97,8 @@ package body Servlet.Server is
    --  Remove the application
    --  ------------------------------
    procedure Remove_Application (Server  : in out Container;
-                                 Context : in Servlet.Servlets.Servlet_Registry_Access) is
-      use type Servlet.Servlets.Servlet_Registry_Access;
+                                 Context : in Servlet.Core.Servlet_Registry_Access) is
+      use type Servlet.Core.Servlet_Registry_Access;
 
       Count : constant Natural := Server.Nb_Bindings;
       Old   : Binding_Array_Access := Server.Applications;
@@ -148,7 +148,6 @@ package body Servlet.Server is
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class) is
 
-      use Servlets;
       use Util.Strings;
       use type Ada.Strings.Unbounded.Unbounded_String;
 
@@ -175,15 +174,15 @@ package body Servlet.Server is
          if Apps (I).Base_URI = URI (URI'First .. Prefix_End) then
             declare
                Req        : Request_Context;
-               Context    : constant Servlet_Registry_Access := Apps (I).Context;
+               Context    : constant Core.Servlet_Registry_Access := Apps (I).Context;
                Page       : constant String := URI (Prefix_End + 1 .. URI'Last);
-               Dispatcher : constant Request_Dispatcher := Context.Get_Request_Dispatcher (Page);
+               Dispatcher : constant Core.Request_Dispatcher := Context.Get_Request_Dispatcher (Page);
             begin
                Req.Request     := Request'Unchecked_Access;
                Req.Response    := Response'Unchecked_Access;
                Req.Application := Context;
                Set_Context (Req);
-               Forward (Dispatcher, Request, Response);
+               Core.Forward (Dispatcher, Request, Response);
                case Response.Get_Status / 100 is
                   when 2 | 3 =>
                      null;
