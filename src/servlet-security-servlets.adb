@@ -36,7 +36,7 @@ package body Servlet.Security.Servlets is
    --  is being placed into service.
    --  ------------------------------
    procedure Initialize (Server  : in out Openid_Servlet;
-                         Context : in Servlet.Servlets.Servlet_Registry'Class) is
+                         Context : in Servlet.Core.Servlet_Registry'Class) is
    begin
       null;
    end Initialize;
@@ -56,7 +56,7 @@ package body Servlet.Security.Servlets is
    overriding
    function Get_Parameter (Server : in Openid_Servlet;
                            Name   : in String) return String is
-      Ctx          : constant Servlet.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx          : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       return Ctx.Get_Init_Parameter (Name);
    end Get_Parameter;
@@ -85,7 +85,7 @@ package body Servlet.Security.Servlets is
                      Request  : in out Servlet.Requests.Request'Class;
                      Response : in out Servlet.Responses.Response'Class) is
 
-      Ctx      : constant Servlet.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx      : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
       Name     : constant String := Server.Get_Provider_URL (Request);
       URL      : constant String := Ctx.Get_Init_Parameter ("auth.url." & Name);
    begin
@@ -155,7 +155,7 @@ package body Servlet.Security.Servlets is
       Assoc      : Association_Access;
       Credential : Auth.Authentication;
       Params     : Auth_Params;
-      Ctx        : constant Servlet.Servlets.Servlet_Registry_Access := Server.Get_Servlet_Context;
+      Ctx        : constant Servlet.Core.Servlet_Registry_Access := Server.Get_Servlet_Context;
    begin
       Log.Info ("Verify openid authentication");
 
