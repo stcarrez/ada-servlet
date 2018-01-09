@@ -24,8 +24,8 @@ with Ada.Unchecked_Deallocation;
 with Util.Files;
 
 with Servlet.Streams;
-with Servlet.Servlets.Files;
-with Servlet.Servlets.Measures;
+with Servlet.Core.Files;
+with Servlet.Core.Measures;
 with Servlet.Responses;
 with Servlet.Responses.Tools;
 
@@ -41,11 +41,11 @@ package body Servlet.Tests is
 
    Server      : Container_Access;
 
-   App_Created : Servlet.Servlets.Servlet_Registry_Access;
-   App         : Servlet.Servlets.Servlet_Registry_Access;
-   Files       : aliased Servlet.Servlets.Files.File_Servlet;
+   App_Created : Servlet.Core.Servlet_Registry_Access;
+   App         : Servlet.Core.Servlet_Registry_Access;
+   Files       : aliased Servlet.Core.Files.File_Servlet;
    Dump        : aliased Servlet.Filters.Dump.Dump_Filter;
-   Measures    : aliased Servlet.Servlets.Measures.Measure_Servlet;
+   Measures    : aliased Servlet.Core.Measures.Measure_Servlet;
    App_URI     : Unbounded_String;
 
    --  Save the response headers and content in a file
@@ -57,14 +57,14 @@ package body Servlet.Tests is
    --  ------------------------------
    procedure Initialize (Props        : in Util.Properties.Manager;
                          Context_Path : in String := "/servlet-unit";
-                         Registry     : in Servlet.Servlets.Servlet_Registry_Access := null) is
-      use type Servlet.Servlets.Servlet_Registry_Access;
+                         Registry     : in Servlet.Core.Servlet_Registry_Access := null) is
+      use type Servlet.Core.Servlet_Registry_Access;
    begin
       if Registry /= null then
          App := Registry;
       else
          if App_Created = null then
-            App_Created := new Servlet.Servlets.Servlet_Registry;
+            App_Created := new Servlet.Core.Servlet_Registry;
          end if;
          App := App_Created;
       end if;
@@ -128,7 +128,7 @@ package body Servlet.Tests is
    --  ------------------------------
    --  Get the test application.
    --  ------------------------------
-   function Get_Application return Servlet.Servlets.Servlet_Registry_Access is
+   function Get_Application return Servlet.Core.Servlet_Registry_Access is
    begin
       return App;
    end Get_Application;
