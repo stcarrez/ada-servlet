@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Servlet.Servlets;
+with Servlet.Core;
 with Servlet.Requests;
 with Servlet.Responses;
 with Servlet.Principals;
@@ -72,13 +72,13 @@ package Servlet.Security.Servlets is
    --  ------------------------------
    --  The <b>Openid_Servlet</b> is the OpenID root servlet for OpenID 2.0 authentication.
    --  It is defined to provide a common basis for the authentication and verification servlets.
-   type Openid_Servlet is abstract new Servlet.Servlets.Servlet and Auth.Parameters with private;
+   type Openid_Servlet is abstract new Servlet.Core.Servlet and Auth.Parameters with private;
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    overriding
    procedure Initialize (Server  : in out Openid_Servlet;
-                         Context : in Servlet.Servlets.Servlet_Registry'Class);
+                         Context : in Servlet.Core.Servlet_Registry'Class);
 
    --  Get a configuration parameter from the servlet context for the security Auth provider.
    overriding
@@ -132,7 +132,7 @@ private
                          Provider : in String;
                          Manager  : in out Auth.Manager);
 
-   type Openid_Servlet is new Servlet.Servlets.Servlet and Auth.Parameters with null record;
+   type Openid_Servlet is new Servlet.Core.Servlet and Auth.Parameters with null record;
 
    type Request_Auth_Servlet is new Openid_Servlet with null record;
    type Verify_Auth_Servlet is new Openid_Servlet with null record;
