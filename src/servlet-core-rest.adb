@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 
 with Servlet.Streams.JSON;
-package body Servlet.Servlets.Rest is
+package body Servlet.Core.Rest is
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
@@ -105,7 +105,7 @@ package body Servlet.Servlets.Rest is
       end;
    end Dispatch;
 
-   function Create_Route (Registry : in Servlets.Servlet_Registry;
+   function Create_Route (Registry : in Core.Servlet_Registry;
                           Name     : in String)
                           return Routes.Servlets.Rest.API_Route_Type_Access is
       Pos    : constant Servlet_Maps.Cursor := Registry.Servlets.Find (Name);
@@ -121,7 +121,7 @@ package body Servlet.Servlets.Rest is
    end Create_Route;
 
    --  Create a route for the REST API.
-   function Create_Route (Servlet  : in Servlets.Servlet_Access)
+   function Create_Route (Servlet  : in Core.Servlet_Access)
                           return Routes.Servlets.Rest.API_Route_Type_Access is
       Result : Routes.Servlets.Rest.API_Route_Type_Access;
    begin
@@ -130,4 +130,4 @@ package body Servlet.Servlets.Rest is
       return Result;
    end Create_Route;
 
-end Servlet.Servlets.Rest;
+end Servlet.Core.Rest;
