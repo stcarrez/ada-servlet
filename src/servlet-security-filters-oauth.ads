@@ -20,7 +20,7 @@ with Ada.Strings.Unbounded;
 with Servlet.Filters;
 with Servlet.Requests;
 with Servlet.Responses;
-with Servlet.Servlets;
+with Servlet.Core;
 with Security.OAuth.Servers; use Security.OAuth;
 with Security.Policies;
 
@@ -43,7 +43,7 @@ package Servlet.Security.Filters.OAuth is
    --  is being placed into service.
    overriding
    procedure Initialize (Server  : in out Auth_Filter;
-                         Config  : in Servlet.Servlets.Filter_Config);
+                         Config  : in Servlet.Core.Filter_Config);
 
    --  Set the permission manager that must be used to verify the permission.
    procedure Set_Permission_Manager (Filter  : in out Auth_Filter;
@@ -57,7 +57,7 @@ package Servlet.Security.Filters.OAuth is
    procedure Do_Filter (F        : in Auth_Filter;
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain);
+                        Chain    : in out Servlet.Core.Filter_Chain);
 
    --  Display or redirects the user to the login page.  This procedure is called when
    --  the user is not authenticated.
