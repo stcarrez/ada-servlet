@@ -21,8 +21,8 @@ with Util.Test_Caller;
 with Security.Policies; use Security;
 with Security.Policies.URLs;
 
-with Servlet.Servlets;
-with Servlet.Servlets.Tests;
+with Servlet.Core;
+with Servlet.Core.Tests;
 with Servlet.Security.Filters;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
@@ -36,9 +36,9 @@ package body Servlet.Security.Tests is
    procedure Check_Security (T      : in out Test;
                              URI    : in String;
                              Result : in Natural) is
-      Ctx : Servlet.Servlets.Servlet_Registry;
+      Ctx : Servlet.Core.Servlet_Registry;
 
-      S1  : aliased Servlet.Servlets.Tests.Test_Servlet1;
+      S1  : aliased Servlet.Core.Tests.Test_Servlet1;
       F1  : aliased Servlet.Security.Filters.Auth_Filter;
       Sec : aliased Policies.Policy_Manager (Max_Policies => 10);
    begin
@@ -53,14 +53,14 @@ package body Servlet.Security.Tests is
       Ctx.Start;
 
       declare
-         Dispatcher : constant Servlet.Servlets.Request_Dispatcher
+         Dispatcher : constant Servlet.Core.Request_Dispatcher
            := Ctx.Get_Request_Dispatcher (Path => URI & ".jsf");
          Req        : Servlet.Requests.Mockup.Request;
          Resp       : Servlet.Responses.Mockup.Response;
       begin
          Req.Set_Request_URI ("/admin/test");
          Req.Set_Method ("GET");
-         Servlet.Servlets.Forward (Dispatcher, Req, Resp);
+         Servlet.Core.Forward (Dispatcher, Req, Resp);
 
          Assert_Equals (T, Result, Resp.Get_Status, "Invalid status");
       end;
