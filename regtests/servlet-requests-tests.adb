@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests-tests - Unit tests for requests
---  Copyright (C) 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@
 with Util.Test_Caller;
 with Util.Log.Loggers;
 with Servlet.Requests.Mockup;
+with Servlet.Responses.Mockup;
 package body Servlet.Requests.Tests is
 
    use Util.Tests;
@@ -36,6 +37,8 @@ package body Servlet.Requests.Tests is
                        Test_Accept_Locales'Access);
       Caller.Add_Test (Suite, "Test Servlet.Requests.Set_Attribute",
                        Test_Set_Attribute'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Requests.Get_Header",
+                       Test_Headers'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -130,5 +133,52 @@ package body Servlet.Requests.Tests is
       T.Assert (Util.Beans.Objects.Is_Null (Req.Get_Attribute ("page")),
                 "Attribute page is not null");
    end Test_Set_Attribute;
+
+   --  ------------------------------
+   --  Test the getting, inserting headers.
+   --  ------------------------------
+   procedure Test_Headers (T : in out Test) is
+      Req   : Servlet.Requests.Mockup.Request;
+      Reply : Servlet.Responses.Mockup.Response;
+      D     : Ada.Calendar.Time;
+      V     : Integer;
+   begin
+      Req.Set_Header ("Content-Type", "text/plain");
+      Req.Set_Header ("Count", "23");
+      Req.Set_Header ("If-Modified-Since", "Tue, 09 Jan 2018 22:55:08 GMT");
+
+      Util.Tests.Assert_Equals (T, "text/plain", Req.Get_Header ("Content-Type"),
+                                "Invalid date header: Content-Type");
+      D := Req.Get_Date_Header ("If-Modified-Since");
+
+      --  Check the integer header conversion.
+      V := Req.Get_Int_Header ("Count");
+      Util.Tests.Assert_Equals (T, 23, V, "Invalid integer header: Count");
+
+      T.Assert (not Req.Is_Ajax_Request, "Is_Ajax_Request must be false");
+      Req.Set_Header ("X-Requested-With", "none");
+      T.Assert (Req.Is_Ajax_Request, "Is_Ajax_Request must be true");
+
+      --  Header tests on the response.
+      Reply.Set_Header ("Count", "230");
+      Reply.Set_Int_Header ("Count-Len", 44);
+      Reply.Add_Int_Header ("Length", 123);
+      Reply.Set_Date_Header ("Date", D);
+      Reply.Add_Date_Header ("Second-Date", D);
+
+      --  Check the integer header conversion.
+      Util.Tests.Assert_Equals (T, "230", Reply.Get_Header ("Count"),
+                                "Invalid response integer header: Count");
+      Util.Tests.Assert_Equals (T, "44", Reply.Get_Header ("Count-Len"),
+                                "Invalid response integer header: Count-Len");
+      Util.Tests.Assert_Equals (T, "123", Reply.Get_Header ("Length"),
+                                "Invalid response integer header: Length");
+
+      Util.Tests.Assert_Equals (T, "Tue, 09 Jan 2018 22:55:08 GMT", Reply.Get_Header ("Date"),
+                                "Invalid response date header: Date");
+
+      Util.Tests.Assert_Equals (T, "Tue, 09 Jan 2018 22:55:08 GMT", Reply.Get_Header ("Second-Date"),
+                                "Invalid response date header: Date");
+   end Test_Headers;
 
 end Servlet.Requests.Tests;
