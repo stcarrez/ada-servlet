@@ -18,7 +18,7 @@
 with Ada.Unchecked_Deallocation;
 with Ada.Strings.Fixed;
 
-with Servlet.Servlets;
+with Servlet.Core;
 with Servlet.Routes.Servlets;
 
 with Util.Strings;
@@ -30,16 +30,16 @@ with Util.Dates.RFC7231;
 --  the Java servlet request (JSR 315 3. The Request).
 package body Servlet.Requests is
 
-   use type Servlet.Servlets.Servlet_Access;
+   use type Servlet.Core.Servlet_Access;
    use type Servlet.Routes.Route_Type_Access;
 
-   function Get_Servlet (Req : in Request'Class) return Servlet.Servlets.Servlet_Access;
+   function Get_Servlet (Req : in Request'Class) return Servlet.Core.Servlet_Access;
 
    --  ------------------------------
    --  Get the servlet associated with the request object.
    --  Returns null if there is no such servlet.
    --  ------------------------------
-   function Get_Servlet (Req : in Request'Class) return Servlet.Servlets.Servlet_Access is
+   function Get_Servlet (Req : in Request'Class) return Servlet.Core.Servlet_Access is
       Route : Servlet.Routes.Route_Type_Access;
    begin
       if Req.Context = null then
@@ -534,15 +534,17 @@ package body Servlet.Requests is
       return "";
    end Get_Headers;
 
+   --  ------------------------------
    --  Returns the value of the specified request header as an int. If the request
    --  does not have a header of the specified name, this method returns -1.
    --  If the header cannot be converted to an integer, this method throws
    --  a NumberFormatException.
    --
    --  The header name is case insensitive.
+   --  ------------------------------
    function Get_Int_Header (Req  : in Request;
                             Name : in String) return Integer is
-      Value : constant String := Req.Get_Header (Name);
+      Value : constant String := Request'Class (Req).Get_Header (Name);
    begin
       return Integer'Value (Value);
    end Get_Int_Header;
@@ -590,7 +592,7 @@ package body Servlet.Requests is
    --  The container does not decode this string.
    --  ------------------------------
    function Get_Context_Path (Req : in Request) return String is
-      Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
+      Servlet : constant Core.Servlet_Access := Get_Servlet (Req);
    begin
       if Servlet = null then
          return "/";
@@ -719,9 +721,9 @@ package body Servlet.Requests is
       for I in Req.Info.Cookies'Range loop
          if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
             declare
-               Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
+               Servlet : constant Core.Servlet_Access := Get_Servlet (Req);
                SID     : constant String := Cookies.Get_Value (Req.Info.Cookies (I));
-               Ctx     : constant Servlets.Servlet_Registry_Access := Servlet.Get_Servlet_Context;
+               Ctx     : constant Core.Servlet_Registry_Access := Servlet.Get_Servlet_Context;
             begin
                Ctx.Find_Session (Id     => SID,
                                  Result => Req.Info.Session);
@@ -759,8 +761,8 @@ package body Servlet.Requests is
       --  Create the session if necessary.
       if Create and not Has_Session then
          declare
-            Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
-            Ctx     : constant Servlets.Servlet_Registry_Access
+            Servlet : constant Core.Servlet_Access := Get_Servlet (Req);
+            Ctx     : constant Core.Servlet_Registry_Access
               := Servlet.Get_Servlet_Context;
          begin
             Ctx.Create_Session (Req.Info.Session);
@@ -812,7 +814,7 @@ package body Servlet.Requests is
    --  ------------------------------
    function Get_Resource (Req  : in Request;
                           Path : in String) return String is
-      Servlet : constant Servlets.Servlet_Access := Get_Servlet (Req);
+      Servlet : constant Core.Servlet_Access := Get_Servlet (Req);
    begin
       if Servlet = null then
          return "";
