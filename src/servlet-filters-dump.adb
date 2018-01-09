@@ -50,7 +50,7 @@ package body Servlet.Filters.Dump is
    procedure Do_Filter (F        : in Dump_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlet.Servlets.Filter_Chain) is
+                        Chain    : in out Servlet.Core.Filter_Chain) is
       pragma Unreferenced (F);
 
       Info : constant String := Servlet.Requests.Tools.To_String (Req              => Request,
@@ -59,7 +59,7 @@ package body Servlet.Filters.Dump is
                                                               Print_Attributes => True);
    begin
       Log.Info ("Request {0}", Info);
-      Servlet.Servlets.Do_Filter (Chain    => Chain,
+      Servlet.Core.Do_Filter (Chain    => Chain,
                               Request  => Request,
                               Response => Response);
    end Do_Filter;
