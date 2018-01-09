@@ -273,13 +273,13 @@ package Servlet.Responses is
    --  method can be used to test for the presence of a header before setting its value.
    procedure Set_Header (Resp  : in out Response;
                          Name  : in String;
-                         Value : in String);
+                         Value : in String) is abstract;
 
    --  Adds a response header with the given name and value.
    --  This method allows response headers to have multiple values.
    procedure Add_Header (Resp  : in out Response;
                          Name  : in String;
-                         Value : in String);
+                         Value : in String) is abstract;
 
    --  Sets a response header with the given name and integer value.
    --  If the header had already been set, the new value overwrites the previous one.
