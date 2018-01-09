@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  servlet-servlets -- Servlet Servlets
+--  servlet-servlets -- Servlet.Core
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -34,23 +34,23 @@ with Util.Files;
 with Util.Log.Loggers;
 
 
---  The <b>Servlet.Servlets</b> package implements a subset of the
+--  The <b>Servlet.Core</b> package implements a subset of the
 --  Java Servlet Specification adapted for the Ada language.
 --
 --  The rationale for this implementation is to provide a set of
 --  interfaces and ways of developing a Web application which
 --  benefit from the architecture expertise defined in Java applications.
 --
---  The <b>Servlet.Servlets</b>, <b>Servlet.Requests</b>, <b>Servlet.Responses</b>
+--  The <b>Servlet.Core</b>, <b>Servlet.Requests</b>, <b>Servlet.Responses</b>
 --  and <b>Servlet.Sessions</b> packages are independent of the web server
 --  which will be used (such as <b>AWS</b>, <b>Apache</b> or <b>Lighthttpd</b>).
 --
-package body Servlet.Servlets is
+package body Servlet.Core is
 
    use Ada.Finalization;
 
    --  The logger
-   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Servlets");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Core");
 
    No_Time : constant Ada.Calendar.Time := Ada.Calendar.Time_Of (Year => 1901,
                                                                  Month => 1,
@@ -1218,4 +1218,4 @@ package body Servlet.Servlets is
       Sessions.Factory.Session_Factory (Registry).Finalize;
    end Finalize;
 
-end Servlet.Servlets;
+end Servlet.Core;
