@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Responses
---  Copyright (C) 2010, 2011 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,8 @@
 -----------------------------------------------------------------------
 
 with Util.Strings;
+with Util.Dates.RFC7231;
 
---  The <b>Servlet.Responses</b> package is an Ada implementation of
---  the Java servlet response (JSR 315 5. The Response).
 package body Servlet.Responses is
 
    --  Returns the name of the character encoding (MIME charset) used for the body
@@ -258,46 +257,31 @@ package body Servlet.Responses is
                                         Value => Location);
    end Send_Redirect;
 
+   --  ------------------------------
    --  Sets a response header with the given name and date-value.
    --  The date is specified in terms of milliseconds since the epoch.
    --  If the header had already been set, the new value overwrites the previous one.
    --  The containsHeader method can be used to test for the presence of a header
    --  before setting its value.
+   --  ------------------------------
    procedure Set_Date_Header (Resp  : in out Response;
                               Name  : in String;
                               Date  : in Ada.Calendar.Time) is
    begin
-      null;
+      Response'Class (Resp).Set_Header (Name, Util.Dates.RFC7231.Image (Date));
    end Set_Date_Header;
 
+   --  ------------------------------
    --  Adds a response header with the given name and date-value. The date is specified
    --  in terms of milliseconds since the epoch. This method allows response headers
    --  to have multiple values.
+   --  ------------------------------
    procedure Add_Date_Header (Resp : in out Response;
                               Name : in String;
                               Date : in Ada.Calendar.Time) is
    begin
-      null;
+      Response'Class (Resp).Add_Header (Name, Util.Dates.RFC7231.Image (Date));
    end Add_Date_Header;
-
-   --  Sets a response header with the given name and value. If the header had already
-   --  been set, the new value overwrites the previous one. The containsHeader
-   --  method can be used to test for the presence of a header before setting its value.
-   procedure Set_Header (Resp  : in out Response;
-                         Name  : in String;
-                         Value : in String) is
-   begin
-      null;
-   end Set_Header;
-
-   --  Adds a response header with the given name and value.
-   --  This method allows response headers to have multiple values.
-   procedure Add_Header (Resp  : in out Response;
-                         Name  : in String;
-                         Value : in String) is
-   begin
-      null;
-   end Add_Header;
 
    --  ------------------------------
    --  Sets a response header with the given name and integer value.
