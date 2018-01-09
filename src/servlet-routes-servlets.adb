@@ -29,7 +29,7 @@ package body Servlet.Routes.Servlets is
    --  ------------------------------
    --  Get the servlet to call for the route.
    --  ------------------------------
-   function Get_Servlet (Route : in Servlet_Route_Type) return Servlet.Servlets.Servlet_Access is
+   function Get_Servlet (Route : in Servlet_Route_Type) return Servlet.Core.Servlet_Access is
    begin
       return Route.Servlet;
    end Get_Servlet;
@@ -74,7 +74,7 @@ package body Servlet.Routes.Servlets is
    --  Get the servlet to call for the route.
    --  ------------------------------
    overriding
-   function Get_Servlet (Route : in Proxy_Route_Type) return Servlet.Servlets.Servlet_Access is
+   function Get_Servlet (Route : in Proxy_Route_Type) return Servlet.Core.Servlet_Access is
    begin
       if Route.Route /= null then
          return Route.Route.Get_Servlet;
