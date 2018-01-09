@@ -22,7 +22,7 @@ with Util.Beans.Objects.Vectors;
 
 with EL.Contexts;
 
---  The <b>Servlet.Servlets.Mappers</b> package defines an XML mapper that can be used
+--  The <b>Servlet.Core.Mappers</b> package defines an XML mapper that can be used
 --  to read the servlet configuration files.
 --
 --  The servlet configuration used by Servlet is a subset of the servlet deployment descriptor
@@ -40,7 +40,7 @@ with EL.Contexts;
 --
 --  Note: several JSR 315 configuration parameters do not makes sense in the Servlet world
 --  because we cannot create a servlet or a filter through the configuration file.
-package Servlet.Servlets.Mappers is
+package Servlet.Core.Mappers is
 
    type Servlet_Fields is (FILTER_MAPPING, FILTER_NAME, SERVLET_NAME,
                            URL_PATTERN, SERVLET_MAPPING,
@@ -96,4 +96,4 @@ private
                                                Fields              => Servlet_Fields,
                                                Set_Member          => Set_Member);
 
-end Servlet.Servlets.Mappers;
+end Servlet.Core.Mappers;
