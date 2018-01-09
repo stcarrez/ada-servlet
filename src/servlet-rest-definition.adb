@@ -23,7 +23,7 @@ package body Servlet.Rest.Definition is
    --  package.  The REST servlet identified by <tt>Name</tt> is searched in the servlet registry
    --  and used as the servlet for processing the API requests.
    --  ------------------------------
-   procedure Register (Registry  : in out Servlet.Servlets.Servlet_Registry;
+   procedure Register (Registry  : in out Servlet.Core.Servlet_Registry;
                        Name      : in String;
                        ELContext : in EL.Contexts.ELContext'Class) is
    begin
