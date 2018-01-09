@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  Servlets Tests - Unit tests for Servlet.Servlets
+--  Servlets Tests - Unit tests for Servlet.Core
 --  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,13 +20,15 @@ with Util.Tests;
 with Util.Beans.Basic;
 with Util.Beans.Objects;
 
-package Servlet.Servlets.Tests is
+package Servlet.Core.Tests is
 
    use Ada.Strings.Unbounded;
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
-   type Test_Servlet1 is new Servlet with null record;
+   type Test_Servlet1 is new Servlet with record
+      Add_Resource : Boolean := False;
+   end record;
 
    procedure Do_Get (Server   : in Test_Servlet1;
                      Request  : in out Requests.Request'Class;
@@ -106,4 +108,4 @@ package Servlet.Servlets.Tests is
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-end Servlet.Servlets.Tests;
+end Servlet.Core.Tests;
