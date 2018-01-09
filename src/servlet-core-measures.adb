@@ -18,7 +18,7 @@
 
 with Util.Streams.Texts;
 with Servlet.Streams;
-package body Servlet.Servlets.Measures is
+package body Servlet.Core.Measures is
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
@@ -137,14 +137,14 @@ package body Servlet.Servlets.Measures is
    procedure Do_Filter (F        : in Measure_Servlet;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;
-                        Chain    : in out Servlets.Filter_Chain) is
+                        Chain    : in out Core.Filter_Chain) is
       URI   : constant String := Request.Get_Request_URI;
       Stamp : Util.Measures.Stamp;
    begin
       Util.Measures.Set_Current (F.Current);
-      Servlets.Do_Filter (Chain    => Chain,
-                          Request  => Request,
-                          Response => Response);
+      Core.Do_Filter (Chain    => Chain,
+                      Request  => Request,
+                      Response => Response);
       Util.Measures.Report (Measures => F.Current.all,
                             S        => Stamp,
                             Title    => URI);
@@ -159,4 +159,4 @@ package body Servlet.Servlets.Measures is
          raise;
    end Do_Filter;
 
-end Servlet.Servlets.Measures;
+end Servlet.Core.Measures;
