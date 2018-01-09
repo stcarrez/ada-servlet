@@ -19,7 +19,7 @@ with Util.Strings;
 with Util.Serialize.IO;
 with Servlet.Requests;
 with Servlet.Responses;
-with Servlet.Servlets;
+with Servlet.Core;
 with EL.Contexts;
 with Security.Permissions;
 
@@ -55,7 +55,7 @@ package Servlet.Rest is
                         Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  Register the API definition in the servlet registry.
-   procedure Register (Registry   : in out Servlet.Servlets.Servlet_Registry'Class;
+   procedure Register (Registry   : in out Servlet.Core.Servlet_Registry'Class;
                        Definition : in Descriptor_Access);
 
 private
@@ -72,7 +72,7 @@ private
                        Item : in Descriptor_Access);
 
    --  Register the list of API descriptors for a given servlet and a root path.
-   procedure Register (Registry  : in out Servlet.Servlets.Servlet_Registry;
+   procedure Register (Registry  : in out Servlet.Core.Servlet_Registry;
                        Name      : in String;
                        URI       : in String;
                        ELContext : in EL.Contexts.ELContext'Class;
