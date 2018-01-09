@@ -32,7 +32,7 @@ with Servlet.Filters.Tests;
 --  with Servlet.Beans.Resolvers;
 --  with Servlet.Applications.Tests;
 with Servlet.Routes.Servlets.Faces;
-package body Servlet.Servlets.Tests is
+package body Servlet.Core.Tests is
 
    use Util.Tests;
 
@@ -91,6 +91,9 @@ package body Servlet.Servlets.Tests is
 --       ELContext.Set_Resolver (Root_Resolver'Unchecked_Access);
       Request.Inject_Parameters (ELContext);
 
+      if Server.Add_Resource then
+         Response.Set_Header ("Resource", Request.Get_Resource ("/tests/form-text.xhtml"));
+      end if;
       Output.Write ("URI: " & Request.Get_Request_URI);
       Response.Set_Status (Responses.SC_OK);
    end Do_Get;
@@ -494,11 +497,14 @@ package body Servlet.Servlets.Tests is
       S1    : aliased Test_Servlet1;
       Dir   : constant String := "regtests/files";
       Path  : constant String := Util.Tests.Get_Path (Dir);
+      Request : Requests.Mockup.Request;
    begin
+      S1.Add_Resource := True;
       Conf.Load_Properties ("regtests/view.properties");
       Conf.Set ("view.dir", Path);
       Ctx.Set_Init_Parameters (Conf);
       Ctx.Add_Servlet ("Faces", S1'Unchecked_Access);
+      Ctx.Add_Mapping (Pattern => "/wikis/*", Name => "Faces");
 
       --  Resource exist, check the returned path.
       declare
@@ -513,6 +519,23 @@ package body Servlet.Servlets.Tests is
          P : constant String := Ctx.Get_Resource ("/tests/form-text-missing.xhtml");
       begin
          Assert_Equals (T, "", P, "Invalid resource path for missing resource");
+      end;
+
+      declare
+         Reply      : Responses.Mockup.Response;
+         Dispatcher : constant Request_Dispatcher
+           := Ctx.Get_Request_Dispatcher (Path => "/wikis/no-cache/view.html");
+      begin
+         Request.Set_Method ("GET");
+         Request.Set_Request_URI ("/wikis/no-cache/view.html");
+         Forward (Dispatcher, Request, Reply);
+
+         --  Check the response after the Test_Servlet1.Do_Get method execution.
+         Assert_Equals (T, Responses.SC_OK, Reply.Get_Status, "Invalid status");
+         T.Assert (Reply.Contains_Header ("Resource"),
+                   "A Resource header is missing in the response");
+         Assert_Matches (T, ".*/regtests/files/tests/form-text.xhtml",
+                         Reply.Get_Header ("Resource"), "Invalid resource path");
       end;
    end Test_Get_Resource;
 
@@ -623,17 +646,17 @@ package body Servlet.Servlets.Tests is
    begin
       --  To document what is tested, register the test methods for each
       --  operation that is tested.
-      Caller.Add_Test (Suite, "Test Servlet.Servlets.Add_Mapping,Find_Mapping",
+      Caller.Add_Test (Suite, "Test Servlet.Core.Add_Mapping,Find_Mapping",
                        Test_Create_Servlet'Access);
-      Caller.Add_Test (Suite, "Test Servlet.Servlets.Add_Servlet",
+      Caller.Add_Test (Suite, "Test Servlet.Core.Add_Servlet",
                        Test_Add_Servlet'Access);
-      Caller.Add_Test (Suite, "Test Servlet.Servlets.Get_Request_Dispatcher",
+      Caller.Add_Test (Suite, "Test Servlet.Core.Get_Request_Dispatcher",
                        Test_Request_Dispatcher'Access);
-      Caller.Add_Test (Suite, "Test Servlet.Servlets.Get_Resource",
+      Caller.Add_Test (Suite, "Test Servlet.Core.Get_Resource",
                        Test_Get_Resource'Access);
       Caller.Add_Test (Suite, "Test Servlet.Requests.Get_Servlet_Path",
                        Test_Servlet_Path'Access);
-      Caller.Add_Test (Suite, "Test Servlet.Servlets.Add_Filter",
+      Caller.Add_Test (Suite, "Test Servlet.Core.Add_Filter",
                        Test_Filter_Mapping'Access);
       Caller.Add_Test (Suite, "Test Servlet.Filters.Do_Filter",
                        Test_Filter_Execution'Access);
@@ -643,4 +666,4 @@ package body Servlet.Servlets.Tests is
                        Test_Cache_Control_Filter'Access);
    end Add_Tests;
 
-end Servlet.Servlets.Tests;
+end Servlet.Core.Tests;
