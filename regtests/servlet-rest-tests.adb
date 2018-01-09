@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Servlets.Rest
+--  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
 --  Copyright (C) 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -25,7 +25,7 @@ with EL.Contexts.Default;
 with Security.Permissions;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
-with Servlet.Servlets.Rest;
+with Servlet.Core.Rest;
 with Servlet.Rest.Definition;
 with Servlet.Rest.Operation;
 
@@ -197,7 +197,7 @@ package body Servlet.Rest.Tests is
                        Test_Invalid'Access);
    end Add_Tests;
 
-   procedure Benchmark (Ctx    : in Servlet.Servlets.Servlet_Registry;
+   procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
                         Title  : in String;
                         Method : in String;
                         URI    : in String) is
@@ -207,13 +207,13 @@ package body Servlet.Rest.Tests is
          declare
             Request : Servlet.Requests.Mockup.Request;
             Reply   : Servlet.Responses.Mockup.Response;
-            Dispatcher : constant Servlet.Servlets.Request_Dispatcher
+            Dispatcher : constant Servlet.Core.Request_Dispatcher
               := Ctx.Get_Request_Dispatcher (Path => URI);
             Result : Ada.Strings.Unbounded.Unbounded_String;
          begin
             Request.Set_Method (Method);
             Request.Set_Request_URI (URI);
-            Servlet.Servlets.Forward (Dispatcher, Request, Reply);
+            Servlet.Core.Forward (Dispatcher, Request, Reply);
          end;
       end loop;
 
@@ -224,11 +224,11 @@ package body Servlet.Rest.Tests is
                              Method : in String;
                              URI    : in String;
                              Status : in Natural) is
-      use Servlet.Servlets;
+      use Servlet.Core;
       use Util.Tests;
 
       Ctx     : Servlet_Registry;
-      S1      : aliased Servlet.Servlets.Rest.Rest_Servlet;
+      S1      : aliased Servlet.Core.Rest.Rest_Servlet;
       EL_Ctx  : EL.Contexts.Default.Default_Context;
       Request : Servlet.Requests.Mockup.Request;
       Reply   : Servlet.Responses.Mockup.Response;
