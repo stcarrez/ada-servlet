@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  security-filters-oauth -- OAuth Security filter
---  Copyright (C) 2017 Stephane Carrez
+--  servlet-security-filters-oauth -- OAuth Security filter
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,7 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
-with Servlet.Core;
---  with Servlet.Applications.Main;
 
-with Security.Policies.URLs;
 package body Servlet.Security.Filters.OAuth is
 
    use Ada.Strings.Unbounded;
@@ -37,24 +34,19 @@ package body Servlet.Security.Filters.OAuth is
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
---      use Servlet.Applications;
-
       Context : constant Core.Servlet_Registry_Access := Core.Get_Servlet_Context (Config);
    begin
---      if Context.all in Main.Application'Class then
---         Server.Set_Permission_Manager (Main.Application'Class (Context.all).Get_Security_Manager);
---      end if;
       null;
    end Initialize;
 
    --  ------------------------------
-   --  Set the permission manager that must be used to verify the permission.
+   --  Set the authorization manager that must be used to verify the OAuth token.
    --  ------------------------------
-   procedure Set_Permission_Manager (Filter  : in out Auth_Filter;
-                                     Manager : in Policies.Policy_Manager_Access) is
+   procedure Set_Auth_Manager (Filter  : in out Auth_Filter;
+                               Manager : in Servers.Auth_Manager_Access) is
    begin
-      Filter.Manager := Manager;
-   end Set_Permission_Manager;
+      Filter.Realm := Manager;
+   end Set_Auth_Manager;
 
    function Get_Access_Token (Request : in Servlet.Requests.Request'Class) return String is
       Header : constant String := Request.Get_Header (AUTHORIZATION_HEADER_NAME);
@@ -76,9 +68,6 @@ package body Servlet.Security.Filters.OAuth is
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;
                         Chain    : in out Servlet.Core.Filter_Chain) is
-      use Policies.URLs;
-      use type Policies.Policy_Manager_Access;
-
       Servlet : constant String := Request.Get_Servlet_Path;
       URL     : constant String := Servlet & Request.Get_Path_Info;
    begin
@@ -91,11 +80,13 @@ package body Servlet.Security.Filters.OAuth is
          Bearer  : constant String := Get_Access_Token (Request);
          --  Auth    : Principal_Access;
          Grant   : Servers.Grant_Type;
-         --  Context : aliased Contexts.Security_Context;
       begin
          if Bearer'Length = 0 then
             Log.Info ("Ask authentication on {0} due to missing access token", URL);
-            Auth_Filter'Class (F).Do_Login (Request, Response);
+--              Auth_Filter'Class (F).Do_Login (Request, Response);
+            Core.Do_Filter (Chain    => Chain,
+                            Request  => Request,
+                            Response => Response);
             return;
          end if;
          F.Realm.Authenticate (Bearer, Grant);
@@ -105,11 +96,7 @@ package body Servlet.Security.Filters.OAuth is
             return;
          end if;
 
-         --  OAuth_Permission
-         --  if not F.Manager.Has_Permission (Context, Perm) then
-         --     -- deny
-         --  Request.Set_Attribute ("application", Grant.Application);
-         --  Request is authorized, proceed to the next filter.
+         Request.Set_User_Principal (Grant.Auth);
          Core.Do_Filter (Chain    => Chain,
                          Request  => Request,
                          Response => Response);
@@ -123,9 +110,11 @@ package body Servlet.Security.Filters.OAuth is
    procedure Do_Login (F        : in Auth_Filter;
                        Request  : in out Servlet.Requests.Request'Class;
                        Response : in out Servlet.Responses.Response'Class) is
-      pragma Unreferenced (F, Request);
    begin
       Response.Send_Error (Servlet.Responses.SC_UNAUTHORIZED);
+      Response.Add_Header (WWW_AUTHENTICATE_HEADER_NAME,
+                           "Bearer realm=""" & To_String (F.Realm_URL)
+                           & """, error=""invalid_token""");
    end Do_Login;
 
    --  ------------------------------
