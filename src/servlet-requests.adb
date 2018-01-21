@@ -632,7 +632,11 @@ package body Servlet.Requests is
    --  authenticated user. If the user has not been authenticated, the method returns null.
    --  ------------------------------
    function Get_User_Principal (Req : in Request) return Servlet.Principals.Principal_Access is
+      use type Servlet.Principals.Principal_Access;
    begin
+      if Req.User /= null then
+         return Req.User;
+      end if;
       if not Req.Info.Session_Initialized then
          --  Look if the session exist
          if not Req.Has_Session then
@@ -645,6 +649,15 @@ package body Servlet.Requests is
       end if;
       return Req.Info.Session.Get_Principal;
    end Get_User_Principal;
+
+   --  ------------------------------
+   --  Set the principal that represents the authenticated user.
+   --  ------------------------------
+   procedure Set_User_Principal (Req  : in out Request;
+                                 User : in Servlet.Principals.Principal_Access) is
+   begin
+      Req.User := User;
+   end Set_User_Principal;
 
    --  ------------------------------
    --  Returns the session ID specified by the client. This may not be the same as
