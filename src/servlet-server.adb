@@ -188,7 +188,9 @@ package body Servlet.Server is
                      null;
 
                   when others =>
-                     Context.Send_Error_Page (Request, Response);
+                     if not Response.Is_Committed then
+                        Context.Send_Error_Page (Request, Response);
+                     end if;
 
                end case;
                Set_Context (Null_Context);
