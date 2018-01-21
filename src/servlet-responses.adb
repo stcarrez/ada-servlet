@@ -113,9 +113,8 @@ package body Servlet.Responses is
    --  A committed response has already had its status code and headers written.
    --  ------------------------------
    function Is_Committed (Resp : in Response) return Boolean is
-      pragma Unreferenced (Resp);
    begin
-      return False;
+      return Resp.Stream.Get_Size > 0;
    end Is_Committed;
 
    --  ------------------------------
