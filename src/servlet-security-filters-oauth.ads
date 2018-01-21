@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  security-filters-oauth -- OAuth Security filter
---  Copyright (C) 2017 Stephane Carrez
+--  servlet-security-filters-oauth -- OAuth Security filter
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,6 @@ with Servlet.Requests;
 with Servlet.Responses;
 with Servlet.Core;
 with Security.OAuth.Servers; use Security.OAuth;
-with Security.Policies;
 
 --  The <b>Servlet.Security.Filters.OAuth</b> package provides a servlet filter that
 --  implements the RFC 6749 "Accessing Protected Resources" part: it extracts the OAuth
@@ -45,9 +44,9 @@ package Servlet.Security.Filters.OAuth is
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config);
 
-   --  Set the permission manager that must be used to verify the permission.
-   procedure Set_Permission_Manager (Filter  : in out Auth_Filter;
-                                     Manager : in Policies.Policy_Manager_Access);
+   --  Set the authorization manager that must be used to verify the OAuth token.
+   procedure Set_Auth_Manager (Filter  : in out Auth_Filter;
+                               Manager : in Servers.Auth_Manager_Access);
 
    --  Filter the request to make sure the user is authenticated.
    --  Invokes the <b>Do_Login</b> procedure if there is no user.
@@ -74,7 +73,6 @@ package Servlet.Security.Filters.OAuth is
 private
 
    type Auth_Filter is new Servlet.Filters.Filter with record
-      Manager   : Policies.Policy_Manager_Access;
       Realm     : Servers.Auth_Manager_Access;
       Realm_URL : Ada.Strings.Unbounded.Unbounded_String;
    end record;
