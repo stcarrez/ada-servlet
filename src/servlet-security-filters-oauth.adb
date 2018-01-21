@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Strings.Fixed;
 with Util.Log.Loggers;
 
 package body Servlet.Security.Filters.OAuth is
@@ -51,10 +51,11 @@ package body Servlet.Security.Filters.OAuth is
    function Get_Access_Token (Request : in Servlet.Requests.Request'Class) return String is
       Header : constant String := Request.Get_Header (AUTHORIZATION_HEADER_NAME);
    begin
-      if Header'Length > 0 then
-         return Header;
+      if Header'Length < 7 or else Header (Header'First .. Header'First + 6) /= "Bearer " then
+         return "";
       end if;
-      return Header;
+
+      return Ada.Strings.Fixed.Trim (Header (Header'First + 7 .. Header'Last), Ada.Strings.Both);
    end Get_Access_Token;
 
    --  ------------------------------
