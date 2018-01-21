@@ -318,6 +318,10 @@ package Servlet.Requests is
    --  authenticated user. If the user has not been authenticated, the method returns null.
    function Get_User_Principal (Req : in Request) return Servlet.Principals.Principal_Access;
 
+   --  Set the principal that represents the authenticated user.
+   procedure Set_User_Principal (Req  : in out Request;
+                                 User : in Servlet.Principals.Principal_Access);
+
    --  Returns the session ID specified by the client. This may not be the same as
    --  the ID of the current valid session for this request. If the client did not
    --  specify a session ID, this method returns null.
@@ -469,6 +473,7 @@ private
       Attributes  : Util.Beans.Objects.Maps.Map_Bean;
       Info        : Request_Data_Access := null;
       Context     : access Servlet.Routes.Route_Context_Type;
+      User        : Servlet.Principals.Principal_Access;
    end record;
 
 end Servlet.Requests;
