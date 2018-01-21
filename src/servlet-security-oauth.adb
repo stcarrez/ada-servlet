@@ -84,14 +84,18 @@ package body Servlet.Security.OAuth is
       if Grant.Status = Servers.Valid_Grant then
          Response.Set_Status (Servlet.Responses.SC_OK);
          Stream.Start_Document;
+         Stream.Start_Entity ("");
          Stream.Write_Entity ("access_token", To_String (Grant.Token));
          Stream.Write_Entity ("token_type", "Bearer");
          Stream.Write_Long_Entity ("expires_in", Long_Long_Integer (Grant.Expires_In));
+         Stream.End_Entity ("");
          Stream.End_Document;
       else
          Response.Set_Status (Servlet.Responses.SC_BAD_REQUEST);
          Stream.Start_Document;
+         Stream.Start_Entity ("");
          Stream.Write_Entity ("error", Grant.Error.all);
+         Stream.End_Entity ("");
          Stream.End_Document;
       end if;
    end Do_Post;
