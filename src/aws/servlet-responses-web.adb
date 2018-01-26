@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses.web -- Servlet Responses with AWS server
---  Copyright (C) 2009, 2010, 2011, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,12 +57,24 @@ package body Servlet.Responses.Web is
             return S100;
          when 101 =>
             return S101;
+         when 102 =>
+            return S102;
          when 200 =>
             return S200;
          when 201 =>
             return S201;
          when 202 =>
             return S202;
+         when 203 =>
+            return S203;
+         when 204 =>
+            return S204;
+         when 205 =>
+            return S205;
+         when 206 =>
+            return S206;
+         when 207 =>
+            return S207;
          when 301 =>
             return S301;
          when 302 =>
@@ -77,6 +89,8 @@ package body Servlet.Responses.Web is
             return S403;
          when 404 =>
             return S404;
+         when 405 =>
+            return S405;
          when others =>
             return S500;
       end case;
