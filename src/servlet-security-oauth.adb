@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 
 with Ada.Strings.Unbounded;
+with Util.Encoders;
+with Util.Strings;
 with Servlet.Streams.JSON;
 with Security.Auth; use Security;
 package body Servlet.Security.OAuth is
@@ -44,6 +46,23 @@ package body Servlet.Security.OAuth is
       Server.Manager := Manager;
    end Set_Auth_Manager;
 
+   function Get_Authorization (Req : in Servlet.Requests.Request'Class) return String is
+      Decoder : constant Util.Encoders.Decoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
+      Auth    : constant String := Req.Get_Header ("Authorization");
+   begin
+      if Auth'Length < 6 then
+         return "";
+      end if;
+      if Auth (Auth'First .. Auth'First + 5) /= "Basic " then
+         return "";
+      end if;
+      return Decoder.Decode (Auth (Auth'First + 6 .. Auth'Last));
+
+   exception
+      when others =>
+         return "";
+   end Get_Authorization;
+
    --  ------------------------------
    --  Perform the OAuth token request.  This is the last step in OAuth flow that allows
    --  to retrieve an access token and an optional refresh token.  This token request is
@@ -57,7 +76,11 @@ package body Servlet.Security.OAuth is
    procedure Do_Post (Server   : in Token_Servlet;
                       Request  : in out Servlet.Requests.Request'Class;
                       Response : in out Servlet.Responses.Response'Class) is
-      type Auth_Params is new Auth.Parameters with null record;
+      type Auth_Params is new Auth.Parameters with record
+         Client_Id         : Ada.Strings.Unbounded.Unbounded_String;
+         Client_Secret     : Ada.Strings.Unbounded.Unbounded_String;
+         Has_Authorization : Boolean := False;
+      end record;
 
       overriding
       function Get_Parameter (Params : in Auth_Params;
@@ -66,17 +89,29 @@ package body Servlet.Security.OAuth is
       overriding
       function Get_Parameter (Params : in Auth_Params;
                               Name   : in String) return String is
-         pragma Unreferenced (Params);
       begin
+         if Name = "client_id" and Params.Has_Authorization then
+            return To_String (Params.Client_Id);
+         end if;
+         if Name = "client_secret" and Params.Has_Authorization then
+            return To_String (Params.Client_Secret);
+         end if;
          return Request.Get_Parameter (Name);
       end Get_Parameter;
 
       Params : Auth_Params;
       Grant  : Servers.Grant_Type;
+      Auth   : constant String := Get_Authorization (Request);
+      Pos    : constant Natural := Util.Strings.Index (Auth, ':');
       Output : constant Streams.Print_Stream := Response.Get_Output_Stream;
       Stream : Streams.JSON.Print_Stream;
 
    begin
+      if Pos > 0 then
+         Params.Client_Id := To_Unbounded_String (Auth (Auth'First .. Pos - 1));
+         Params.Client_Id := To_Unbounded_String (Auth (Pos + 1 .. Auth'Last));
+         Params.Has_Authorization := True;
+      end if;
       Streams.JSON.Initialize (Stream, Output);
       Response.Set_Content_Type ("application/json; charset=utf-8");
       Server.Manager.Token (Params, Grant);
