@@ -97,7 +97,7 @@ package body Servlet.Security.Filters.OAuth is
             return;
          end if;
 
-         Request.Set_User_Principal (Grant.Auth);
+         Request.Set_User_Principal (Grant.Auth.all'Access);
          Core.Do_Filter (Chain    => Chain,
                          Request  => Request,
                          Response => Response);
