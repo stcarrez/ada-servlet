@@ -159,7 +159,8 @@ package body Servlet.Server.Tests is
    begin
       Except_Servlet.Raise_Exception := True;
       Do_Get (Request, Reply, "/exception-raised.exc", "exception-raised.exc");
-      Assert_Header (T, "Content-Type", "text/html", Reply, "Content-Type");
+      Assert_Header (T, "Content-Type", "text/html", Reply, "Content-Type",
+                     Status => Servlet.Responses.SC_INTERNAL_SERVER_ERROR);
       Assert_Matches (T, ".*CONSTRAINT_ERROR.*",
                       Reply, "No exception reported",
                       Status => Servlet.Responses.SC_INTERNAL_SERVER_ERROR);
