@@ -595,6 +595,8 @@ package body Servlet.Core.Tests is
       T.Assert (Ctx.Error_Pages.Contains (404), "The 404 error have an error page configured");
       Util.Tests.Assert_Equals (T, "/tests/404.html", Ctx.Error_Pages.Element (404),
                                 "Invalid 404 error page");
+
+      Core.Configs.Read_Configuration (Ctx, Dir & "test-error.xml");
    end Test_Read_Configuration;
 
    --  ------------------------------
