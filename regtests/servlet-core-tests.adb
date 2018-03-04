@@ -21,7 +21,6 @@ with Util.Measures;
 
 with EL.Contexts.Default;
 
---  with Servlet.Applications;
 with Servlet.Streams;
 with Servlet.Routes.Servlets;
 with Servlet.Requests.Mockup;
@@ -29,8 +28,8 @@ with Servlet.Responses.Mockup;
 with Servlet.Filters.Dump;
 with Servlet.Filters.Cache_Control;
 with Servlet.Filters.Tests;
---  with Servlet.Beans.Resolvers;
---  with Servlet.Applications.Tests;
+with Servlet.Resolvers;
+with Servlet.Core.Configs;
 with Servlet.Routes.Servlets.Faces;
 package body Servlet.Core.Tests is
 
@@ -80,15 +79,13 @@ package body Servlet.Core.Tests is
    procedure Do_Get (Server   : in Test_Servlet1;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is
-      pragma Unreferenced (Server);
-
       ELContext      : aliased EL.Contexts.Default.Default_Context;
---        Root_Resolver  : aliased Servlet.Beans.Resolvers.ELResolver;
+      Root_Resolver  : aliased Resolvers.ELResolver;
       Output         : Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       --  Minimal setting for the EL context creation to inject URI parameters in an Ada bean.
---        Root_Resolver.Initialize (null, Request'Unchecked_Access);
---       ELContext.Set_Resolver (Root_Resolver'Unchecked_Access);
+      Root_Resolver.Initialize (null, Request'Unchecked_Access);
+      ELContext.Set_Resolver (Root_Resolver'Unchecked_Access);
       Request.Inject_Parameters (ELContext);
 
       if Server.Add_Resource then
@@ -117,8 +114,6 @@ package body Servlet.Core.Tests is
                             URI          : in String;
                             Servlet_Path : in String;
                             Path_Info    : in String) is
-      use type Routes.Route_Type_Access;
-
       Dispatcher : constant Request_Dispatcher
         := Ctx.Get_Request_Dispatcher (Path => URI);
       Req        : Requests.Mockup.Request;
@@ -145,6 +140,36 @@ package body Servlet.Core.Tests is
 
       --  Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
       --               "Invalid status for an operation not implemented");
+
+      Req.Set_Method ("PUT");
+      Forward (Dispatcher, Req, Resp);
+
+      Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
+                     "Invalid status for an operation not implemented");
+
+      Req.Set_Method ("DELETE");
+      Forward (Dispatcher, Req, Resp);
+
+      Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
+                     "Invalid status for an operation not implemented");
+
+      Req.Set_Method ("OPTIONS");
+      Forward (Dispatcher, Req, Resp);
+
+      Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
+                     "Invalid status for an operation not implemented");
+
+      Req.Set_Method ("TRACE");
+      Forward (Dispatcher, Req, Resp);
+
+      Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
+                     "Invalid status for an operation not implemented");
+
+      Req.Set_Method ("PATCH");
+      Forward (Dispatcher, Req, Resp);
+
+      Assert_Equals (T, Responses.SC_NOT_IMPLEMENTED, Resp.Get_Status,
+                     "Invalid status for an operation not implemented");
    end Check_Request;
 
    --  ------------------------------
@@ -260,7 +285,7 @@ package body Servlet.Core.Tests is
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/html/test.html", S1'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/html/test.html", "/html/test.html", "");
-      Assert_Equals (T, 2, F1.Counter, "Filter was executed for /html/*.html");
+      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /html/*.html");
       Assert_Equals (T, 0, F2.Counter, "Filter was not executed for /html/*.html");
 
       F1.Counter := 0;
@@ -268,20 +293,20 @@ package body Servlet.Core.Tests is
       T.Check_Mapping (Ctx, "/json/test.json", S2'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/json/test.json", "/json/test.json", "");
       Assert_Equals (T, 0, F1.Counter, "Filter was not executed for /json/*.json");
-      Assert_Equals (T, 2, F2.Counter, "Filter was executed for /json/*.json");
+      Assert_Equals (T, 7, F2.Counter, "Filter was executed for /json/*.json");
 
       F1.Counter := 0;
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/test.html", S1'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/list/test.html", "/list/test.html", "");
-      Assert_Equals (T, 2, F1.Counter, "Filter was executed for /list/*.html");
+      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/*.html");
       Assert_Equals (T, 0, F2.Counter, "Filter was not executed for /list/*.html");
 
       F1.Counter := 0;
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/test.json", S2'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/list/test.json", "/list/test.json", "");
-      Assert_Equals (T, 2, F1.Counter, "Filter was executed for /list/*.json");
+      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/*.json");
       Assert_Equals (T, 0, F2.Counter, "Filter was not executed for /list/*.json");
 
       --  Both filters are traversed.
@@ -289,15 +314,15 @@ package body Servlet.Core.Tests is
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/admin/test.json", S2'Unchecked_Access, 2);
       T.Check_Request (Ctx, "/list/admin/test.json", "/list/admin/test.json", "");
-      Assert_Equals (T, 2, F1.Counter, "Filter was executed for /list/admin/*.json");
-      Assert_Equals (T, 2, F2.Counter, "Filter was executed for /list/admin/*.json");
+      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/admin/*.json");
+      Assert_Equals (T, 7, F2.Counter, "Filter was executed for /list/admin/*.json");
 
       F1.Counter := 0;
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/admin/test.html", S1'Unchecked_Access, 2);
       T.Check_Request (Ctx, "/list/admin/test.html", "/list/admin/test.html", "");
-      Assert_Equals (T, 2, F1.Counter, "Filter was executed for /list/admin/*.html");
-      Assert_Equals (T, 2, F2.Counter, "Filter was executed for /list/admin/*.html");
+      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/admin/*.html");
+      Assert_Equals (T, 7, F2.Counter, "Filter was executed for /list/admin/*.html");
    end Test_Filter_Execution;
 
    --  ------------------------------
@@ -540,6 +565,30 @@ package body Servlet.Core.Tests is
    end Test_Get_Resource;
 
    --  ------------------------------
+   --  Test reading XML configuration file.
+   --  ------------------------------
+   procedure Test_Read_Configuration (T : in out Test) is
+      Ctx : Servlet_Registry;
+      Dir : constant String := Util.Tests.Get_Test_Path ("regtests/config/");
+   begin
+      Core.Configs.Read_Configuration (Ctx, Dir & "empty.xml");
+      Util.Tests.Assert_Equals (T, "", String '(Ctx.Get_Init_Parameter ("content-type.default")),
+                                "Parameter 'content-type.default' must be "
+                                & "empty after Read_Configuration");
+      T.Assert (Ctx.Error_Pages.Is_Empty, "There is no error page configuration");
+
+      Core.Configs.Read_Configuration (Ctx, Dir & "test-config.xml");
+      Util.Tests.Assert_Equals (T, "text/plain",
+                                String '(Ctx.Get_Init_Parameter ("content-type.default")),
+                                "Parameter 'content-type.default' must be set "
+                                & "after Read_Configuration");
+      T.Assert (not Ctx.Error_Pages.Is_Empty, "There is some error page configuration");
+      T.Assert (Ctx.Error_Pages.Contains (404), "The 404 error have an error page configured");
+      Util.Tests.Assert_Equals (T, "/tests/404.html", Ctx.Error_Pages.Element (404),
+                                "Invalid 404 error page");
+   end Test_Read_Configuration;
+
+   --  ------------------------------
    --  Check that the mapping for the given URI matches the server.
    --  ------------------------------
    procedure Check_Mapping (T      : in out Test;
@@ -639,7 +688,7 @@ package body Servlet.Core.Tests is
 
    end Test_Create_Servlet;
 
-   package Caller is new Util.Test_Caller (Test, "Servlets");
+   package Caller is new Util.Test_Caller (Test, "Core");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
 
@@ -654,6 +703,8 @@ package body Servlet.Core.Tests is
                        Test_Request_Dispatcher'Access);
       Caller.Add_Test (Suite, "Test Servlet.Core.Get_Resource",
                        Test_Get_Resource'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Core.Read_Configuration",
+                       Test_Read_Configuration'Access);
       Caller.Add_Test (Suite, "Test Servlet.Requests.Get_Servlet_Path",
                        Test_Servlet_Path'Access);
       Caller.Add_Test (Suite, "Test Servlet.Core.Add_Filter",
