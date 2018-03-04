@@ -619,6 +619,9 @@ package body Servlet.Core.Tests is
             Util.Tests.Assert_Equals (T, Filter, Disp.Filters'Length,
                                       "Invalid mapping returned for URI: " & URI);
          end if;
+         T.Assert (Get_Servlet (Disp) /= null, "A null servlet is returned by Get_Servlet");
+         T.Assert (Get_Servlet (Disp) = Servlet_Route.Servlet,
+                   "Invalid servlet returned by Get_Servlet");
       end if;
    end Check_Mapping;
 
