@@ -30,7 +30,7 @@ package body Servlet.Server.Tests is
    use Servlet.Tests;
    use Util.Tests;
 
-   package Caller is new Util.Test_Caller (Test, "Cookies");
+   package Caller is new Util.Test_Caller (Test, "Server");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
