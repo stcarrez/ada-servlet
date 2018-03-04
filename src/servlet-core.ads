@@ -400,10 +400,6 @@ package Servlet.Core is
                          Name     : in String;
                          Filter   : in Filter_Access);
 
-   procedure Add_Filter (Registry : in out Servlet_Registry;
-                         Target   : in String;
-                         Name     : in String);
-
    --  Add a filter mapping with the given pattern
    --  If the URL pattern is already mapped to a different servlet,
    --  no updates will be performed.
