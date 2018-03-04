@@ -644,13 +644,6 @@ package body Servlet.Core is
                            Filter.all'Unchecked_Access);
    end Add_Filter;
 
-   procedure Add_Filter (Registry : in out Servlet_Registry;
-                         Target   : in String;
-                         Name     : in String) is
-   begin
-      null;
-   end Add_Filter;
-
    --  ------------------------------
    --  Causes the next filter in the chain to be invoked, or if the calling
    --  filter is the last filter in the chain, causes the resource at the end
