@@ -73,6 +73,9 @@ package Servlet.Core.Tests is
    --  Test reading XML configuration file.
    procedure Test_Read_Configuration (T : in out Test);
 
+   --  Test the Get_Name_Dispatcher.
+   procedure Test_Name_Dispatcher (T : in out Test);
+
    --  Check that the mapping for the given URI matches the server.
    procedure Check_Mapping (T      : in out Test;
                             Ctx    : in Servlet_Registry;
