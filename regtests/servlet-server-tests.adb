@@ -22,6 +22,7 @@ with Util.Tests;
 with Util.Beans.Objects;
 with Util.Test_Caller;
 with Servlet.Tests;
+with Servlet.Core.Tests;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 
@@ -31,6 +32,8 @@ package body Servlet.Server.Tests is
    use Util.Tests;
 
    package Caller is new Util.Test_Caller (Test, "Server");
+
+   Except_Servlet : aliased Servlet.Core.Tests.Test_Servlet3;
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
@@ -44,6 +47,8 @@ package body Servlet.Server.Tests is
                        Test_Post_File'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET measures)",
                        Test_Get_Measures'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET with exception)",
+                       Test_Get_With_Exception'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Register_Application",
                        Test_Register_Remove_Application'Access);
     end Add_Tests;
@@ -55,6 +60,8 @@ package body Servlet.Server.Tests is
    begin
       if Servlet.Tests.Get_Application = null then
          Servlet.Tests.Initialize (Util.Tests.Get_Properties);
+         Servlet.Tests.Get_Application.Add_Servlet ("Except", Except_Servlet'Access);
+         Servlet.Tests.Get_Application.Add_Mapping ("*.exc", "Except");
       end if;
       Servlet.Tests.Get_Application.Start;
    end Set_Up;
@@ -142,6 +149,21 @@ package body Servlet.Server.Tests is
    begin
       Do_Post (Request, Reply, "/tests/file.css", "post-file.css");
    end Test_Post_File;
+
+   --  ------------------------------
+   --  Test a GET request on servlet that raises an exception.
+   --  ------------------------------
+   procedure Test_Get_With_Exception (T : in out Test) is
+      Request : Servlet.Requests.Mockup.Request;
+      Reply   : Servlet.Responses.Mockup.Response;
+   begin
+      Except_Servlet.Raise_Exception := True;
+      Do_Get (Request, Reply, "/exception-raised.exc", "exception-raised.exc");
+      Assert_Header (T, "Content-Type", "text/html", Reply, "Content-Type");
+      Assert_Matches (T, ".*CONSTRAINT_ERROR.*",
+                      Reply, "No exception reported",
+                      Status => Servlet.Responses.SC_INTERNAL_SERVER_ERROR);
+   end Test_Get_With_Exception;
 
    --  ------------------------------
    --  Test a Register_Application and Remove_Application.
