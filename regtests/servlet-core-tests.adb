@@ -589,6 +589,31 @@ package body Servlet.Core.Tests is
    end Test_Read_Configuration;
 
    --  ------------------------------
+   --  Test the Get_Name_Dispatcher.
+   --  ------------------------------
+   procedure Test_Name_Dispatcher (T : in out Test) is
+      Ctx   : Servlet_Registry;
+      S1    : aliased Test_Servlet1;
+      S2    : aliased Test_Servlet1;
+   begin
+      Ctx.Add_Servlet (Name => "Faces", Server => S1'Unchecked_Access);
+      Ctx.Add_Servlet (Name => "Text", Server => S2'Unchecked_Access);
+      declare
+         Disp : Request_Dispatcher := Ctx.Get_Name_Dispatcher ("Faces");
+      begin
+         T.Assert (Get_Servlet (Disp) /= null, "Get_Name_Dispatcher returned null");
+      end;
+      begin
+         T.Assert (Get_Servlet (Ctx.Get_Name_Dispatcher ("wrong-servlet")) = null,
+                   "Get_Name_Dispatcher returned something!");
+         T.Fail ("No Servlet_Error exception was raised by Get_Name_Dispatcher");
+      exception
+         when Servlet_Error =>
+            null;
+      end;
+   end Test_Name_Dispatcher;
+
+   --  ------------------------------
    --  Check that the mapping for the given URI matches the server.
    --  ------------------------------
    procedure Check_Mapping (T      : in out Test;
@@ -708,6 +733,8 @@ package body Servlet.Core.Tests is
                        Test_Get_Resource'Access);
       Caller.Add_Test (Suite, "Test Servlet.Core.Read_Configuration",
                        Test_Read_Configuration'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Core.Get_Name_Dispatcher",
+                       Test_Name_Dispatcher'Access);
       Caller.Add_Test (Suite, "Test Servlet.Requests.Get_Servlet_Path",
                        Test_Servlet_Path'Access);
       Caller.Add_Test (Suite, "Test Servlet.Core.Add_Filter",
