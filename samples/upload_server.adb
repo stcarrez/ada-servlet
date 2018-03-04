@@ -17,13 +17,13 @@
 -----------------------------------------------------------------------
 
 with Servlet.Server.Web;
-with Servlet.Servlets;
+with Servlet.Core;
 with Upload_Servlet;
 with Util.Log.Loggers;
 
 procedure Upload_Server is
    Upload  : aliased Upload_Servlet.Servlet;
-   App     : aliased Servlet.Servlets.Servlet_Registry;
+   App     : aliased Servlet.Core.Servlet_Registry;
    WS      : Servlet.Server.Web.AWS_Container;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Upload_Server");
 begin
