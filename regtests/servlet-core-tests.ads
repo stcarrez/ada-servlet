@@ -70,6 +70,9 @@ package Servlet.Core.Tests is
    --  Test execution of the cache control filter.
    procedure Test_Cache_Control_Filter (T : in out Test);
 
+   --  Test reading XML configuration file.
+   procedure Test_Read_Configuration (T : in out Test);
+
    --  Check that the mapping for the given URI matches the server.
    procedure Check_Mapping (T      : in out Test;
                             Ctx    : in Servlet_Registry;
