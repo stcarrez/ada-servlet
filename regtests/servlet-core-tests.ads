@@ -40,6 +40,14 @@ package Servlet.Core.Tests is
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class);
 
+   type Test_Servlet3 is new Servlet with record
+      Raise_Exception : Boolean := False;
+   end record;
+
+   procedure Do_Get (Server   : in Test_Servlet3;
+                     Request  : in out Requests.Request'Class;
+                     Response : in out Responses.Response'Class);
+
    type Test is new Util.Tests.Test with record
       Writer    : Integer;
    end record;
