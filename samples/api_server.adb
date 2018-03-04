@@ -17,8 +17,8 @@
 -----------------------------------------------------------------------
 
 with Servlet.Server.Web;
-with Servlet.Servlets.Rest;
-with Servlet.Servlets.Files;
+with Servlet.Core.Rest;
+with Servlet.Core.Files;
 with Servlet.Rest;
 with Util.Log.Loggers;
 with Monitor;
@@ -27,9 +27,9 @@ with EL.Contexts.Default;
 procedure API_Server is
    CONFIG_PATH  : constant String := "samples.properties";
 
-   Api     : aliased Servlet.Servlets.Rest.Rest_Servlet;
-   Files   : aliased Servlet.Servlets.Files.File_Servlet;
-   App     : aliased Servlet.Servlets.Servlet_Registry;
+   Api     : aliased Servlet.Core.Rest.Rest_Servlet;
+   Files   : aliased Servlet.Core.Files.File_Servlet;
+   App     : aliased Servlet.Core.Servlet_Registry;
    WS      : Servlet.Server.Web.AWS_Container;
    Ctx     : EL.Contexts.Default.Default_Context;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Api_Server");
