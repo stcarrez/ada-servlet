@@ -102,6 +102,15 @@ package body Servlet.Core.Tests is
       null;
    end Do_Post;
 
+   procedure Do_Get (Server   : in Test_Servlet3;
+                     Request  : in out Requests.Request'Class;
+                     Response : in out Responses.Response'Class) is
+   begin
+      if Server.Raise_Exception then
+         raise Constraint_Error with "fake constraint error from servlet";
+      end if;
+   end Do_Get;
+
    S1 : aliased Test_Servlet1;
    S2 : aliased Test_Servlet2;
 
