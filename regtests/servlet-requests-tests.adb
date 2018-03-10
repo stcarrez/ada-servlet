@@ -177,7 +177,8 @@ package body Servlet.Requests.Tests is
       Util.Tests.Assert_Equals (T, "Tue, 09 Jan 2018 22:55:08 GMT", Reply.Get_Header ("Date"),
                                 "Invalid response date header: Date");
 
-      Util.Tests.Assert_Equals (T, "Tue, 09 Jan 2018 22:55:08 GMT", Reply.Get_Header ("Second-Date"),
+      Util.Tests.Assert_Equals (T, "Tue, 09 Jan 2018 22:55:08 GMT",
+                                Reply.Get_Header ("Second-Date"),
                                 "Invalid response date header: Date");
    end Test_Headers;
 
