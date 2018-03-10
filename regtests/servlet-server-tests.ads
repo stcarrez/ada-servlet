@@ -16,11 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Strings.Unbounded;
-
 with Util.Tests;
-with Util.Beans.Objects;
-with Servlet.Tests;
 
 package Servlet.Server.Tests is
 
