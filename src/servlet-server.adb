@@ -41,6 +41,18 @@ package body Servlet.Server is
    end Current;
 
    --  ------------------------------
+   --  Set the current registry (for unit testing mostly).
+   --  ------------------------------
+   procedure Set_Context (Context : in Servlet.Core.Servlet_Registry_Access) is
+      C : Request_Context;
+   begin
+      C.Application := Context;
+      C.Request     := null;
+      C.Response    := null;
+      Set_Context (C);
+   end Set_Context;
+
+   --  ------------------------------
    --  Set the current registry.  This is called by <b>Service</b> once the
    --  registry is identified from the URI.
    --  ------------------------------
