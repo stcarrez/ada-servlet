@@ -55,7 +55,7 @@ package body Servlet.Tests is
    --  ------------------------------
    --  Initialize the awa test framework mockup.
    --  ------------------------------
-   procedure Initialize (Props        : in Util.Properties.Manager;
+   procedure Initialize (Props        : in Util.Properties.Manager'Class;
                          Context_Path : in String := "/servlet-unit";
                          Registry     : in Servlet.Core.Servlet_Registry_Access := null) is
       use type Servlet.Core.Servlet_Registry_Access;
@@ -69,7 +69,9 @@ package body Servlet.Tests is
          App := App_Created;
       end if;
 
-      App.Set_Init_Parameters (Props);
+      if not Props.Is_Empty then
+         App.Set_Init_Parameters (Props);
+      end if;
       App_URI := To_Unbounded_String (Context_Path);
       Server := new Servlet.Server.Container;
       Server.Register_Application (Context_Path, App.all'Access);
