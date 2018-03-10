@@ -26,6 +26,8 @@ package body Servlet.Security.OAuth is
    use Ada.Strings.Unbounded;
    use type Servers.Grant_Status;
 
+   function Get_Authorization (Req : in Servlet.Requests.Request'Class) return String;
+
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
