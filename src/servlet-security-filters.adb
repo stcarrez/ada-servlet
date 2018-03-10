@@ -21,7 +21,6 @@ with Ada.Strings.Unbounded;
 with Util.Log.Loggers;
 
 with Servlet.Cookies;
---  with Servlet.Applications.Main;
 
 with Security.Contexts;
 with Security.Policies.URLs;
@@ -36,14 +35,9 @@ package body Servlet.Security.Filters is
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
---      use Servlet.Applications.Main;
-
-      Context : constant Core.Servlet_Registry_Access := Core.Get_Servlet_Context (Config);
+      pragma Unreferenced (Server, Config);
    begin
---      if Context.all in Application'Class then
---         Server.Set_Permission_Manager (Application'Class (Context.all).Get_Security_Manager);
---      end if;
-null;
+      null;
    end Initialize;
 
    --  ------------------------------
