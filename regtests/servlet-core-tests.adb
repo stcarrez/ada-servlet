@@ -98,6 +98,7 @@ package body Servlet.Core.Tests is
    procedure Do_Post (Server   : in Test_Servlet2;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class) is
+      pragma Unreferenced (Server, Request, Response);
    begin
       null;
    end Do_Post;
@@ -105,6 +106,7 @@ package body Servlet.Core.Tests is
    procedure Do_Get (Server   : in Test_Servlet3;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is
+      pragma Unreferenced (Request, Response);
    begin
       if Server.Raise_Exception then
          raise Constraint_Error with "fake constraint error from servlet";
@@ -610,7 +612,7 @@ package body Servlet.Core.Tests is
       Ctx.Add_Servlet (Name => "Faces", Server => S1'Unchecked_Access);
       Ctx.Add_Servlet (Name => "Text", Server => S2'Unchecked_Access);
       declare
-         Disp : Request_Dispatcher := Ctx.Get_Name_Dispatcher ("Faces");
+         Disp : constant Request_Dispatcher := Ctx.Get_Name_Dispatcher ("Faces");
       begin
          T.Assert (Get_Servlet (Disp) /= null, "Get_Name_Dispatcher returned null");
       end;
