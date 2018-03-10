@@ -85,7 +85,9 @@ package body Servlet.Rest is
       end loop;
    end Register;
 
+   --  ------------------------------
    --  Dispatch the request to the API handler.
+   --  ------------------------------
    overriding
    procedure Dispatch (Handler : in Static_Descriptor;
                        Req     : in out Servlet.Rest.Request'Class;
@@ -95,11 +97,14 @@ package body Servlet.Rest is
       Handler.Handler (Req, Reply, Stream);
    end Dispatch;
 
+   --  ------------------------------
    --  Register the API definition in the servlet registry.
+   --  ------------------------------
    procedure Register (Registry   : in out Servlet.Core.Servlet_Registry'Class;
                        Definition : in Descriptor_Access) is
       use type Servlet.Routes.Route_Type_Access;
       use type Servlet.Core.Servlet_Access;
+      procedure Insert (Route : in out Routes.Route_Type_Ref);
 
       Dispatcher : constant Servlet.Core.Request_Dispatcher
          := Registry.Get_Request_Dispatcher (Definition.Pattern.all);
