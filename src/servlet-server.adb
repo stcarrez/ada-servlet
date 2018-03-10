@@ -176,7 +176,8 @@ package body Servlet.Server is
                Req        : Request_Context;
                Context    : constant Core.Servlet_Registry_Access := Apps (I).Context;
                Page       : constant String := URI (Prefix_End + 1 .. URI'Last);
-               Dispatcher : constant Core.Request_Dispatcher := Context.Get_Request_Dispatcher (Page);
+               Dispatcher : constant Core.Request_Dispatcher
+                 := Context.Get_Request_Dispatcher (Page);
             begin
                Req.Request     := Request'Unchecked_Access;
                Req.Response    := Response'Unchecked_Access;
