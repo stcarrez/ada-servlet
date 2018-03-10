@@ -36,7 +36,7 @@ package Servlet.Tests is
 
    --  Initialize the servlet-test framework mockup.  If the application is not specified,
    --  a default Servlet application is created.
-   procedure Initialize (Props        : in Util.Properties.Manager;
+   procedure Initialize (Props        : in Util.Properties.Manager'Class;
                          Context_Path : in String := "/servlet-unit";
                          Registry     : in Servlet.Core.Servlet_Registry_Access := null);
 
