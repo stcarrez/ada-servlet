@@ -49,6 +49,9 @@ package Servlet.Server is
    --  by the current thread.  Returns null if there is no current request.
    function Current return Servlet.Core.Servlet_Registry_Access;
 
+   --  Set the current registry (for unit testing mostly).
+   procedure Set_Context (Context : in Servlet.Core.Servlet_Registry_Access);
+
    --  Give access to the current request and response object to the <b>Process</b>
    --  procedure.  If there is no current request for the thread, do nothing.
    procedure Update_Context (Process : not null access
