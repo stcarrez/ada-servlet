@@ -627,8 +627,6 @@ package body Servlet.Core is
       Server.Name := To_Unbounded_String (Name);
       Server.Context := Registry'Unchecked_Access;
       Servlet_Maps.Include (Registry.Servlets, Name, Server);
-
-      Server.Initialize (Registry);
    end Add_Servlet;
 
    --  ------------------------------
@@ -730,6 +728,7 @@ package body Servlet.Core is
       procedure Make_Route;
       procedure Initialize_Filter (Key    : in String;
                                    Filter : in Filter_Access);
+      procedure Initialize_Servlet (Pos : in Servlet_Maps.Cursor);
 
       procedure Process (URI   : in String;
                          Route : in Routes.Route_Type_Access) is
@@ -806,6 +805,12 @@ package body Servlet.Core is
          Filter.Initialize (Config);
       end Initialize_Filter;
 
+      procedure Initialize_Servlet (Pos : in Servlet_Maps.Cursor) is
+         Servlet : constant Servlet_Access := Servlet_Maps.Element (Pos);
+      begin
+         Servlet.Initialize (Registry);
+      end Initialize_Servlet;
+
       Iter   : Filter_Maps.Cursor := Registry.Filters.First;
    begin
       Config.Context := Registry'Unchecked_Access;
@@ -813,6 +818,7 @@ package body Servlet.Core is
          Filter_Maps.Query_Element (Position => Iter, Process => Initialize_Filter'Access);
          Filter_Maps.Next (Iter);
       end loop;
+      Registry.Servlets.Iterate (Process => Initialize_Servlet'Access);
       Make_Route;
       Registry.Routes.Iterate (Process'Access);
    end Install_Filters;
