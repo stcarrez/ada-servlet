@@ -34,7 +34,6 @@ package body Servlet.Security.Filters.OAuth is
    --  ------------------------------
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
-      Context : constant Core.Servlet_Registry_Access := Core.Get_Servlet_Context (Config);
    begin
       null;
    end Initialize;
@@ -111,6 +110,7 @@ package body Servlet.Security.Filters.OAuth is
    procedure Do_Login (F        : in Auth_Filter;
                        Request  : in out Servlet.Requests.Request'Class;
                        Response : in out Servlet.Responses.Response'Class) is
+      pragma Unreferenced (Request);
    begin
       Response.Send_Error (Servlet.Responses.SC_UNAUTHORIZED);
       Response.Add_Header (WWW_AUTHENTICATE_HEADER_NAME,
