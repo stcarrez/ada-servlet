@@ -15,11 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
-with Ada.Strings.Unbounded;
-
-with Util.Tests;
-with Util.Beans.Objects;
 with Util.Test_Caller;
 with Servlet.Tests;
 with Servlet.Core.Tests;
@@ -51,11 +46,14 @@ package body Servlet.Server.Tests is
                        Test_Get_With_Exception'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Register_Application",
                        Test_Register_Remove_Application'Access);
-    end Add_Tests;
+   end Add_Tests;
 
+   --  ------------------------------
    --  Initialize the test.
+   --  ------------------------------
    overriding
    procedure Set_Up (T : in out Test) is
+      pragma Unreferenced (T);
       use type Servlet.Core.Servlet_Registry_Access;
    begin
       if Servlet.Tests.Get_Application = null then
@@ -148,6 +146,8 @@ package body Servlet.Server.Tests is
       Reply   : Servlet.Responses.Mockup.Response;
    begin
       Do_Post (Request, Reply, "/tests/file.css", "post-file.css");
+      Assert_Header (T, "Content-Type", "text/html", Reply, "Content-Type",
+                     Status => Servlet.Responses.SC_METHOD_NOT_ALLOWED);
    end Test_Post_File;
 
    --  ------------------------------
@@ -175,8 +175,8 @@ package body Servlet.Server.Tests is
       Servlet.Tests.Get_Server.Register_Application ("my-app", App1'Unchecked_Access);
       T.Test_Get_File;
       for I in 1 .. 2 loop
-          Servlet.Tests.Get_Server.Remove_Application (App1'Unchecked_Access);
-          T.Test_Get_File;
+         Servlet.Tests.Get_Server.Remove_Application (App1'Unchecked_Access);
+         T.Test_Get_File;
       end loop;
    end Test_Register_Remove_Application;
 
