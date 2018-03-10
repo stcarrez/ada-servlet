@@ -24,12 +24,9 @@ with Ada.Unchecked_Deallocation;
 with Util.Files;
 
 with Servlet.Streams;
-with Servlet.Core.Files;
-with Servlet.Core.Measures;
 with Servlet.Responses;
 with Servlet.Responses.Tools;
 
-with Servlet.Filters.Dump;
 with EL.Variables.Default;
 
 package body Servlet.Tests is
@@ -43,9 +40,6 @@ package body Servlet.Tests is
 
    App_Created : Servlet.Core.Servlet_Registry_Access;
    App         : Servlet.Core.Servlet_Registry_Access;
-   Files       : aliased Servlet.Core.Files.File_Servlet;
-   Dump        : aliased Servlet.Filters.Dump.Dump_Filter;
-   Measures    : aliased Servlet.Core.Measures.Measure_Servlet;
    App_URI     : Unbounded_String;
 
    --  Save the response headers and content in a file
@@ -75,34 +69,6 @@ package body Servlet.Tests is
       App_URI := To_Unbounded_String (Context_Path);
       Server := new Servlet.Server.Container;
       Server.Register_Application (Context_Path, App.all'Access);
-
-      --  Register the servlets and filters
-      App.Add_Servlet (Name => "files", Server => Files'Access);
-      App.Add_Servlet (Name => "measures", Server => Measures'Access);
-      App.Add_Filter (Name => "dump", Filter => Dump'Access);
-      App.Add_Filter (Name => "measures",
-                      Filter => Servlet.Filters.Filter'Class (Measures)'Access);
-
-      --  Define servlet mappings
-      App.Add_Mapping (Name => "files", Pattern => "*.css");
-      App.Add_Mapping (Name => "files", Pattern => "*.js");
-      App.Add_Mapping (Name => "files", Pattern => "*.html");
-      App.Add_Mapping (Name => "files", Pattern => "*.txt");
-      App.Add_Mapping (Name => "files", Pattern => "*.png");
-      App.Add_Mapping (Name => "files", Pattern => "*.jpg");
-      App.Add_Mapping (Name => "files", Pattern => "*.gif");
-      App.Add_Mapping (Name => "files", Pattern => "*.pdf");
-      App.Add_Mapping (Name => "files", Pattern => "*.properties");
-      App.Add_Mapping (Name => "files", Pattern => "*.xhtml");
-      App.Add_Mapping (Name => "measures", Pattern => "stats.xml");
-
-      App.Add_Filter_Mapping (Name => "measures", Pattern => "*");
-      App.Add_Filter_Mapping (Name => "measures", Pattern => "/ajax/*");
-      App.Add_Filter_Mapping (Name => "measures", Pattern => "*.html");
-      App.Add_Filter_Mapping (Name => "measures", Pattern => "*.xhtml");
-      App.Add_Filter_Mapping (Name => "dump", Pattern => "*.html");
-      App.Add_Filter_Mapping (Name => "dump", Pattern => "*.css");
-      App.Add_Filter_Mapping (Name => "dump", Pattern => "/ajax/*");
    end Initialize;
 
    --  ------------------------------
