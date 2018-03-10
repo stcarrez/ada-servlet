@@ -17,7 +17,10 @@
 -----------------------------------------------------------------------
 with Util.Test_Caller;
 with Servlet.Tests;
+with Servlet.Core.Files;
+with Servlet.Core.Measures;
 with Servlet.Core.Tests;
+with Servlet.Filters.Dump;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 
@@ -29,6 +32,9 @@ package body Servlet.Server.Tests is
    package Caller is new Util.Test_Caller (Test, "Server");
 
    Except_Servlet : aliased Servlet.Core.Tests.Test_Servlet3;
+   Files          : aliased Servlet.Core.Files.File_Servlet;
+   Dump           : aliased Servlet.Filters.Dump.Dump_Filter;
+   Measures       : aliased Servlet.Core.Measures.Measure_Servlet;
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
@@ -55,11 +61,41 @@ package body Servlet.Server.Tests is
    procedure Set_Up (T : in out Test) is
       pragma Unreferenced (T);
       use type Servlet.Core.Servlet_Registry_Access;
+      App         : Servlet.Core.Servlet_Registry_Access;
    begin
       if Servlet.Tests.Get_Application = null then
          Servlet.Tests.Initialize (Util.Tests.Get_Properties);
-         Servlet.Tests.Get_Application.Add_Servlet ("Except", Except_Servlet'Access);
-         Servlet.Tests.Get_Application.Add_Mapping ("*.exc", "Except");
+         App := Servlet.Tests.Get_Application;
+         App.Add_Servlet ("Except", Except_Servlet'Access);
+         App.Add_Mapping ("*.exc", "Except");
+
+         --  Register the servlets and filters
+         App.Add_Servlet (Name => "files", Server => Files'Access);
+         App.Add_Servlet (Name => "measures", Server => Measures'Access);
+         App.Add_Filter (Name => "dump", Filter => Dump'Access);
+         App.Add_Filter (Name => "measures",
+                         Filter => Servlet.Filters.Filter'Class (Measures)'Access);
+
+         --  Define servlet mappings
+         App.Add_Mapping (Name => "files", Pattern => "*.css");
+         App.Add_Mapping (Name => "files", Pattern => "*.js");
+         App.Add_Mapping (Name => "files", Pattern => "*.html");
+         App.Add_Mapping (Name => "files", Pattern => "*.txt");
+         App.Add_Mapping (Name => "files", Pattern => "*.png");
+         App.Add_Mapping (Name => "files", Pattern => "*.jpg");
+         App.Add_Mapping (Name => "files", Pattern => "*.gif");
+         App.Add_Mapping (Name => "files", Pattern => "*.pdf");
+         App.Add_Mapping (Name => "files", Pattern => "*.properties");
+         App.Add_Mapping (Name => "files", Pattern => "*.xhtml");
+         App.Add_Mapping (Name => "measures", Pattern => "stats.xml");
+
+         App.Add_Filter_Mapping (Name => "measures", Pattern => "*");
+         App.Add_Filter_Mapping (Name => "measures", Pattern => "/ajax/*");
+         App.Add_Filter_Mapping (Name => "measures", Pattern => "*.html");
+         App.Add_Filter_Mapping (Name => "measures", Pattern => "*.xhtml");
+         App.Add_Filter_Mapping (Name => "dump", Pattern => "*.html");
+         App.Add_Filter_Mapping (Name => "dump", Pattern => "*.css");
+         App.Add_Filter_Mapping (Name => "dump", Pattern => "/ajax/*");
       end if;
       Servlet.Tests.Get_Application.Start;
    end Set_Up;
