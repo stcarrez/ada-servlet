@@ -5,7 +5,7 @@ SERVLET_LIBRARY_TYPE=static
 
 # You may edit this makefile as long as you keep these original 
 # target names defined.
-MODE=debug
+MODE=@MODE@
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
 GPRINSTALL=@GPRINSTALL@
@@ -69,7 +69,7 @@ libname=libada_servlet
 libprefix=$(libname)_
 
 PROCESSORS=@NR_CPUS@
-COVERAGE=no
+COVERAGE=@BUILDS_COVERAGE@
 MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XSERVLET_LIBRARY_TYPE=${SERVLET_LIBRARY_TYPE} -XPROCESSORS=$(PROCESSORS)
 ifeq ($(SERVLET_LIBRARY_TYPE),relocatable)
 MAKE_ARGS += -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
