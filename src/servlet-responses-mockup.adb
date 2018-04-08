@@ -118,6 +118,7 @@ package body Servlet.Responses.Mockup is
       Resp.Content.Flush (Into);
       Resp.Status := SC_OK;
       Resp.Headers.Clear;
+      Resp.Committed := False;
    end Clear;
 
    --  ------------------------------
