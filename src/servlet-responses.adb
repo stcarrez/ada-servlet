@@ -114,7 +114,7 @@ package body Servlet.Responses is
    --  ------------------------------
    function Is_Committed (Resp : in Response) return Boolean is
    begin
-      return Resp.Stream.Get_Size > 0;
+      return Resp.Committed or else Resp.Stream.Get_Size > 0;
    end Is_Committed;
 
    --  ------------------------------
@@ -341,5 +341,13 @@ package body Servlet.Responses is
          Result.Initialize (Resp.Stream.all'Access);
       end return;
    end Get_Output_Stream;
+
+   --  ------------------------------
+   --  Mark the response as being committed.
+   --  ------------------------------
+   procedure Set_Committed (Resp : in out Response) is
+   begin
+      Resp.Committed := True;
+   end Set_Committed;
 
 end Servlet.Responses;
