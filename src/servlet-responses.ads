@@ -312,6 +312,9 @@ package Servlet.Responses is
    --  Get the output stream
    function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Print_Stream;
 
+   --  Mark the response as being committed.
+   procedure Set_Committed (Resp : in out Response);
+
 private
 
    type Response is abstract new Ada.Finalization.Limited_Controlled with record
@@ -319,6 +322,7 @@ private
       Stream       : Util.Streams.Texts.Print_Stream_Access;
       Content_Type : Ada.Strings.Unbounded.Unbounded_String;
       Locale       : Util.Locales.Locale;
+      Committed    : Boolean := False;
    end record;
 
 end Servlet.Responses;
