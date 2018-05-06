@@ -89,14 +89,23 @@ package body Servlet.Security.Filters is
       Context : aliased Contexts.Security_Context;
    begin
       Request.Iterate_Cookies (Fetch_Cookie'Access);
-      Session := Request.Get_Session (Create => True);
+
+      --  Get a session but avoid creating it.
+      Session := Request.Get_Session (Create => False);
+      if Session.Is_Valid then
+         Auth := Session.Get_Principal;
+      end if;
 
       --  If the session does not have a principal, try to authenticate the user with
       --  the auto-login cookie.
-      Auth := Session.Get_Principal;
-      if Auth = null and then Length (AID) > 0 then
+      if Auth = null and Length (AID) > 0 then
          Auth_Filter'Class (F).Authenticate (Request, Response, Session, To_String (AID), Auth);
          if Auth /= null then
+
+            --  Now we must make sure we have a valid session and create it if necessary.
+            if not Session.Is_Valid then
+               Session := Request.Get_Session (Create => True);
+            end if;
             Session.Set_Principal (Auth);
          end if;
       end if;
