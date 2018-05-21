@@ -8,8 +8,6 @@ with "@SECURITY_DIR@security";
 abstract project Servlet is
 
    Version := Servlet_Core.Version;
-   Library_Dir := Servlet_Core.Library_Dir;
-   Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
    type Server_Type is ("none", "aws");
    Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
