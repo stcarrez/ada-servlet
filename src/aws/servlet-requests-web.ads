@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ package Servlet.Requests.Web is
    function Get_Parameter (R : Request; Name : String) return String;
 
    --  Iterate over the request parameters and executes the <b>Process</b> procedure.
+   overriding
    procedure Iterate_Parameters (Req     : in Request;
                                  Process : not null access
                                    procedure (Name  : in String;
@@ -40,11 +41,13 @@ package Servlet.Requests.Web is
    --  Returns the name of the HTTP method with which this request was made,
    --  for example, GET, POST, or PUT. Same as the value of the CGI variable
    --  REQUEST_METHOD.
+   overriding
    function Get_Method (Req : in Request) return String;
 
    --  Returns the name and version of the protocol the request uses in the form
    --  protocol/majorVersion.minorVersion, for example, HTTP/1.1. For HTTP servlets,
    --  the value returned is the same as the value of the CGI variable SERVER_PROTOCOL.
+   overriding
    function Get_Protocol (Req : in Request) return String;
 
    --  Returns the part of this request's URL from the protocol name up to the query
@@ -54,6 +57,7 @@ package Servlet.Requests.Web is
    --  POST /some/path.html HTTP/1.1        /some/path.html
    --  GET http://foo.bar/a.html HTTP/1.0       /a.html
    --  HEAD /xyz?a=b HTTP/1.1       /xyz
+   overriding
    function Get_Request_URI (Req : in Request) return String;
 
    --  Returns the value of the specified request header as a String. If the request
@@ -61,6 +65,7 @@ package Servlet.Requests.Web is
    --  If there are multiple headers with the same name, this method returns the
    --  first head in the request. The header name is case insensitive. You can use
    --  this method with any request header.
+   overriding
    function Get_Header (Req  : in Request;
                         Name : in String) return String;
 
@@ -74,10 +79,12 @@ package Servlet.Requests.Web is
    --  If the request did not include any headers of the specified name, this method
    --  returns an empty Enumeration. The header name is case insensitive. You can use
    --  this method with any request header.
+   overriding
    function Get_Headers (Req  : in Request;
                          Name : in String) return String;
 
    --  Iterate over the request headers and executes the <b>Process</b> procedure.
+   overriding
    procedure Iterate_Headers (Req     : in Request;
                               Process : not null access
                                 procedure (Name  : in String;
@@ -86,13 +93,16 @@ package Servlet.Requests.Web is
    --  Returns the Internet Protocol (IP) address of the client or last proxy that
    --  sent the request. For HTTP servlets, same as the value of the CGI variable
    --  REMOTE_ADDR.
+   overriding
    function Get_Remote_Addr (Req : in Request) return String;
 
    --  Get the number of parts included in the request.
+   overriding
    function Get_Part_Count (Req : in Request) return Natural;
 
    --  Process the part at the given position and executes the <b>Process</b> operation
    --  with the part object.
+   overriding
    procedure Process_Part (Req      : in out Request;
                            Position : in Positive;
                            Process  : not null access
@@ -100,6 +110,7 @@ package Servlet.Requests.Web is
 
    --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
+   overriding
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
                            Process  : not null access
