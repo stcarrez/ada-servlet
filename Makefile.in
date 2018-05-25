@@ -1,6 +1,6 @@
 ## The type of library we want to build. Possible values:
-##   relocatable
-##   static
+##	 relocatable
+##	 static
 SERVLET_LIBRARY_TYPE=static
 
 # You may edit this makefile as long as you keep these original 
@@ -82,18 +82,19 @@ MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 endif
 
 ifeq (${BUILDS_SHARED},yes)
-all:     static shared
-install: uninstall install_static install_shared install-info
+all:	 static shared
+install: uninstall install_shared install_static install-info
 else
-all:     static
+all:	 static
 install: uninstall install_static install-info
 endif
 
 # Build executables for all mains defined by the project.
 build: setup regtests/servlet-testsuite.adb
 	$(GNATMAKE) -m -p -P "$(SERVLET_GPRPATH)" $(MAKE_ARGS)
-	test T${HAVE_AWS} = Tno || \
-		$(GNATMAKE) -m -p -P "$(AWS_GPRPATH)" $(MAKE_ARGS)
+ifeq (${HAVE_AWS},yes)
+	$(GNATMAKE) -m -p -P "$(AWS_GPRPATH)" $(MAKE_ARGS)
+endif
 	$(GNATMAKE) -m -p -Pservlet_tests $(MAKE_ARGS)
 
 static:
@@ -144,7 +145,7 @@ clean_tree:
 # Check *all* sources for errors, even those not changed.
 # Does not build executables.
 analyze:
-	$(GNATMAKE) $(MAKE_ARGS) -f  -gnatc -c -k  -P "$(GPRPATH)"
+	$(GNATMAKE) $(MAKE_ARGS) -f	 -gnatc -c -k  -P "$(GPRPATH)"
 
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
@@ -183,23 +184,29 @@ install_shared:
 	$(MAKE) SERVLET_LIBRARY_TYPE=relocatable install_lib
 
 install_lib:
-	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+	$(GPRINSTALL) -p -f --prefix=${prefix} \
+		$(MAKE_ARGS) \
 		--build-name=$(SERVLET_LIBRARY_TYPE) $(GPRPATH)
-	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+	$(GPRINSTALL) -p -f --prefix=${prefix} \
+		$(MAKE_ARGS) \
 		--build-name=$(SERVLET_LIBRARY_TYPE) $(SERVLET_GPRPATH)
-	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+	$(GPRINSTALL) -p -f --prefix=${prefix} \
+		$(MAKE_ARGS) \
 		--build-name=$(SERVLET_LIBRARY_TYPE) $(SERVLET_UNIT_GPRPATH)
-	test T${HAVE_AWS} = Tno || \
-	 $(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+ifeq (${HAVE_AWS},yes)
+	$(GPRINSTALL) -p -f --prefix=${prefix} \
+		$(MAKE_ARGS) \
 		--build-name=$(SERVLET_LIBRARY_TYPE) $(AWS_GPRPATH)
+endif
 
 install-info:
 	@echo "Environment setup:"
-	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
+	@echo "	 export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
 
 uninstall:
 	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(GPRPATH)
 	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(SERVLET_GPRPATH)
 	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(SERVLET_UNIT_GPRPATH)
-	-test T${HAVE_AWS} = Tno || \
-	 $(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(AWS_GPRPATH)
+ifeq (${HAVE_AWS},yes)
+	$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(AWS_GPRPATH)
+endif
