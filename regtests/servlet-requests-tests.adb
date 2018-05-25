@@ -180,6 +180,15 @@ package body Servlet.Requests.Tests is
       Util.Tests.Assert_Equals (T, "Tue, 09 Jan 2018 22:55:08 GMT",
                                 Reply.Get_Header ("Second-Date"),
                                 "Invalid response date header: Date");
+
+      Reply.Set_Content_Length (123);
+      Util.Tests.Assert_Equals (T, "123", Reply.Get_Header ("Content-Length"));
+
+      Reply.Set_Content_Length (456);
+      Util.Tests.Assert_Equals (T, "456", Reply.Get_Header ("Content-Length"));
+
+      Reply.Send_Redirect (Location => "https://somewhere.com");
+      Util.Tests.Assert_Equals (T, "https://somewhere.com", Reply.Get_Header ("Location"));
    end Test_Headers;
 
 end Servlet.Requests.Tests;
