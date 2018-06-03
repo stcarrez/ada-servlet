@@ -208,5 +208,5 @@ uninstall:
 	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(SERVLET_GPRPATH)
 	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(SERVLET_UNIT_GPRPATH)
 ifeq (${HAVE_AWS},yes)
-	$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(AWS_GPRPATH)
+	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(AWS_GPRPATH)
 endif
