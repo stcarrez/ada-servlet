@@ -47,8 +47,6 @@ with Util.Log.Loggers;
 --
 package body Servlet.Core is
 
-   use Ada.Finalization;
-
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Core");
 
@@ -391,7 +389,6 @@ package body Servlet.Core is
    procedure Forward (Dispatcher : in Request_Dispatcher;
                       Request    : in out Requests.Request'Class;
                       Response   : in out Responses.Response'Class) is
-      use type Filters.Filter_List_Access;
    begin
       if Dispatcher.Servlet = null then
          Response.Send_Error (Responses.SC_NOT_FOUND);
