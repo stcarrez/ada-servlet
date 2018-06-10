@@ -44,7 +44,6 @@ package body Servlet.Resolvers is
                        Name     : in Ada.Strings.Unbounded.Unbounded_String)
                        return Util.Beans.Objects.Object is
       pragma Unreferenced (Context);
-      use type Util.Beans.Basic.Readonly_Bean_Access;
       use type Servlet.Requests.Request_Access;
 
       Key    : constant String := Ada.Strings.Unbounded.To_String (Name);
