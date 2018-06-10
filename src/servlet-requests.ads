@@ -37,8 +37,6 @@ with Servlet.Streams;
 --  the Java servlet request (JSR 315 3. The Request).
 package Servlet.Requests is
 
-   use Ada.Strings.Unbounded;
-
    type Quality_Type is digits 4 range 0.0 .. 1.0;
 
    --  Split an accept like header into multiple tokens and a quality value.
