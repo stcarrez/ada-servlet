@@ -76,7 +76,6 @@ package body Servlet.Core.Rest is
                        Request  : in out Requests.Request'Class;
                        Response : in out Responses.Response'Class) is
       pragma Unreferenced (Server);
-      use type Routes.Servlets.Rest.API_Route_Type;
 
       Route  : constant Routes.Route_Type_Access := Request.Get_Route;
    begin
