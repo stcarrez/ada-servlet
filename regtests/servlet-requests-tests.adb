@@ -22,8 +22,6 @@ with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 package body Servlet.Requests.Tests is
 
-   use Util.Tests;
-
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Requests.Tests");
 
@@ -81,8 +79,6 @@ package body Servlet.Requests.Tests is
    procedure Test_Accept_Locales (T : in out Test) is
       procedure Process_Locale (Locale : in Util.Locales.Locale;
                                 Quality : in Quality_Type);
-
-      use Util.Locales;
 
       Req : Servlet.Requests.Mockup.Request;
 

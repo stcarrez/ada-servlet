@@ -634,8 +634,6 @@ package body Servlet.Core.Tests is
                             URI    : in String;
                             Server : in Servlet_Access;
                             Filter : in Natural := 0) is
-      use type Filters.Filter_List_Access;
-
       Disp  : constant Request_Dispatcher := Ctx.Get_Request_Dispatcher (URI);
       Route : constant Routes.Route_Type_Access := Disp.Context.Get_Route;
       Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
