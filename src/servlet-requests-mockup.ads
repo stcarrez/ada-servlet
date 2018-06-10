@@ -156,6 +156,8 @@ package Servlet.Requests.Mockup is
 
 private
 
+   use Ada.Strings.Unbounded;
+
    type Request is new Servlet.Requests.Request with record
       Headers    : Util.Strings.Maps.Map;
       Parameters : Util.Strings.Maps.Map;
