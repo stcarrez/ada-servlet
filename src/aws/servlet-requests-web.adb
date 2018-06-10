@@ -24,6 +24,8 @@ with Util.Strings;
 with Servlet.Parts.Web;
 package body Servlet.Requests.Web is
 
+   use Ada.Strings.Unbounded;
+
    function Get_Parameter (R : Request; Name : String) return String is
    begin
       return AWS.Status.Parameter (R.Data.all, Name);
