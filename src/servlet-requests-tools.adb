@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests.tools -- Servlet Requests Tools
---  Copyright (C) 2010, 2015 Stephane Carrez
+--  Copyright (C) 2010, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
 -----------------------------------------------------------------------
 with Util.Strings.Transforms;
 package body Servlet.Requests.Tools is
+
+   use Ada.Strings.Unbounded;
 
    --  ------------------------------
    --  Builds a printable representation of the request for debugging purposes.
