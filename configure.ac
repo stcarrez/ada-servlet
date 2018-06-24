@@ -114,5 +114,8 @@ AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
 Makefile servlet.gpr servlet_core.gpr servlet_aws.gpr servlet_tests.gpr samples.gpr servlet_unit.gpr
+distrib/servlet.gpr
+distrib/servlet_core.gpr
+distrib/servlet_aws.gpr
 )
 
