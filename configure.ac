@@ -117,5 +117,6 @@ Makefile servlet.gpr servlet_core.gpr servlet_aws.gpr servlet_tests.gpr samples.
 distrib/servlet.gpr
 distrib/servlet_core.gpr
 distrib/servlet_aws.gpr
+distrib/servlet_unit.gpr
 )
 
