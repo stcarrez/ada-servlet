@@ -1,0 +1,16 @@
+with "util_config";
+with "servlet_core";
+with "util_http_aws";
+with "aws";
+
+project Servlet_Aws is
+   Version := "@SERVLET_VERSION@";
+
+   for Library_Name use "ada_servlet_aws";
+   for Library_Dir use Util_Config.Libdir;
+   for Library_Kind use "LIBRARY_TYPE";
+
+   for Source_Dirs use (Util_Config.Includedir & "/servlet_aws");
+   for Library_ALI_Dir use Util_Config.Alidir & "/servlet_aws/";
+   for Externally_Built use "true";
+end Servlet_Aws;

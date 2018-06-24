@@ -1,0 +1,7 @@
+with "servlet_core";
+
+project Servlet is
+   Version := Servlet_Core.Version;
+
+   for Externally_Built use "true";
+end Servlet;
