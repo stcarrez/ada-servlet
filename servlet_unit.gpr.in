@@ -15,8 +15,8 @@ project Servlet_Unit is
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Servlet_Core.Version;
 
-   for Library_Dir use Library_Dir & "/servletunit/" & Project'Library_Kind;
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/servletunit/" & Project'Library_Kind;
+   for Library_Dir use Library_Dir & "/servlet_unit/" & Project'Library_Kind;
+   for Object_Dir use "./" & Config'Object_Dir & "/obj/servlet_unit/" & Project'Library_Kind;
    for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
 
    package Binder   renames Config.Binder;
