@@ -27,13 +27,6 @@ SERVLET_MINOR_VERSION=2
 SERVLET_MICRO_VERSION=0
 SERVLET_VERSION=$SERVLET_MAJOR_VERSION.$SERVLET_MINOR_VERSION.$SERVLET_MICRO_VERSION
 
-AM_GNAT_CHECK_GPRBUILD
-
-# checking for local tools
-AC_PROG_MAKE_SET
-AC_PROG_INSTALL
-AC_PROG_LN_S
-
 # Set the version number of Ada Server Faces
 AC_SUBST(SERVLET_VERSION)
 AC_SUBST(SERVLET_MAJOR_VERSION)
@@ -46,17 +39,10 @@ AC_SUBST(EXEC_PREFIX)
 SERVLET_LIBDIR="lib"
 AC_SUBST(SERVLET_LIBDIR)
 
-AC_MSG_CHECKING([number of processors])
-NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
-AC_MSG_RESULT($NR_CPUS)
-AC_SUBST(NR_CPUS)
-
 ##########################################
 # Check to enable/disable shared library
 ##########################################
-AM_SHARED_LIBRARY_SUPPORT
-AM_DISTRIB_SUPPORT
-AM_COVERAGE_SUPPORT
+AM_GNAT_LIBRARY_PROJECT(servlet)
 
 ##########################################
 # Ada Util library
@@ -109,8 +95,6 @@ AC_SUBST(SERVLET_SERVER)
 AC_SUBST(SERVLET_HAVE_AWS)
 AC_SUBST(WITH_SERVER)
 AC_SUBST(WITH_SERVLET_AWS)
-
-AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
 Makefile servlet.gpr servlet_core.gpr servlet_aws.gpr servlet_tests.gpr samples.gpr servlet_unit.gpr
