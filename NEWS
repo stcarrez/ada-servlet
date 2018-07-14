@@ -1,4 +1,4 @@
-Version 1.2     -
+Version 1.2     - Jul 2018
   - New REST servlet with support for server API implementation
   - Add support for servlet requests to retrieve the body content as a stream
   - Moved the Ada Servlet implementation outside of Ada Server Faces in a separate project
