@@ -2,9 +2,9 @@
 
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Servlet.svg)](http://jenkins.vacs.fr/job/Ada-Servlet/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Servlet.svg)](http://jenkins.vacs.fr/job/Ada-Servlet/)
-[![Download](https://img.shields.io/badge/download-1.1.0-brightgreen.svg)](http://download.vacs.fr/ada-asf/ada-asf-1.1.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.2.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.2.0.tar.gz)
 [![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.1.0.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.2.0.svg)
 
 Ada Servlet allows to create web applications using the same pattern
 as the Java Servlet (See JSR 154, JSR 315). 
