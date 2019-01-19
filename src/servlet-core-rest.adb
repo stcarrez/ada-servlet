@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets-rest -- REST servlet
---  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,6 +81,7 @@ package body Servlet.Core.Rest is
    begin
       if Route = null or else not (Route.all in Routes.Servlets.Rest.API_Route_Type'Class) then
          Response.Set_Status (Responses.SC_NOT_FOUND);
+         Response.Set_Committed;
          return;
       end if;
       declare
@@ -92,6 +93,7 @@ package body Servlet.Core.Rest is
       begin
          if Desc = null then
             Response.Set_Status (Responses.SC_NOT_FOUND);
+            Response.Set_Committed;
             return;
          end if;
 --         if not App.Has_Permission (Desc.Permission) then
