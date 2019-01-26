@@ -1,3 +1,6 @@
+Version 1.2.1   -
+  - Fix REST servlet when a 404 error is returned.
+
 Version 1.2     - Jul 2018
   - New REST servlet with support for server API implementation
   - Add support for servlet requests to retrieve the body content as a stream
