@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Servlet
-dnl Copyright (C) 2009 - 2018 Stephane Carrez
+dnl Copyright (C) 2009 - 2019 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +18,6 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/servlet.ads)
 
-AC_CANONICAL_SYSTEM
-dnl AM_MAINTAINER_MODE
-
 # Current release settings
 SERVLET_MAJOR_VERSION=1
 SERVLET_MINOR_VERSION=2
@@ -36,33 +33,29 @@ AC_SUBST(SERVLET_MICRO_VERSION)
 EXEC_PREFIX="$prefix"
 AC_SUBST(EXEC_PREFIX)
 
-SERVLET_LIBDIR="lib"
-AC_SUBST(SERVLET_LIBDIR)
-
-##########################################
-# Check to enable/disable shared library
-##########################################
-AM_GNAT_LIBRARY_PROJECT(servlet)
+AM_GNAT_LIBRARY_PROJECT(servletada)
+AM_GNAT_LIBRARY_SETUP(servletada_core)
+AM_GNAT_LIBRARY_SETUP(servletada_aws)
 
 ##########################################
 # Ada Util library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
+AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_sys],
   [git@github.com:stcarrez/ada-util.git],
   [Building Ada EL requires the Ada Utility Library.],
   [
-    UTIL_DIR=${gnat_project_dir_util}
+    UTIL_DIR=${gnat_project_dir_utilada_sys}
   ])
 AC_SUBST(UTIL_DIR)
 
 ##########################################
 # Ada Expression Language library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[el],
+AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[elada],
   [git@github.com:stcarrez/ada-el.git],
   [Building Ada Servlet requires the Ada EL Library.],
   [
-    EL_DIR=${gnat_project_dir_el}
+    EL_DIR=${gnat_project_dir_elada}
   ])
 AC_SUBST(EL_DIR)
 
@@ -89,7 +82,7 @@ AM_GNAT_CHECK_AWS(
     SERVLET_SERVER=aws
     SERVLET_HAVE_AWS=yes
     WITH_SERVER="with \"${gnat_project_name}\";";
-    WITH_SERVLET_AWS="with \"servlet_aws\";";
+    WITH_SERVLET_AWS="with \"servletada_aws\";";
   ])
 AC_SUBST(SERVLET_SERVER)
 AC_SUBST(SERVLET_HAVE_AWS)
@@ -97,10 +90,12 @@ AC_SUBST(WITH_SERVER)
 AC_SUBST(WITH_SERVLET_AWS)
 
 AC_OUTPUT(
-Makefile servlet.gpr servlet_core.gpr servlet_aws.gpr servlet_tests.gpr samples.gpr servlet_unit.gpr
-distrib/servlet.gpr
-distrib/servlet_core.gpr
-distrib/servlet_aws.gpr
-distrib/servlet_unit.gpr
+Makefile.conf
+servletada.gpr
+servletada_core.gpr
+servletada_aws.gpr
+servletada_tests.gpr
+servletada_unit.gpr
+samples.gpr
 )
 
