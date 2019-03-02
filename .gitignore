@@ -1,6 +1,6 @@
 *~
 *.log
-Makefile
+Makefile.conf
 config.status
 CHANGES
 *.cproject
@@ -10,13 +10,12 @@ CHANGES
 ChangeLog
 .settings
 configure.lineno
-Makefile
-servlet.gpr
-servlet_tests.gpr
-servlet_aws.gpr
-servlet_core.gpr
+servletada.gpr
+servletada_tests.gpr
+servletada_aws.gpr
+servletada_core.gpr
 t.gpr
-servlet_unit.gpr
+servletada_unit.gpr
 tests.xml
 servlet-tests.xml
 autom4te.cache
