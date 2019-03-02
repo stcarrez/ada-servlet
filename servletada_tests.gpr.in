@@ -1,16 +1,16 @@
 with "@UTIL_DIR@config";
-with "@UTIL_DIR@util";
-with "@UTIL_DIR@util_unit";
-with "@EL_DIR@el";
-with "servlet";
-with "servlet_unit";
+with "@UTIL_DIR@utilada_sys";
+with "@UTIL_DIR@utilada_unit";
+with "@EL_DIR@elada";
+with "servletada";
+with "servletada_unit";
 
-project Servlet_Tests is
+project ServletAda_Tests is
 
    Mains := ("servlet_harness.adb");
 
    for Source_Dirs use ("regtests");
-   case Servlet.Server is
+   case ServletAda.Server is
       when "aws" =>
           for Source_Dirs use project'Source_Dirs & ("regtests/aws");
 
@@ -28,4 +28,4 @@ project Servlet_Tests is
    package Compiler renames Config.Compiler;
    package Linker renames Config.Linker;
 
-end Servlet_Tests;
+end ServletAda_Tests;

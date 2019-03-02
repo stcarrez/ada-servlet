@@ -1,16 +1,16 @@
 with "@UTIL_DIR@config";
-with "servlet_core";
-with "@UTIL_DIR@util";
-with "@EL_DIR@el";
+with "servletada_core";
+with "@UTIL_DIR@utilada_sys";
+with "@EL_DIR@elada";
 with "@SECURITY_DIR@security";
 @WITH_SERVLET_AWS@
 
-abstract project Servlet is
+abstract project ServletAda is
 
-   Version := Servlet_Core.Version;
+   Version := ServletAda_Core.Version;
 
    type Server_Type is ("none", "aws");
    Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
 
    for Source_Files use ();
-end Servlet;
+end ServletAda;
