@@ -22,7 +22,7 @@ build-test:: setup regtests/servlet-testsuite.adb
 	$(GNATMAKE) $(GPRFLAGS) -p -Pservletada_tests $(MAKE_ARGS)
 
 # Build and run the unit tests
-test:	build-test runtest
+test:	build runtest
 
 runtest:
 	DIR=`pwd`; \
@@ -32,27 +32,6 @@ runtest:
 
 regtests/servlet-testsuite.adb: regtests/servlet-testsuite.gpb Makefile.conf
 	gnatprep -DSERVLET_SERVER=$(SERVLET_SERVER) regtests/servlet-testsuite.gpb $@
-
-# Build the coverage data and make a report using lcov and genhtml
-coverage:  coverage-init runtest coverage-capture coverage-report
-
-COVERAGE_OPTIONS= \
-		 --directory src --directory servletunit --directory regtests \
-		 --directory obj --directory obj/servlet/static --directory obj/servletunit/static
-
-coverage-init:
-	lcov --no-external --initial --capture $(COVERAGE_OPTIONS) \
-		 --output-file servlet-coverage.info
-
-coverage-capture:
-	lcov --no-external --capture $(COVERAGE_OPTIONS) \
-		 --output-file servlet-coverage.info
-	lcov --remove servlet-coverage.info '*.ads' -o servlet-coverage-body.info
-
-coverage-report:
-	mkdir -p cov
-	genhtml --ignore-errors source servlet-coverage-body.info --legend --title "Ada Server Faces" \
-			--output-directory cov
 
 $(eval $(call ada_library,$(NAME)))
 
