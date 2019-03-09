@@ -34,7 +34,6 @@ EXEC_PREFIX="$prefix"
 AC_SUBST(EXEC_PREFIX)
 
 AM_GNAT_LIBRARY_PROJECT(servletada)
-AM_GNAT_LIBRARY_SETUP(servletada_core)
 AM_GNAT_LIBRARY_SETUP(servletada_aws)
 
 ##########################################
@@ -92,8 +91,8 @@ AC_SUBST(WITH_SERVLET_AWS)
 AC_OUTPUT(
 Makefile.conf
 servletada.gpr
-servletada_core.gpr
 servletada_aws.gpr
+servletada_all.gpr
 servletada_tests.gpr
 servletada_unit.gpr
 samples.gpr
