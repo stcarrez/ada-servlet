@@ -1,16 +1,26 @@
 with "@UTIL_DIR@config";
-with "servletada_core";
 with "@UTIL_DIR@utilada_sys";
 with "@EL_DIR@elada";
 with "@SECURITY_DIR@security";
-@WITH_SERVLET_AWS@
 
-abstract project ServletAda is
+project ServletAda is
 
-   Version := ServletAda_Core.Version;
+   Version := "@SERVLET_VERSION@";
+   Library_Dir := "lib";
+   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
-   type Server_Type is ("none", "aws");
-   Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
+   for Source_Dirs use ("src");
 
-   for Source_Files use ();
+   for Library_Name use "servletada";
+   for Library_Kind use Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+
+   for Library_Dir use Library_Dir & "/servletada/" & Project'Library_Kind;
+   for Object_Dir use "./" & Config'Object_Dir & "/obj/servletada/" & Project'Library_Kind;
+
+   package Binder renames Config.Binder;
+   package Builder renames Config.Builder;
+   package Compiler renames Config.Compiler;
+   package Ide      renames Config.Ide;
+
 end ServletAda;
