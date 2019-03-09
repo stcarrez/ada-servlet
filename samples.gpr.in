@@ -1,7 +1,7 @@
 with "@UTIL_DIR@config";
 with "@UTIL_DIR@utilada_base";
 with "@EL_DIR@elada";
-with "servletada";
+with "servletada_all";
 
 project Samples is
 
