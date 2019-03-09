@@ -13,7 +13,7 @@ configure.lineno
 servletada.gpr
 servletada_tests.gpr
 servletada_aws.gpr
-servletada_core.gpr
+servletada_all.gpr
 samples.gpr
 t.gpr
 servletada_unit.gpr
