@@ -2734,13 +2734,6 @@ $as_echo "done" >&6; }
 
 
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking preparing for GNAT project servletada_core" >&5
-$as_echo_n "checking preparing for GNAT project servletada_core... " >&6; }
-  mkdir -p obj/servletada_core/static obj/servletada_core/relocatable lib/servletada_core/static lib/servletada_core/relocatable
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: done" >&5
-$as_echo "done" >&6; }
-
-
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking preparing for GNAT project servletada_aws" >&5
 $as_echo_n "checking preparing for GNAT project servletada_aws... " >&6; }
   mkdir -p obj/servletada_aws/static obj/servletada_aws/relocatable lib/servletada_aws/static lib/servletada_aws/relocatable
@@ -3135,7 +3128,7 @@ $as_echo "no" >&6; }
 
 
 
-ac_config_files="$ac_config_files Makefile.conf servletada.gpr servletada_core.gpr servletada_aws.gpr servletada_tests.gpr servletada_unit.gpr samples.gpr"
+ac_config_files="$ac_config_files Makefile.conf servletada.gpr servletada_aws.gpr servletada_all.gpr servletada_tests.gpr servletada_unit.gpr samples.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3845,8 +3838,8 @@ do
   case $ac_config_target in
     "Makefile.conf") CONFIG_FILES="$CONFIG_FILES Makefile.conf" ;;
     "servletada.gpr") CONFIG_FILES="$CONFIG_FILES servletada.gpr" ;;
-    "servletada_core.gpr") CONFIG_FILES="$CONFIG_FILES servletada_core.gpr" ;;
     "servletada_aws.gpr") CONFIG_FILES="$CONFIG_FILES servletada_aws.gpr" ;;
+    "servletada_all.gpr") CONFIG_FILES="$CONFIG_FILES servletada_all.gpr" ;;
     "servletada_tests.gpr") CONFIG_FILES="$CONFIG_FILES servletada_tests.gpr" ;;
     "servletada_unit.gpr") CONFIG_FILES="$CONFIG_FILES servletada_unit.gpr" ;;
     "samples.gpr") CONFIG_FILES="$CONFIG_FILES samples.gpr" ;;
