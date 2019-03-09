@@ -1,5 +1,5 @@
 with "@UTIL_DIR@config";
-with "servletada_core";
+with "servletada";
 with "@UTIL_DIR@utilada_aws";
 @WITH_SERVER@
 

@@ -2,7 +2,7 @@ with "@UTIL_DIR@config";
 with "@UTIL_DIR@utilada_sys";
 with "@UTIL_DIR@utilada_unit";
 with "@EL_DIR@elada";
-with "servletada_core";
+with "servletada";
 
 project ServletAda_Unit is
 
@@ -13,7 +13,7 @@ project ServletAda_Unit is
 
    for Library_Name use "servletada_unit";
    for Library_Kind use Library_Type;
-   for Library_Version use "lib" & Project'Library_Name & ".so." & ServletAda_Core.Version;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & ServletAda.Version;
 
    for Library_Dir use Library_Dir & "/servletada_unit/" & Project'Library_Kind;
    for Object_Dir use "./" & Config'Object_Dir & "/obj/servletada_unit/" & Project'Library_Kind;
