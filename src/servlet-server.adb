@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server
---  Copyright (C) 2009, 2010, 2011, 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2015, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,14 @@
 -----------------------------------------------------------------------
 
 with Util.Strings;
+with Util.Log.Loggers;
 
 with Ada.Unchecked_Deallocation;
 with Ada.Task_Attributes;
 package body Servlet.Server is
+
+   --  The logger
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Server");
 
    Null_Context : constant Request_Context := Request_Context'(null, null, null);
 
@@ -83,6 +87,8 @@ package body Servlet.Server is
       Apps  : constant Binding_Array_Access := new Binding_Array (1 .. Count + 1);
       Old   : Binding_Array_Access := Server.Applications;
    begin
+      Log.Info ("Register application {0}", URI);
+
       if Old /= null then
          Apps (1 .. Count) := Server.Applications (1 .. Count);
       end if;
@@ -118,6 +124,7 @@ package body Servlet.Server is
    begin
       for I in 1 .. Count loop
          if Old (I).Context = Context then
+            Log.Info ("Removed application {0}", Old (I).Base_URI);
             if I < Count then
                Old (I) := Old (Count);
             end if;
@@ -168,7 +175,6 @@ package body Servlet.Server is
       Apps       : constant Binding_Array_Access := Server.Applications;
       Prefix_End : Natural;
    begin
-
       if Apps = null then
          Response.Set_Status (Responses.SC_NOT_FOUND);
          Server.Default.Send_Error_Page (Request, Response);
@@ -191,6 +197,7 @@ package body Servlet.Server is
                Dispatcher : constant Core.Request_Dispatcher
                  := Context.Get_Request_Dispatcher (Page);
             begin
+               Log.Info ("{0} {1}", Request.Get_Method, Page);
                Req.Request     := Request'Unchecked_Access;
                Req.Response    := Response'Unchecked_Access;
                Req.Application := Context;
