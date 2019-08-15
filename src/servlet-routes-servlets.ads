@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-servlets -- Servlet request routing
---  Copyright (C) 2015, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@ package Servlet.Routes.Servlets is
    procedure Finalize (Route : in out Servlet_Route_Type);
 
    type Proxy_Route_Type is new Servlet_Route_Type with record
-      Route   : Servlet_Route_Type_Access;
+      Route   : Route_Type_Ref;
    end record;
    type Proxy_Route_Type_Access is access all Proxy_Route_Type'Class;
 
