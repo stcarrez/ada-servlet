@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -410,7 +410,10 @@ package Servlet.Requests is
                           Path : in String) return String;
 
    --  Returns the route object that is associated with the request.
-   function Get_Route (Req : in Request) return Servlet.Routes.Route_Type_Access;
+   function Get_Route (Req : in Request) return Servlet.Routes.Route_Type_Accessor;
+
+   --  Returns true if we have a route object.
+   function Has_Route (Req : in Request) return Boolean;
 
    --  Inject the parameters that have been extracted from the path according
    --  to the selected route.  The parameters are injected in the request attributes map.
