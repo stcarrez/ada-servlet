@@ -77,32 +77,40 @@ package body Servlet.Core.Rest is
                        Response : in out Responses.Response'Class) is
       pragma Unreferenced (Server);
 
-      Route  : constant Routes.Route_Type_Access := Request.Get_Route;
    begin
-      if Route = null or else not (Route.all in Routes.Servlets.Rest.API_Route_Type'Class) then
+      if not Request.Has_Route then
          Response.Set_Status (Responses.SC_NOT_FOUND);
          Response.Set_Committed;
          return;
       end if;
       declare
-         Api    : constant access Routes.Servlets.Rest.API_Route_Type
-           := Routes.Servlets.Rest.API_Route_Type (Route.all)'Access;
-         Desc   : constant Descriptor_Access := Api.Descriptors (Method);
-         Output : constant Streams.Print_Stream := Response.Get_Output_Stream;
-         Stream : Streams.JSON.Print_Stream;
+         Route  : constant Routes.Route_Type_Accessor := Request.Get_Route;
       begin
-         if Desc = null then
+         if not (Route in Routes.Servlets.Rest.API_Route_Type'Class) then
             Response.Set_Status (Responses.SC_NOT_FOUND);
             Response.Set_Committed;
             return;
          end if;
+         declare
+            Api    : constant access Routes.Servlets.Rest.API_Route_Type'Class
+              := Routes.Servlets.Rest.API_Route_Type'Class (Route.Element.all)'Access;
+            Desc   : constant Descriptor_Access := Api.Descriptors (Method);
+            Output : constant Streams.Print_Stream := Response.Get_Output_Stream;
+            Stream : Streams.JSON.Print_Stream;
+         begin
+            if Desc = null then
+               Response.Set_Status (Responses.SC_NOT_FOUND);
+               Response.Set_Committed;
+               return;
+            end if;
 --         if not App.Has_Permission (Desc.Permission) then
 --            Response.Set_Status (Responses.SC_FORBIDDEN);
 --            return;
 --         end if;
-         Streams.JSON.Initialize (Stream, Output);
-         Response.Set_Content_Type ("application/json; charset=utf-8");
-         Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+            Streams.JSON.Initialize (Stream, Output);
+            Response.Set_Content_Type ("application/json; charset=utf-8");
+            Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+         end;
       end;
    end Dispatch;
 
