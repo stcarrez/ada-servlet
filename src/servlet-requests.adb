@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,6 @@ with Util.Dates.RFC7231;
 package body Servlet.Requests is
 
    use type Servlet.Core.Servlet_Access;
-   use type Servlet.Routes.Route_Type_Access;
 
    function Get_Servlet (Req : in Request'Class) return Servlet.Core.Servlet_Access;
 
@@ -40,16 +39,15 @@ package body Servlet.Requests is
    --  Returns null if there is no such servlet.
    --  ------------------------------
    function Get_Servlet (Req : in Request'Class) return Servlet.Core.Servlet_Access is
-      Route : Servlet.Routes.Route_Type_Access;
    begin
-      if Req.Context = null then
+      if Req.Context = null or else Req.Context.Is_Null then
          return null;
       end if;
-      Route := Req.Context.Get_Route;
-      if Route = null then
-         return null;
-      end if;
-      return Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.all).Servlet;
+      declare
+         Route : constant Servlet.Routes.Route_Type_Accessor := Req.Context.Get_Route;
+      begin
+         return Servlet.Routes.Servlets.Servlet_Route_Type'Class (Route.Element.all).Servlet;
+      end;
    end Get_Servlet;
 
    --  ------------------------------
@@ -839,14 +837,18 @@ package body Servlet.Requests is
    --  ------------------------------
    --  Returns the route object that is associated with the request.
    --  ------------------------------
-   function Get_Route (Req : in Request) return Servlet.Routes.Route_Type_Access is
+   function Get_Route (Req : in Request) return Servlet.Routes.Route_Type_Accessor is
    begin
-      if Req.Context = null then
-         return null;
-      else
-         return Servlet.Routes.Get_Route (Req.Context.all);
-      end if;
+      return Servlet.Routes.Get_Route (Req.Context.all);
    end Get_Route;
+
+   --  ------------------------------
+   --  Returns true if we have a route object.
+   --  ------------------------------
+   function Has_Route (Req : in Request) return Boolean is
+   begin
+      return Req.Context /= null and then not Servlet.Routes.Is_Null (Req.Context.all);
+   end Has_Route;
 
    --  ------------------------------
    --  Inject the parameters that have been extracted from the path according
