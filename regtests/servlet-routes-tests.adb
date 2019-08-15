@@ -89,7 +89,8 @@ package body Servlet.Routes.Tests is
                            Path   : in String;
                            Index  : in Positive;
                            Bean   : in out Test_Bean'Class) is
-      Route   : constant Route_Type_Access := T.Routes (Index).Value;
+      use type Route_Type_Refs.Ref;
+      Route   : constant Route_Type_Ref := T.Routes (Index);
       R       : Route_Context_Type;
    begin
       Router.Find_Route (Path, R);
@@ -97,7 +98,7 @@ package body Servlet.Routes.Tests is
          P : constant String := Get_Path (R);
       begin
          T.Assert_Equals (Path, P, "Add_Route + Find_Route with " & Path);
-         T.Assert (Get_Route (R) /= null, "Get_Route returns a null route for " & Path);
+         T.Assert (not Is_Null (R), "Get_Route returns a null route for " & Path);
          T.Assert (Get_Route (R) = Route, "Get_Route returns a wrong route for " & Path);
 
          --  Inject the path parameters in the bean instance.
@@ -268,19 +269,20 @@ package body Servlet.Routes.Tests is
    --  ------------------------------
    procedure Test_Iterate (T : in out Test) is
       procedure Process (Pattern : in String;
-                         Route   : in Route_Type_Access);
+                         Route   : in Route_Type_Accessor);
 
       Router  : Router_Type;
       Bean    : Test_Bean;
 
       procedure Process (Pattern : in String;
-                         Route   : in Route_Type_Access) is
+                         Route   : in Route_Type_Accessor) is
       begin
-         T.Assert (Route /= null, "The route is null for " & Pattern);
-         T.Assert (Route.all in Test_Route_Type'Class, "Invalid route for " & Pattern);
+         --  T.Assert (Route /= null, "The route is null for " & Pattern);
+         T.Assert (Route in Test_Route_Type'Class, "Invalid route for " & Pattern);
 
-         Log.Info ("Route {0} to {1}", Pattern, Natural'Image (Test_Route_Type (Route.all).Index));
-         T.Assert_Equals (Pattern, Path_Array (Test_Route_Type (Route.all).Index).all,
+         Log.Info ("Route {0} to {1}", Pattern,
+                   Natural'Image (Test_Route_Type (Route.Element.all).Index));
+         T.Assert_Equals (Pattern, Path_Array (Test_Route_Type (Route.Element.all).Index).all,
                           "Invalid route for " & Pattern);
       end Process;
 

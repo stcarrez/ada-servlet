@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Sessions Tests - Unit tests for Servlet.Sessions
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,7 +131,7 @@ package body Servlet.Core.Tests is
       Resp       : Responses.Mockup.Response;
       Result     : Unbounded_String;
    begin
-      T.Assert (Dispatcher.Context.Get_Route /= null, "No mapping found for " & URI);
+      T.Assert (not Dispatcher.Context.Is_Null, "No mapping found for " & URI);
 
       Req.Set_Request_URI ("test1");
       Req.Set_Method ("GET");
@@ -634,17 +634,19 @@ package body Servlet.Core.Tests is
                             URI    : in String;
                             Server : in Servlet_Access;
                             Filter : in Natural := 0) is
+      use Routes.Servlets;
+
       Disp  : constant Request_Dispatcher := Ctx.Get_Request_Dispatcher (URI);
-      Route : constant Routes.Route_Type_Access := Disp.Context.Get_Route;
+      Route : constant Routes.Route_Type_Ref := Disp.Context.Get_Route;
       Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
    begin
       if Server = null then
-         T.Assert (Route = null, "No mapping returned for URI: " & URI);
+         T.Assert (Route.Is_Null, "No mapping returned for URI: " & URI);
       else
-         T.Assert (Route /= null, "A mapping is returned for URI: " & URI);
-         T.Assert (Route.all in Routes.Servlets.Servlet_Route_Type'Class,
+         T.Assert (not Route.Is_Null, "A mapping is returned for URI: " & URI);
+         T.Assert (Route.Value in Routes.Servlets.Servlet_Route_Type'Class,
                    "The route is not a Servlet route");
-         Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+         Servlet_Route := Servlet_Route_Type'Class (Route.Value.Element.all)'Access;
          T.Assert (Servlet_Route.Servlet = Server,
                    "Invalid mapping returned for URI: " & URI);
          if Filter = 0 then
@@ -699,7 +701,7 @@ package body Servlet.Core.Tests is
                Disp : constant Request_Dispatcher
                  := Ctx.Get_Request_Dispatcher (Path => "/joe/black/joe.jsf");
             begin
-               T.Assert (Disp.Context.Get_Route /= null,
+               T.Assert (not Disp.Context.Is_Null,
                          "No mapping found for /joe/black/joe.jsf");
             end;
          end loop;
