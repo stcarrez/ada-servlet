@@ -462,6 +462,8 @@ package body Servlet.Core is
          Context.Routes.Find_Route (Path, R.Context);
          if not Routes.Is_Null (R.Context) then
             declare
+               use Routes.Servlets;
+
                Route : Routes.Route_Type_Accessor := Routes.Get_Route (R.Context);
             begin
                if Route in Routes.Servlets.Servlet_Route_Type'Class then
@@ -474,9 +476,10 @@ package body Servlet.Core is
                         R.Filters := Servlet_Route.Filters.all'Access;
                      end if;
                      if Servlet_Route.all in Routes.Servlets.Proxy_Route_Type'Class then
-                        Proxy := Routes.Servlets.Proxy_Route_Type'Class (Servlet_Route.all)'Access;
+                        Proxy := Proxy_Route_Type'Class (Servlet_Route.all)'Access;
                         Routes.Change_Route (R.Context, Proxy.Route);
-                        R.Servlet := Routes.Servlets.Servlet_Route_Type'Class (Proxy.Route.Value.Element.all).Servlet;
+                        R.Servlet
+                          := Servlet_Route_Type'Class (Proxy.Route.Value.Element.all).Servlet;
                      else
                         R.Servlet := Servlet_Route.Servlet;
                      end if;
@@ -775,11 +778,11 @@ package body Servlet.Core is
                   if Ref.Is_Null then
                      Proxy := new Routes.Servlets.Proxy_Route_Type;
                      Proxy.Route := Route.Get_Route;
-                     -- Proxy.Route := Servlet_Route_Type'Class (Route.Get_Route.Element.all)'Access;
 
                      --  If the route is also a proxy, get the real route pointed to by the proxy.
                      if Proxy.Route.Value in Proxy_Route_Type'Class then
-                        Proxy.Route := Proxy_Route_Type'Class (Proxy.Route.Value.Element.all).Route;
+                        Proxy.Route
+                          := Proxy_Route_Type'Class (Proxy.Route.Value.Element.all).Route;
                      end if;
                      Ref := Routes.Route_Type_Refs.Create (Proxy.all'Access);
                   end if;
