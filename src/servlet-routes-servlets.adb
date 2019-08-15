@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,8 +76,8 @@ package body Servlet.Routes.Servlets is
    overriding
    function Get_Servlet (Route : in Proxy_Route_Type) return Servlet.Core.Servlet_Access is
    begin
-      if Route.Route /= null then
-         return Route.Route.Get_Servlet;
+      if not Route.Route.Is_Null then
+         return Servlet_Route_Type'Class (Route.Route.Value.Element.all).Get_Servlet;
       else
          return Route.Servlet;
       end if;
