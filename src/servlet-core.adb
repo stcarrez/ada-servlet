@@ -457,31 +457,32 @@ package body Servlet.Core is
                                     Path    : in String)
                                     return Request_Dispatcher is
       use type Filters.Filter_List_Access;
-
-      Route : Routes.Route_Type_Access;
    begin
       return R : Request_Dispatcher do
          Context.Routes.Find_Route (Path, R.Context);
-         Route := Routes.Get_Route (R.Context);
-         if Route /= null then
-            if Route.all in Routes.Servlets.Servlet_Route_Type'Class then
-               declare
-                  Servlet_Route : constant Routes.Servlets.Servlet_Route_Type_Access
-                    := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
-                  Proxy : Routes.Servlets.Proxy_Route_Type_Access;
-               begin
-                  if Servlet_Route.Filters /= null then
-                     R.Filters := Servlet_Route.Filters.all'Access;
-                  end if;
-                  if Servlet_Route.all in Routes.Servlets.Proxy_Route_Type'Class then
-                     Proxy := Routes.Servlets.Proxy_Route_Type'Class (Servlet_Route.all)'Access;
-                     Routes.Change_Route (R.Context, Proxy.Route.all'Access);
-                     R.Servlet := Proxy.Route.Servlet;
-                  else
-                     R.Servlet := Servlet_Route.Servlet;
-                  end if;
-               end;
-            end if;
+         if not Routes.Is_Null (R.Context) then
+            declare
+               Route : Routes.Route_Type_Accessor := Routes.Get_Route (R.Context);
+            begin
+               if Route in Routes.Servlets.Servlet_Route_Type'Class then
+                  declare
+                     Servlet_Route : constant access Routes.Servlets.Servlet_Route_Type'Class
+                       := Routes.Servlets.Servlet_Route_Type'Class (Route.Element.all)'Access;
+                     Proxy : Routes.Servlets.Proxy_Route_Type_Access;
+                  begin
+                     if Servlet_Route.Filters /= null then
+                        R.Filters := Servlet_Route.Filters.all'Access;
+                     end if;
+                     if Servlet_Route.all in Routes.Servlets.Proxy_Route_Type'Class then
+                        Proxy := Routes.Servlets.Proxy_Route_Type'Class (Servlet_Route.all)'Access;
+                        Routes.Change_Route (R.Context, Proxy.Route);
+                        R.Servlet := Routes.Servlets.Servlet_Route_Type'Class (Proxy.Route.Value.Element.all).Servlet;
+                     else
+                        R.Servlet := Servlet_Route.Servlet;
+                     end if;
+                  end;
+               end if;
+            end;
          end if;
          R.Pos := Routes.Get_Path_Pos (R.Context);
       end return;
@@ -721,21 +722,21 @@ package body Servlet.Core is
    --  ------------------------------
    procedure Install_Filters (Registry : in out Servlet_Registry) is
       procedure Process (URI   : in String;
-                         Route : in Routes.Route_Type_Access);
+                         Route : in Routes.Route_Type_Accessor);
       procedure Make_Route;
       procedure Initialize_Filter (Key    : in String;
                                    Filter : in Filter_Access);
       procedure Initialize_Servlet (Pos : in Servlet_Maps.Cursor);
 
       procedure Process (URI   : in String;
-                         Route : in Routes.Route_Type_Access) is
+                         Route : in Routes.Route_Type_Accessor) is
          Iter : Util.Strings.Vectors.Cursor := Registry.Filter_Patterns.First;
-         Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
+         Servlet_Route : access Routes.Servlets.Servlet_Route_Type'Class;
       begin
-         if not (Route.all in Routes.Servlets.Servlet_Route_Type'Class) then
+         if not (Route in Routes.Servlets.Servlet_Route_Type'Class) then
             return;
          end if;
-         Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+         Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.Element.all)'Access;
          while Util.Strings.Vectors.Has_Element (Iter) loop
             declare
                Pattern : constant String := Util.Strings.Vectors.Element (Iter);
@@ -773,11 +774,12 @@ package body Servlet.Core is
                begin
                   if Ref.Is_Null then
                      Proxy := new Routes.Servlets.Proxy_Route_Type;
-                     Proxy.Route := Servlet_Route_Type'Class (Route.Get_Route.all)'Access;
+                     Proxy.Route := Route.Get_Route;
+                     -- Proxy.Route := Servlet_Route_Type'Class (Route.Get_Route.Element.all)'Access;
 
                      --  If the route is also a proxy, get the real route pointed to by the proxy.
-                     if Proxy.Route.all in Proxy_Route_Type'Class then
-                        Proxy.Route := Proxy_Route_Type'Class (Proxy.Route.all).Route;
+                     if Proxy.Route.Value in Proxy_Route_Type'Class then
+                        Proxy.Route := Proxy_Route_Type'Class (Proxy.Route.Value.Element.all).Route;
                      end if;
                      Ref := Routes.Route_Type_Refs.Create (Proxy.all'Access);
                   end if;
@@ -785,7 +787,7 @@ package body Servlet.Core is
 
             begin
                Registry.Routes.Find_Route (Pattern, Route);
-               if Route.Get_Route /= null then
+               if not Route.Is_Null then
                   Registry.Routes.Add_Route (Pattern, Context, Insert'Access);
                end if;
             end;
@@ -831,7 +833,7 @@ package body Servlet.Core is
       function Get_Servlet_Name (Servlet : in Servlet_Access) return String;
       function Get_Filter_Names (List : in Filters.Filter_List_Access) return String;
       procedure Print_Route (URI   : in String;
-                             Route : in Routes.Route_Type_Access);
+                             Route : in Routes.Route_Type_Accessor);
       procedure Collect_Servlet (Pos : in Servlet_Maps.Cursor);
       procedure Collect_Filter (Pos : in Filter_Maps.Cursor);
 
@@ -879,13 +881,14 @@ package body Servlet.Core is
       end Get_Filter_Names;
 
       procedure Print_Route (URI   : in String;
-                             Route : in Routes.Route_Type_Access) is
-         Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
+                             Route : in Routes.Route_Type_Accessor) is
+         Servlet_Route : access Routes.Servlets.Servlet_Route_Type'Class;
       begin
-         if not (Route.all in Routes.Servlets.Servlet_Route_Type'Class) then
-            Log.Print (Level, "Route {0} to {1}", URI, System.Address_Image (Route.all'Address));
+         if not (Route in Routes.Servlets.Servlet_Route_Type'Class) then
+            Log.Print (Level, "Route {0} to {1}", URI,
+                       System.Address_Image (Route.Element.all'Address));
          else
-            Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.all)'Access;
+            Servlet_Route := Routes.Servlets.Servlet_Route_Type'Class (Route.Element.all)'Access;
             if Servlet_Route.Filters /= null then
                Log.Print (Level, "Route {0} to {1} with filters {2}",
                           URI, Get_Servlet_Name (Servlet_Route.Get_Servlet),
