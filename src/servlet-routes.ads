@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,14 +28,12 @@ package Servlet.Routes is
    type Route_Type is abstract new Util.Refs.Ref_Entity with null record;
    type Route_Type_Access is access all Route_Type'Class;
 
-   --  function Duplicate (Route : in Route_Type) return Route_Type_Access is abstract;
-
    package Route_Type_Refs is
      new Util.Refs.Indefinite_References (Element_Type => Route_Type'Class,
                                           Element_Access => Route_Type_Access);
 
    subtype Route_Type_Ref is Route_Type_Refs.Ref;
-   --  subtype Route_Type_Access is Route_Type_Refs.Element_Access;
+   subtype Route_Type_Accessor is Route_Type_Refs.Element_Accessor;
 
    No_Parameter : exception;
 
@@ -63,11 +61,15 @@ package Servlet.Routes is
    function Get_Path_Pos (Context : in Route_Context_Type) return Natural;
 
    --  Return the route associated with the resolved route context.
-   function Get_Route (Context : in Route_Context_Type) return Route_Type_Access;
+   function Get_Route (Context : in Route_Context_Type) return Route_Type_Accessor;
+   function Get_Route (Context : in Route_Context_Type) return Route_Type_Ref;
+
+   --  Return True if there is no route.
+   function Is_Null (Context : in Route_Context_Type) return Boolean;
 
    --  Change the context to use a new route.
    procedure Change_Route (Context : in out Route_Context_Type;
-                           To      : in Route_Type_Access);
+                           To      : in Route_Type_Ref);
 
    --  Inject the parameters that have been extracted from the path according
    --  to the selected route.
@@ -100,7 +102,7 @@ package Servlet.Routes is
    --  procedure with each path pattern and route object.
    procedure Iterate (Router  : in Router_Type;
                       Process : not null access procedure (Pattern : in String;
-                                                           Route   : in Route_Type_Access));
+                                                           Route   : in Route_Type_Accessor));
 
 private
 
@@ -162,7 +164,7 @@ private
    procedure Iterate (Node    : in Route_Node_Type;
                       Path    : in String;
                       Process : not null access procedure (Pattern : in String;
-                                                           Route   : in Route_Type_Access));
+                                                           Route   : in Route_Type_Accessor));
 
    --  A fixed path component identification.
    type Path_Node_Type (Len : Natural) is new Route_Node_Type with record
@@ -275,7 +277,7 @@ private
    MAX_ROUTE_PARAMS : constant Positive := 10;
 
    type Route_Context_Type is limited new Ada.Finalization.Limited_Controlled with record
-      Route  : Route_Type_Access;
+      Route  : Route_Type_Ref;
       Path   : String_Access;
       Params : Route_Param_Array (1 .. MAX_ROUTE_PARAMS);
       Count  : Natural := 0;
