@@ -52,28 +52,38 @@ package body Servlet.Rest is
                        ELContext : in EL.Contexts.ELContext'Class;
                        List      : in Descriptor_Access) is
       procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref);
-      use type Servlet.Routes.Route_Type_Access;
       Item : Descriptor_Access := List;
 
       procedure Insert (Route : in out Servlet.Routes.Route_Type_Ref) is
-         R : constant Servlet.Routes.Route_Type_Access := Route.Value;
-         D : Servlet.Routes.Servlets.Rest.API_Route_Type_Access;
       begin
-         if R /= null then
-            if not (R.all in Servlet.Routes.Servlets.Rest.API_Route_Type'Class) then
-               Log.Error ("Route API for {0}/{1} already used by another page",
-                          URI, Item.Pattern.all);
-               return;
-            end if;
-            D := Servlet.Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
+         if not Route.Is_Null then
+            declare
+               R : constant Servlet.Routes.Route_Type_Accessor := Route.Value;
+               D : access Servlet.Routes.Servlets.Rest.API_Route_Type'Class;
+            begin
+               if not (R in Servlet.Routes.Servlets.Rest.API_Route_Type'Class) then
+                  Log.Error ("Route API for {0}/{1} already used by another page",
+                             URI, Item.Pattern.all);
+                  return;
+               end if;
+               D := Servlet.Routes.Servlets.Rest.API_Route_Type'Class (R.Element.all)'Access;
+               if D.Descriptors (Item.Method) /= null then
+                  Log.Error ("Route API for {0}/{1} is already used", URI, Item.Pattern.all);
+               end if;
+               D.Descriptors (Item.Method) := Item;
+            end;
          else
-            D := Servlet.Core.Rest.Create_Route (Registry, Name);
-            Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
+            declare
+               D : access Servlet.Routes.Servlets.Rest.API_Route_Type'Class;
+            begin
+               D := Servlet.Core.Rest.Create_Route (Registry, Name);
+               Route := Servlet.Routes.Route_Type_Refs.Create (D.all'Access);
+               if D.Descriptors (Item.Method) /= null then
+                  Log.Error ("Route API for {0}/{1} is already used", URI, Item.Pattern.all);
+               end if;
+               D.Descriptors (Item.Method) := Item;
+            end;
          end if;
-         if D.Descriptors (Item.Method) /= null then
-            Log.Error ("Route API for {0}/{1} is already used", URI, Item.Pattern.all);
-         end if;
-         D.Descriptors (Item.Method) := Item;
       end Insert;
 
    begin
@@ -102,7 +112,6 @@ package body Servlet.Rest is
    --  ------------------------------
    procedure Register (Registry   : in out Servlet.Core.Servlet_Registry'Class;
                        Definition : in Descriptor_Access) is
-      use type Servlet.Routes.Route_Type_Access;
       use type Servlet.Core.Servlet_Access;
       procedure Insert (Route : in out Routes.Route_Type_Ref);
 
@@ -111,26 +120,37 @@ package body Servlet.Rest is
       Servlet    : constant Core.Servlet_Access := Core.Get_Servlet (Dispatcher);
 
       procedure Insert (Route : in out Routes.Route_Type_Ref) is
-         R : constant Routes.Route_Type_Access := Route.Value;
-         D : Routes.Servlets.Rest.API_Route_Type_Access;
       begin
-         if R /= null then
-            if not (R.all in Routes.Servlets.Rest.API_Route_Type'Class) then
-               Log.Error ("Route API for {0} already used by another page",
-                          Definition.Pattern.all);
+         if not Route.Is_Null then
+            declare
+               R : constant Routes.Route_Type_Accessor := Route.Value;
+               D : access Routes.Servlets.Rest.API_Route_Type'Class;
+            begin
+               if not (R in Routes.Servlets.Rest.API_Route_Type'Class) then
+                  Log.Error ("Route API for {0} already used by another page",
+                             Definition.Pattern.all);
+                  D := Core.Rest.Create_Route (Servlet);
+                  Route := Routes.Route_Type_Refs.Create (D.all'Access);
+               else
+                  D := Routes.Servlets.Rest.API_Route_Type'Class (R.Element.all)'Access;
+               end if;
+               if D.Descriptors (Definition.Method) /= null then
+                  Log.Error ("Route API for {0} is already used", Definition.Pattern.all);
+               end if;
+               D.Descriptors (Definition.Method) := Definition;
+            end;
+         else
+            declare
+               D : access Routes.Servlets.Rest.API_Route_Type'Class;
+            begin
                D := Core.Rest.Create_Route (Servlet);
                Route := Routes.Route_Type_Refs.Create (D.all'Access);
-            else
-               D := Routes.Servlets.Rest.API_Route_Type (R.all)'Access;
-            end if;
-         else
-            D := Core.Rest.Create_Route (Servlet);
-            Route := Routes.Route_Type_Refs.Create (D.all'Access);
+               if D.Descriptors (Definition.Method) /= null then
+                  Log.Error ("Route API for {0} is already used", Definition.Pattern.all);
+               end if;
+               D.Descriptors (Definition.Method) := Definition;
+            end;
          end if;
-         if D.Descriptors (Definition.Method) /= null then
-            Log.Error ("Route API for {0} is already used", Definition.Pattern.all);
-         end if;
-         D.Descriptors (Definition.Method) := Definition;
       end Insert;
 
       Ctx     : EL.Contexts.Default.Default_Context;
