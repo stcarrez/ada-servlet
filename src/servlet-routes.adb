@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,16 +88,28 @@ package body Servlet.Routes is
    --  ------------------------------
    --  Return the route associated with the resolved route context.
    --  ------------------------------
-   function Get_Route (Context : in Route_Context_Type) return Route_Type_Access is
+   function Get_Route (Context : in Route_Context_Type) return Route_Type_Accessor is
+   begin
+      return Context.Route.Value;
+   end Get_Route;
+   function Get_Route (Context : in Route_Context_Type) return Route_Type_Ref is
    begin
       return Context.Route;
    end Get_Route;
 
    --  ------------------------------
+   --  Return True if there is no route.
+   --  ------------------------------
+   function Is_Null (Context : in Route_Context_Type) return Boolean is
+   begin
+      return Context.Route.Is_Null;
+   end Is_Null;
+
+   --  ------------------------------
    --  Change the context to use a new route.
    --  ------------------------------
    procedure Change_Route (Context : in out Route_Context_Type;
-                           To      : in Route_Type_Access) is
+                           To      : in Route_Type_Ref) is
    begin
       Context.Route := To;
    end Change_Route;
@@ -421,7 +433,7 @@ package body Servlet.Routes is
    --  ------------------------------
    procedure Iterate (Router  : in Router_Type;
                       Process : not null access procedure (Pattern : in String;
-                                                           Route   : in Route_Type_Access)) is
+                                                           Route   : in Route_Type_Accessor)) is
    begin
       Router.Route.Iterate ("", Process);
    end Iterate;
@@ -468,7 +480,7 @@ package body Servlet.Routes is
          case Match is
             when YES_MATCH =>
                if Last = Path'Last then
-                  Context.Route := N.Route.Value;
+                  Context.Route := N.Route;
                   return;
                end if;
                N.Find_Match (Path, Last + 2, Match, Context);
@@ -488,7 +500,7 @@ package body Servlet.Routes is
                   --  We reached the end of the path and we have a route, this is a match.
                   if Last = Path'Last and not N.Route.Is_Null then
                      Match := YES_MATCH;
-                     Context.Route := N.Route.Value;
+                     Context.Route := N.Route;
                      return;
                   end if;
                   N.Find_Match (Path, Last + 2, Match, Context);
@@ -510,7 +522,7 @@ package body Servlet.Routes is
                      Context.Params (Count).Route := N;
                      Context.Params (Count).First := Pos;
                      Context.Params (Count).Last := Path'Last;
-                     Context.Route := N.Route.Value;
+                     Context.Route := N.Route;
                      if Match = EXT_MATCH or Match = WILDCARD_MATCH then
                         Match := YES_MATCH;
                      end if;
@@ -529,7 +541,7 @@ package body Servlet.Routes is
                      Context.Params (Count).Route := N;
                      Context.Params (Count).First := Pos;
                      Context.Params (Count).Last := Path'Last;
-                     Context.Route := N.Route.Value;
+                     Context.Route := N.Route;
                      Match := YES_MATCH;
                      return;
                   end;
@@ -555,7 +567,7 @@ package body Servlet.Routes is
    procedure Iterate (Node    : in Route_Node_Type;
                       Path    : in String;
                       Process : not null access procedure (Pattern : in String;
-                                                           Route   : in Route_Type_Access)) is
+                                                           Route   : in Route_Type_Accessor)) is
       Child : Route_Node_Access := Node.Children;
    begin
       if not Node.Route.Is_Null then
