@@ -464,7 +464,7 @@ package body Servlet.Core is
             declare
                use Routes.Servlets;
 
-               Route : Routes.Route_Type_Accessor := Routes.Get_Route (R.Context);
+               Route : constant Routes.Route_Type_Accessor := Routes.Get_Route (R.Context);
             begin
                if Route in Routes.Servlets.Servlet_Route_Type'Class then
                   declare
