@@ -21,7 +21,7 @@ endif
 include Makefile.defaults
 
 # Build executables for all mains defined by the project.
-build-test:: setup regtests/servlet-testsuite.adb
+build-test:: setup
 	$(GNATMAKE) $(GPRFLAGS) -p -Pservletada_tests $(MAKE_ARGS)
 
 # Build and run the unit tests
@@ -32,9 +32,6 @@ runtest:
 	export LD_LIBRARY_PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)/relocatable:$$LD_LIBRARY_PATH"; \
 	export PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)unit/relocatable:$$PATH"; \
 	bin/servlet_harness -xml servlet-aunit.xml -config test.properties
-
-regtests/servlet-testsuite.adb: regtests/servlet-testsuite.gpb Makefile.conf
-	gnatprep -DSERVLET_SERVER=$(SERVLET_SERVER) regtests/servlet-testsuite.gpb $@
 
 $(eval $(call ada_library,$(NAME)))
 
