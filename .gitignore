@@ -25,4 +25,4 @@ obj/
 lib/
 servlet-aunit.xml
 regtests/result/
-regtests/servlet-testsuite.adb
+
