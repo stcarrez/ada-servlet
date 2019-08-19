@@ -617,9 +617,14 @@ package body Servlet.Core.Tests is
          T.Assert (Get_Servlet (Disp) /= null, "Get_Name_Dispatcher returned null");
       end;
       begin
-         T.Assert (Get_Servlet (Ctx.Get_Name_Dispatcher ("wrong-servlet")) = null,
-                   "Get_Name_Dispatcher returned something!");
-         T.Fail ("No Servlet_Error exception was raised by Get_Name_Dispatcher");
+         --  Use local declared variable to avoid a bug in init/finalization by GNAT 2019.
+         declare
+            D : constant Request_Dispatcher := Ctx.Get_Name_Dispatcher ("wrong-servlet");
+         begin
+            T.Assert (Get_Servlet (D) = null,
+                      "Get_Name_Dispatcher returned something!");
+            T.Fail ("No Servlet_Error exception was raised by Get_Name_Dispatcher");
+         end;
       exception
          when Servlet_Error =>
             null;
