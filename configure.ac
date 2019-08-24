@@ -30,48 +30,13 @@ AC_SUBST(SERVLET_MAJOR_VERSION)
 AC_SUBST(SERVLET_MINOR_VERSION)
 AC_SUBST(SERVLET_MICRO_VERSION)
 
-EXEC_PREFIX="$prefix"
-AC_SUBST(EXEC_PREFIX)
-
 AM_GNAT_LIBRARY_PROJECT(servletada)
 AM_GNAT_LIBRARY_SETUP(servletada_aws)
 
-##########################################
-# Ada Util library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_sys],
-  [git@github.com:stcarrez/ada-util.git],
-  [Building Ada EL requires the Ada Utility Library.],
-  [
-    UTIL_DIR=${gnat_project_dir_utilada_sys}
-  ])
-AC_SUBST(UTIL_DIR)
+AM_GNAT_FIND_ADA_UTIL([Ada Servlet])
+AM_GNAT_FIND_ADA_EL([Ada Servlet])
+AM_GNAT_FIND_ADA_SECURITY([Ada Servlet])
 
-##########################################
-# Ada Expression Language library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[elada],
-  [git@github.com:stcarrez/ada-el.git],
-  [Building Ada Servlet requires the Ada EL Library.],
-  [
-    EL_DIR=${gnat_project_dir_elada}
-  ])
-AC_SUBST(EL_DIR)
-
-##########################################
-# Ada Security library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-security],[Ada Security Library],[security],
-  [git@github.com:stcarrez/ada-security.git],
-  [Building Ada Servlet requires the Ada Security Library.],
-  [
-    SECURITY_DIR=${gnat_project_dir_security}
-  ])
-AC_SUBST(SECURITY_DIR)
-
-##########################################
-# Ada Web Server
-##########################################
 AM_GNAT_CHECK_AWS(
   [
     SERVLET_HAVE_AWS=no
@@ -80,13 +45,14 @@ AM_GNAT_CHECK_AWS(
   ], [
     SERVLET_SERVER=aws
     SERVLET_HAVE_AWS=yes
-    WITH_SERVER="with \"${gnat_project_name}\";";
+    WITH_SERVER=$ac_cv_gnat_project_with_aws
     WITH_SERVLET_AWS="with \"servletada_aws\";";
   ])
 AC_SUBST(SERVLET_SERVER)
 AC_SUBST(SERVLET_HAVE_AWS)
 AC_SUBST(WITH_SERVER)
 AC_SUBST(WITH_SERVLET_AWS)
+AM_GNAT_AWS_VERSION
 
 AC_OUTPUT(
 Makefile.conf
