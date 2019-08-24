@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server for AWS
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ with AWS.Response;
 
 with Servlet.Requests.Web;
 with Servlet.Responses.Web;
-with Util.Http.Clients.Web;
+with Util.Http.Clients.AWS;
 
 with Util.Log.Loggers;
 package body Servlet.Server.Web is
@@ -82,5 +82,5 @@ package body Servlet.Server.Web is
    end Server_Callback;
 
 begin
-   Util.Http.Clients.Web.Register;
+   Util.Http.Clients.AWS.Register;
 end Servlet.Server.Web;
