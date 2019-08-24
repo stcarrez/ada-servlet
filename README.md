@@ -1,9 +1,9 @@
 # Ada Servlet
 
-[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Servlet.svg)](http://jenkins.vacs.fr/job/Ada-Servlet/)
-[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Servlet.svg)](http://jenkins.vacs.fr/job/Ada-Servlet/)
+[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
+[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
 [![Download](https://img.shields.io/badge/download-1.2.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.2.0.tar.gz)
-[![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.2.0.svg)
 
 Ada Servlet allows to create web applications using the same pattern
@@ -16,8 +16,8 @@ To build Ada Servlet, you will need:
 * Ada Util     (https://github.com/stcarrez/ada-util          1.9.0)
 * Ada EL       (https://github.com/stcarrez/ada-el            1.6.1)
 * Ada Security (https://github.com/stcarrez/ada-security      1.2.0)
-* AWS          (http://libre.adacore.com/libre/tools/aws/     3.1)
-* XML/Ada      (http://libre.adacore.com/libre/tools/xmlada/  4.3)
+* AWS          (https://libre.adacore.com/libre/tools/aws/     3.3)
+* XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  4.3)
 
 Build with the following commands:
 ```
