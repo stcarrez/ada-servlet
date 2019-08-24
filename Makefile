@@ -31,7 +31,7 @@ runtest:
 	DIR=`pwd`; \
 	export LD_LIBRARY_PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)/relocatable:$$LD_LIBRARY_PATH"; \
 	export PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)unit/relocatable:$$PATH"; \
-	bin/servlet_harness -xml servlet-aunit.xml -config test.properties
+	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
 
 $(eval $(call ada_library,$(NAME)))
 
