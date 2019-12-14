@@ -593,9 +593,9 @@ SECURITY_DIR
 EL_DIR
 UTIL_DIR
 NR_CPUS
+BUILD
 BUILDS_COVERAGE
 BUILDS_QUIET
-MODE
 BUILDS_DISTRIB
 DEFAULT_LIBRARY_TYPE
 BUILDS_SHARED
@@ -2397,9 +2397,6 @@ $as_echo "${ac_enable_distrib}" >&6; }
   BUILDS_DISTRIB=$ac_enable_distrib
 
 
-  MODE=$ac_build_mode
-
-
   BUILDS_QUIET=$ac_quiet_mode
 
 
@@ -2419,6 +2416,12 @@ fi
 $as_echo "${ac_enable_coverage}" >&6; }
   BUILDS_COVERAGE=$ac_enable_coverage
 
+  if test T$ac_enable_coverage = Tyes; then
+     ac_build_mode='coverage'
+  fi
+
+
+  BUILD=$ac_build_mode
 
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking number of processors" >&5
