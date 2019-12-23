@@ -2460,10 +2460,14 @@ $as_echo "done" >&6; }
 # Check whether --with-ada-util was given.
 if test "${with_ada_util+set}" = set; then :
   withval=$with_ada_util;
-      ac_cv_gnat_project_name_utilada_base=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_utilada_base=${withval}/utilada_base
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_utilada_base=${awa_build_root}utilada_base
+      else
+        ac_cv_gnat_project_name_utilada_base=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_utilada_base=${withval}/utilada_base
+	    fi
+      fi
 
 else
 
@@ -2565,10 +2569,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-el was given.
 if test "${with_ada_el+set}" = set; then :
   withval=$with_ada_el;
-      ac_cv_gnat_project_name_elada=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_elada=${withval}/elada
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_elada=${awa_build_root}elada
+      else
+        ac_cv_gnat_project_name_elada=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_elada=${withval}/elada
+	    fi
+      fi
 
 else
 
@@ -2670,10 +2678,14 @@ $as_echo "no" >&6; }
 # Check whether --with-ada-security was given.
 if test "${with_ada_security+set}" = set; then :
   withval=$with_ada_security;
-      ac_cv_gnat_project_name_security=${withval}/
-      if test -d "${withval}"; then
-	    ac_cv_gnat_project_name_security=${withval}/security
-	  fi
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_security=${awa_build_root}security
+      else
+        ac_cv_gnat_project_name_security=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_security=${withval}/security
+	    fi
+      fi
 
 else
 
