@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server for AWS
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2019 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ with Util.Log.Loggers;
 package body Servlet.Server.Web is
 
    use Util.Log;
+   use Ada.Strings.Unbounded;
 
    Log : constant Loggers.Logger := Loggers.Create ("Servlet.Server.Web");
    --  The logger
@@ -39,6 +40,7 @@ package body Servlet.Server.Web is
    begin
       Instance.Conf := AWS.Config.Get_Current;
       AWS.Config.Set.Reuse_Address (O => Instance.Conf, Value => True);
+      AWS.Config.Set.Upload_Directory (Server.Conf, "upload");
       Server := Instance'Unchecked_Access;
    end Initialize;
 
@@ -51,7 +53,6 @@ package body Servlet.Server.Web is
 
       Container (Server).Start;
 
-      AWS.Config.Set.Upload_Directory (Server.Conf, "upload");
       AWS.Server.Start (Web_Server => Server.WS,
                         Config     => Server.Conf,
                         Callback   => Servlet.Server.Web.Server_Callback'Access);
@@ -64,6 +65,22 @@ package body Servlet.Server.Web is
                         Process : not null access procedure (Config : in out AWS.Config.Object)) is
    begin
       Process (Server.Conf);
+   end Configure;
+
+   ----------------------
+   --  Configure the server before starting it.
+   ----------------------
+   procedure Configure (Server : in out AWS_Container;
+                        Config : in Configuration) is
+   begin
+      AWS.Config.Set.Server_Port (Server.Conf, Config.Listening_Port);
+      AWS.Config.Set.Send_Buffer_Size (Server.Conf, Config.Buffer_Size);
+      AWS.Config.Set.Max_Connection (Server.Conf, Config.Max_Connection);
+      AWS.Config.Set.Reuse_Address (Server.Conf, Config.Reuse_Address);
+      AWS.Config.Set.Accept_Queue_Size (Server.Conf, Config.Accept_Queue_Size);
+      AWS.Config.Set.TCP_No_Delay (Server.Conf, Config.TCP_No_Delay);
+      AWS.Config.Set.Upload_Size_Limit (Server.Conf, Config.Upload_Size_Limit);
+      AWS.Config.Set.Upload_Directory (Server.Conf, To_String (Config.Upload_Directory));
    end Configure;
 
    ----------------------
