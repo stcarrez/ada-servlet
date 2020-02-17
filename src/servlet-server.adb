@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server
---  Copyright (C) 2009, 2010, 2011, 2015, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2015, 2016, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -232,6 +232,22 @@ package body Servlet.Server is
       when E : others =>
          Server.Default.Error (Request, Response, E);
    end Service;
+
+   --  ------------------------------
+   --  Iterate over the application which are registered.
+   --  ------------------------------
+   procedure Iterate (Server  : in Container;
+                      Process : not null access
+                        procedure (URI     : in String;
+                                   Context : in Servlet.Core.Servlet_Registry_Access)) is
+   begin
+      if Server.Applications /= null then
+         for I in Server.Applications'Range loop
+            Process (Ada.Strings.Unbounded.To_String (Server.Applications (I).Base_URI),
+                     Server.Applications (I).Context);
+         end loop;
+      end if;
+   end Iterate;
 
    --  ------------------------------
    --  Release the storage.
