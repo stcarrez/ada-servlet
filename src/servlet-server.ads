@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server
---  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015, 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,20 @@ with Servlet.Responses;
 with Servlet.Core;
 package Servlet.Server is
 
+   subtype Port_Number is Natural range 0 .. 65535;
+
+   type Configuration is record
+      Listening_Port        : Port_Number := 8080;
+      Max_Connection        : Positive := 5;
+      Buffer_Size           : Positive := 128 * 1024;
+      Accept_Queue_Size     : Positive := 63;
+      Upload_Size_Limit     : Positive := 16#500_000#;
+      Input_Line_Size_Limit : Positive := 16#4000#;
+      Reuse_Address         : Boolean := True;
+      TCP_No_Delay          : Boolean := False;
+      Upload_Directory      : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
    type Container is tagged limited private;
 
    --  Register the application to serve requests
@@ -33,6 +47,10 @@ package Servlet.Server is
    --  Remove the application
    procedure Remove_Application (Server  : in out Container;
                                  Context : in Servlet.Core.Servlet_Registry_Access);
+
+   --  Configure the server before starting it.
+   procedure Configure (Server : in out Container;
+                        Config : in Configuration) is null;
 
    --  Start the applications that have been registered.
    procedure Start (Server : in out Container);
@@ -57,6 +75,12 @@ package Servlet.Server is
    procedure Update_Context (Process : not null access
                                procedure (Request  : in out Requests.Request'Class;
                                           Response : in out Responses.Response'Class));
+
+   --  Iterate over the application which are registered.
+   procedure Iterate (Server  : in Container;
+                      Process : not null access
+                        procedure (URI     : in String;
+                                   Context : in Servlet.Core.Servlet_Registry_Access));
 
 private
 
