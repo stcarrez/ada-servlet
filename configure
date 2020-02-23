@@ -584,6 +584,7 @@ PACKAGE_URL=
 ac_unique_file="src/servlet.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+SERVLET_AWS_VERSION
 AWS_VERSION
 WITH_SERVLET_AWS
 WITH_SERVER
@@ -2910,6 +2911,26 @@ $as_echo "$ac_cv_gnat_aws_version" >&6; }
 
   AWS_VERSION=$ac_cv_gnat_aws_version
 
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking using AWS http server" >&5
+$as_echo_n "checking using AWS http server... " >&6; }
+SERVLET_AWS_VERSION=1
+case $AWS_VERSION in
+  *2018*|*2019*|*202*|20.0)
+     SERVLET_AWS_VERSION=2
+     ;;
+
+  3.3.2|*2017*)
+     SERVLET_AWS_VERSION=1
+     ;;
+
+  *)
+     SERVLET_AWS_VERSION=1
+     ;;
+esac
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${SERVLET_AWS_VERSION}" >&5
+$as_echo "${SERVLET_AWS_VERSION}" >&6; }
 
 
 ac_config_files="$ac_config_files Makefile.conf servletada.gpr servletada_aws.gpr servletada_all.gpr servletada_tests.gpr servletada_unit.gpr samples.gpr"
