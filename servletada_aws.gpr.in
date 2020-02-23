@@ -9,6 +9,10 @@ project ServletAda_Aws is
    Library_Dir := "lib";
    Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "@DEFAULT_LIBRARY_TYPE@");
 
+   type AWS_Impl_Type is ("1", "2");
+
+   AWS_Impl    : AWS_Impl_Type := "@SERVLET_AWS_VERSION@";
+
    Has_Aws     : Config.Yes_No := "@SERVLET_HAVE_AWS@";
 
    type Server_Type is ("none", "aws");
@@ -22,6 +26,19 @@ project ServletAda_Aws is
       when others =>
 
    end case;
+
+   package Naming is
+      case AWS_Impl is
+         when "1" =>
+            for Implementation ("Servlet.Server.Web")
+               use "servlet-server-web__1.adb";
+
+         when "2" =>
+            for Implementation ("Servlet.Server.Web")
+               use "servlet-server-web__2.adb";
+
+      end case;
+   end Naming;
 
    for Library_Name use "servletada_aws";
    for Library_Kind use Library_Type;
