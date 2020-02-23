@@ -40,7 +40,7 @@ package body Servlet.Server.Web is
    begin
       Instance.Conf := AWS.Config.Get_Current;
       AWS.Config.Set.Reuse_Address (O => Instance.Conf, Value => True);
-      AWS.Config.Set.Upload_Directory (Server.Conf, "upload");
+      AWS.Config.Set.Upload_Directory (Instance.Conf, "upload");
       Server := Instance'Unchecked_Access;
    end Initialize;
 
