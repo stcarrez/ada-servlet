@@ -928,8 +928,68 @@ package body Servlet.Core is
    --  ------------------------------
    procedure Start (Registry : in out Servlet_Registry) is
    begin
+      Registry.Status := Started;
       Install_Filters (Registry);
    end Start;
+
+   --  ------------------------------
+   --  Get the application status.
+   --  ------------------------------
+   function Get_Status (Registry : in Servlet_Registry) return Status_Type is
+   begin
+      return Registry.Status;
+   end Get_Status;
+
+   --  ------------------------------
+   --  Disable the application.
+   --  ------------------------------
+   procedure Disable (Registry : in out Servlet_Registry) is
+   begin
+      case Registry.Status is
+         when Ready =>
+            Registry.Status := Disabled;
+
+         when Started =>
+            Registry.Status := Suspended;
+
+         when Disabled | Suspended | Stopped =>
+            null;
+
+      end case;
+   end Disable;
+
+   --  ------------------------------
+   --  Enable the application.
+   --  ------------------------------
+   procedure Enable (Registry : in out Servlet_Registry) is
+   begin
+      case Registry.Status is
+         when Disabled =>
+            Registry.Status := Ready;
+
+         when Suspended =>
+            Registry.Status := Started;
+
+         when Ready | Started | Stopped =>
+            null;
+
+      end case;
+   end Enable;
+
+   --  ------------------------------
+   --  Stop the application.
+   --  ------------------------------
+   procedure Stop (Registry : in out Servlet_Registry) is
+   begin
+      case Registry.Status is
+         when Ready | Disabled | Stopped =>
+            null;
+
+         when Started | Suspended =>
+            Registry.Status := Stopped;
+
+      end case;
+   end Stop;
 
    procedure Free is
      new Ada.Unchecked_Deallocation (Object => Filters.Filter_List,
