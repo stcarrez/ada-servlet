@@ -23,6 +23,9 @@ with Ada.Unchecked_Deallocation;
 with Ada.Task_Attributes;
 package body Servlet.Server is
 
+   use Ada.Strings.Unbounded;
+   use type Core.Status_Type;
+
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Server");
 
@@ -66,7 +69,7 @@ package body Servlet.Server is
    end Set_Context;
 
    --  ------------------------------
-   --  Give access to the current request and response object to the <b>Process</b>
+   --  Give access to the current request and response object to the `Process`
    --  procedure.  If there is no current request for the thread, do nothing.
    --  ------------------------------
    procedure Update_Context (Process : not null access
@@ -82,7 +85,7 @@ package body Servlet.Server is
    --  ------------------------------
    procedure Register_Application (Server  : in out Container;
                                    URI     : in String;
-                                   Context : in Servlet.Core.Servlet_Registry_Access) is
+                                   Context : in Core.Servlet_Registry_Access) is
       Count : constant Natural := Server.Nb_Bindings;
       Apps  : constant Binding_Array_Access := new Binding_Array (1 .. Count + 1);
       Old   : Binding_Array_Access := Server.Applications;
@@ -93,13 +96,13 @@ package body Servlet.Server is
          Apps (1 .. Count) := Server.Applications (1 .. Count);
       end if;
       Apps (Count + 1).Context  := Context;
-      Apps (Count + 1).Base_URI := Ada.Strings.Unbounded.To_Unbounded_String (URI);
+      Apps (Count + 1).Base_URI := To_Unbounded_String (URI);
 
       --  Inform the servlet registry about the base URI.
       Context.Register_Application (URI);
 
       --  Start the application if the container is started.
-      if Server.Is_Started then
+      if Server.Is_Started and then Context.Get_Status = Core.Ready then
          Context.Start;
       end if;
 
@@ -115,7 +118,7 @@ package body Servlet.Server is
    --  Remove the application
    --  ------------------------------
    procedure Remove_Application (Server  : in out Container;
-                                 Context : in Servlet.Core.Servlet_Registry_Access) is
+                                 Context : in Core.Servlet_Registry_Access) is
       use type Servlet.Core.Servlet_Registry_Access;
 
       Count : constant Natural := Server.Nb_Bindings;
@@ -147,28 +150,27 @@ package body Servlet.Server is
    --  ------------------------------
    procedure Start (Server : in out Container) is
    begin
-      if not Server.Is_Started then
-         Server.Is_Started := True;
-         if Server.Applications /= null then
-            for I in Server.Applications'Range loop
-               Server.Applications (I).Context.Start;
-            end loop;
-         end if;
+      if Server.Applications /= null then
+         for Application of Server.Applications.all loop
+            if Application.Context.Get_Status = Core.Ready then
+               Application.Context.Start;
+            end if;
+         end loop;
       end if;
+      Server.Is_Started := True;
    end Start;
 
    --  ------------------------------
-   --  Receives standard HTTP requests from the public service method and dispatches
-   --  them to the Do_XXX methods defined in this class. This method is an HTTP-specific
-   --  version of the Servlet.service(Request, Response) method. There's no need
-   --  to override this method.
+   --  Receives standard HTTP requests from the public service method and
+   --  dispatches them to the Do_XXX methods defined in this class. This method
+   --  is an HTTP-specific version of the Servlet.service(Request, Response)
+   --  method. There's no need to override this method.
    --  ------------------------------
    procedure Service (Server   : in Container;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class) is
 
       use Util.Strings;
-      use type Ada.Strings.Unbounded.Unbounded_String;
 
       URI        : constant String := Request.Get_Request_URI;
       Slash_Pos  : constant Natural := Index (URI, '/', URI'First + 1);
@@ -188,11 +190,13 @@ package body Servlet.Server is
          Prefix_End := URI'Last;
       end if;
 
-      for I in Apps.all'Range loop
-         if Apps (I).Base_URI = URI (URI'First .. Prefix_End) then
+      for Application of Apps.all loop
+         if Application.Base_URI = URI (URI'First .. Prefix_End)
+           and then Application.Context.Get_Status = Core.Started
+         then
             declare
                Req        : Request_Context;
-               Context    : constant Core.Servlet_Registry_Access := Apps (I).Context;
+               Context    : constant Core.Servlet_Registry_Access := Application.Context;
                Page       : constant String := URI (Prefix_End + 1 .. URI'Last);
                Dispatcher : constant Core.Request_Dispatcher
                  := Context.Get_Request_Dispatcher (Page);
@@ -239,12 +243,11 @@ package body Servlet.Server is
    procedure Iterate (Server  : in Container;
                       Process : not null access
                         procedure (URI     : in String;
-                                   Context : in Servlet.Core.Servlet_Registry_Access)) is
+                                   Context : in Core.Servlet_Registry_Access)) is
    begin
       if Server.Applications /= null then
-         for I in Server.Applications'Range loop
-            Process (Ada.Strings.Unbounded.To_String (Server.Applications (I).Base_URI),
-                     Server.Applications (I).Context);
+         for Application of Server.Applications.all loop
+            Process (To_String (Application.Base_URI), Application.Context);
          end loop;
       end if;
    end Iterate;
