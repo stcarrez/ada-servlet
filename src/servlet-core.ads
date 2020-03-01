@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets -- Servlet.Core
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,8 @@ private with Ada.Containers.Indefinite_Hashed_Maps;
 package Servlet.Core is
 
    Servlet_Error : exception;
+
+   type Status_Type is (Ready, Disabled, Started, Suspended, Stopped);
 
    --  Filter chain as defined by JSR 315 6. Filtering
    type Filter_Chain is limited private;
@@ -458,6 +460,18 @@ package Servlet.Core is
    --  Start the application.
    procedure Start (Registry : in out Servlet_Registry);
 
+   --  Get the application status.
+   function Get_Status (Registry : in Servlet_Registry) return Status_Type;
+
+   --  Disable the application.
+   procedure Disable (Registry : in out Servlet_Registry);
+
+   --  Enable the application.
+   procedure Enable (Registry : in out Servlet_Registry);
+
+   --  Stop the application.
+   procedure Stop (Registry : in out Servlet_Registry);
+
    --  Finalize the servlet registry releasing the internal mappings.
    overriding
    procedure Finalize (Registry : in out Servlet_Registry);
@@ -469,15 +483,6 @@ package Servlet.Core is
 private
 
    use Ada.Strings.Unbounded;
-
-   --  Find the servlet and filter mapping that must be used for the given URI.
-   --  Search the mapping according to Ch 12/SRV 11. Mapping Requests to Servlets:
-   --  o look for an exact match,
-   --  o look for the longest match,
-   --  o look for an extension
-   --  o use the default servlet mapping
---     function Find_Mapping (Registry : in Servlet_Registry;
---                            URI      : in String) return Mapping_Access;
 
    type Filter_Chain is limited record
       Filter_Pos : Natural;
@@ -534,6 +539,7 @@ private
       Error_Pages       : Error_Maps.Map;
       Context_Path      : Unbounded_String;
       Routes            : Router_Type;
+      Status            : Status_Type := Ready;
    end record;
 
    --  Install the servlet filters after all the mappings have been registered.
