@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests.mockup -- Servlet Requests mockup
---  Copyright (C) 2010, 2011, 2012, 2013, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -305,5 +305,14 @@ package body Servlet.Requests.Mockup is
    begin
       Req.Set_Header ("Cookie", C);
    end Set_Cookie;
+
+   --  ------------------------------
+   --  Set the session associated with the request.
+   --  ------------------------------
+   procedure Set_Session (Req     : in out Request;
+                          Session : in Servlet.Sessions.Session) is
+   begin
+      Req.Info.Session := Session;
+   end Set_Session;
 
 end Servlet.Requests.Mockup;
