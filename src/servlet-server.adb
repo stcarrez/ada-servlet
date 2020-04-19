@@ -153,6 +153,7 @@ package body Servlet.Server is
       if Server.Applications /= null then
          for Application of Server.Applications.all loop
             if Application.Context.Get_Status = Core.Ready then
+               Log.Info ("Starting application {0}", Application.Base_URI);
                Application.Context.Start;
             end if;
          end loop;
