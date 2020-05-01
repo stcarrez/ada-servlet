@@ -1,4 +1,4 @@
-Version 1.4.0   -
+Version 1.4.0   - May 2020
   - Added support to configure the web container
 
 Version 1.3.0   - Dec 2019
