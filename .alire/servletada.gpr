@@ -5,7 +5,7 @@ with "security";
 
 project ServletAda is
 
-   Version := "1.3.0";
+   Version := "1.4.0";
    Library_Dir := "lib";
    Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
