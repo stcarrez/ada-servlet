@@ -3,20 +3,30 @@
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-servlet/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-servlet)
-[![Download](https://img.shields.io/badge/download-1.3.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.3.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.4.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.3.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.3.0.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.4.0.svg)
 
 Ada Servlet allows to create web applications using the same pattern
 as the Java Servlet (See JSR 154, JSR 315). 
+
+The Ada Servlet library is used by the [Ada Server Faces](https://github.com/stcarrez/ada-asf)
+framework and [Ada Web Application](https://github.com/stcarrez/ada-awa)
+to provide server web requests.
+
+## Version 1.4.0 - May 2020
+
+- Added support to configure the web container
+
+[List all versions](https://github.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 
 ## Build
 
 To build Ada Servlet, you will need:
 
-* Ada Util     (https://github.com/stcarrez/ada-util          2.0.0)
-* Ada EL       (https://github.com/stcarrez/ada-el            1.7.0)
-* Ada Security (https://github.com/stcarrez/ada-security      1.2.1)
+* Ada Util     (https://github.com/stcarrez/ada-util          2.1.0)
+* Ada EL       (https://github.com/stcarrez/ada-el            1.8.0)
+* Ada Security (https://github.com/stcarrez/ada-security      1.2.2)
 * AWS          (https://libre.adacore.com/libre/tools/aws/     2018, 2019)
 * XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  4.4)
 
