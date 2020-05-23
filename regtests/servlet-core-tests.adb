@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Sessions Tests - Unit tests for Servlet.Sessions
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -643,7 +643,6 @@ package body Servlet.Core.Tests is
 
       Disp  : constant Request_Dispatcher := Ctx.Get_Request_Dispatcher (URI);
       Route : constant Routes.Route_Type_Ref := Disp.Context.Get_Route;
-      Servlet_Route : Routes.Servlets.Servlet_Route_Type_Access;
    begin
       if Server = null then
          T.Assert (Route.Is_Null, "No mapping returned for URI: " & URI);
@@ -651,8 +650,7 @@ package body Servlet.Core.Tests is
          T.Assert (not Route.Is_Null, "A mapping is returned for URI: " & URI);
          T.Assert (Route.Value in Routes.Servlets.Servlet_Route_Type'Class,
                    "The route is not a Servlet route");
-         Servlet_Route := Servlet_Route_Type'Class (Route.Value.Element.all)'Access;
-         T.Assert (Servlet_Route.Servlet = Server,
+         T.Assert (Servlet_Route_Type'Class (Route.Value.Element.all).Servlet = Server,
                    "Invalid mapping returned for URI: " & URI);
          if Filter = 0 then
             T.Assert (Disp.Filters = null,
@@ -663,7 +661,7 @@ package body Servlet.Core.Tests is
                                       "Invalid mapping returned for URI: " & URI);
          end if;
          T.Assert (Get_Servlet (Disp) /= null, "A null servlet is returned by Get_Servlet");
-         T.Assert (Get_Servlet (Disp) = Servlet_Route.Servlet,
+         T.Assert (Get_Servlet (Disp) = Servlet_Route_Type'Class (Route.Value.Element.all).Servlet,
                    "Invalid servlet returned by Get_Servlet");
       end if;
    end Check_Mapping;
