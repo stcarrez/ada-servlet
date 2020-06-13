@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server-tests - Unit tests for server requests
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,10 @@ package Servlet.Server.Tests is
    procedure Test_Get_Measures (T : in out Test);
 
    --  Test a POST on a file served by the File_Servlet.
-   procedure Test_Post_File (T : in out Test);
+   procedure Test_Post_File_Error (T : in out Test);
+
+   --  Test a POST with a part file to a test servlet.
+   procedure Test_Post_Content (T : in out Test);
 
    --  Test a GET request on servlet that raises an exception.
    procedure Test_Get_With_Exception (T : in out Test);
