@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Servlet tests - Servlet Tests Framework
---  Copyright (C) 2011, 2012, 2013, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ package body Servlet.Tests is
 
    --  Save the response headers and content in a file
    procedure Save_Response (Name     : in String;
-                            Response : in out Servlet.Responses.Mockup.Response);
+                            Response : in out Servlet.Responses.Mockup.Response'Class);
 
    --  ------------------------------
    --  Initialize the awa test framework mockup.
@@ -105,7 +105,7 @@ package body Servlet.Tests is
    --  Save the response headers and content in a file
    --  ------------------------------
    procedure Save_Response (Name     : in String;
-                            Response : in out Servlet.Responses.Mockup.Response) is
+                            Response : in out Servlet.Responses.Mockup.Response'Class) is
       use Servlet.Responses;
 
       Info        : constant String := Tools.To_String (Reply         => Response,
@@ -126,8 +126,8 @@ package body Servlet.Tests is
    --  ------------------------------
    --  Simulate a raw request.  The URI and method must have been set on the Request object.
    --  ------------------------------
-   procedure Do_Req (Request  : in out Servlet.Requests.Mockup.Request;
-                     Response : in out Servlet.Responses.Mockup.Response) is
+   procedure Do_Req (Request  : in out Servlet.Requests.Mockup.Request'Class;
+                     Response : in out Servlet.Responses.Mockup.Response'Class) is
    begin
       --  For the purpose of writing tests, clear the buffer before invoking the service.
       Response.Clear;
@@ -158,8 +158,8 @@ package body Servlet.Tests is
    --  Simulate a POST request on the given URI with the request parameters.
    --  Get the result in the response object.
    --  ------------------------------
-   procedure Do_Post (Request  : in out Servlet.Requests.Mockup.Request;
-                      Response : in out Servlet.Responses.Mockup.Response;
+   procedure Do_Post (Request  : in out Servlet.Requests.Mockup.Request'Class;
+                      Response : in out Servlet.Responses.Mockup.Response'Class;
                       URI      : in String;
                       Save     : in String := "") is
    begin
