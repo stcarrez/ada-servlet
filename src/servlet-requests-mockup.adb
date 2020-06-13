@@ -267,7 +267,6 @@ package body Servlet.Requests.Mockup is
    --  Get the number of parts included in the request.
    --  ------------------------------
    function Get_Part_Count (Req : in Request) return Natural is
-      pragma Unreferenced (Req);
    begin
       return 0;
    end Get_Part_Count;
@@ -314,5 +313,56 @@ package body Servlet.Requests.Mockup is
    begin
       Req.Info.Session := Session;
    end Set_Session;
+
+   --  ------------------------------
+   --  Set a part to the request.
+   --  ------------------------------
+   procedure Set_Part (Req          : in out Part_Request;
+                       Position     : in Positive;
+                       Name         : in String;
+                       Path         : in String;
+                       Content_Type : in String) is
+   begin
+      Servlet.Parts.Mockup.Create (Req.Parts (Position), Name, Path, Content_Type);
+   end Set_Part;
+
+   --  ------------------------------
+   --  Get the number of parts included in the request.
+   --  ------------------------------
+   overriding
+   function Get_Part_Count (Req : in Part_Request) return Natural is
+   begin
+      return Req.Count;
+   end Get_Part_Count;
+
+   --  ------------------------------
+   --  Process the part at the given position and executes the <b>Process</b> operation
+   --  with the part object.
+   --  ------------------------------
+   overriding
+   procedure Process_Part (Req      : in out Part_Request;
+                           Position : in Positive;
+                           Process  : not null access
+                             procedure (Data : in Servlet.Parts.Part'Class)) is
+   begin
+      Process (Req.Parts (Position));
+   end Process_Part;
+
+   --  ------------------------------
+   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  with the part object.
+   --  ------------------------------
+   overriding
+   procedure Process_Part (Req      : in out Part_Request;
+                           Id       : in String;
+                           Process  : not null access
+                             procedure (Data : in Servlet.Parts.Part'Class)) is
+   begin
+      for I in 1 .. Req.Count loop
+         if Id = Req.Parts (I).Get_Name then
+            Process (Req.Parts (I));
+         end if;
+      end loop;
+   end Process_Part;
 
 end Servlet.Requests.Mockup;
