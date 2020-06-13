@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Strings;
 with Util.Test_Caller;
 with Util.Measures;
 
@@ -25,6 +26,7 @@ with Servlet.Streams;
 with Servlet.Routes.Servlets;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
+with Servlet.Parts;
 with Servlet.Filters.Dump;
 with Servlet.Filters.Cache_Control;
 with Servlet.Filters.Tests;
@@ -98,9 +100,19 @@ package body Servlet.Core.Tests is
    procedure Do_Post (Server   : in Test_Servlet2;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class) is
-      pragma Unreferenced (Server, Request, Response);
+      pragma Unreferenced (Server);
+      procedure Process (Part : in Parts.Part'Class);
+
+      procedure Process (Part : in Parts.Part'Class) is
+      begin
+         Response.Set_Content_Type (Part.Get_Content_Type);
+      end Process;
+
    begin
-      null;
+      if Request.Get_Part_Count > 0 then
+         Response.Set_Header ("Part_Count", Util.Strings.Image (Request.Get_Part_Count));
+         Request.Process_Part (1, Process'Access);
+      end if;
    end Do_Post;
 
    procedure Do_Get (Server   : in Test_Servlet3;
