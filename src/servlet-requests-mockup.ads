@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Util.Strings.Maps;
 with Servlet.Responses.Mockup;
+with Servlet.Parts.Mockup;
 
 --  The <b>Servlet.Requests.Mockup</b> provides a fake request object to simulate
 --  an HTTP request.
@@ -158,6 +159,35 @@ package Servlet.Requests.Mockup is
    procedure Set_Session (Req     : in out Request;
                           Session : in Servlet.Sessions.Session);
 
+   type Part_Request (Count : Natural) is new Request with private;
+
+   --  Set a part to the request.
+   procedure Set_Part (Req          : in out Part_Request;
+                       Position     : in Positive;
+                       Name         : in String;
+                       Path         : in String;
+                       Content_Type : in String);
+
+   --  Get the number of parts included in the request.
+   overriding
+   function Get_Part_Count (Req : in Part_Request) return Natural;
+
+   --  Process the part at the given position and executes the <b>Process</b> operation
+   --  with the part object.
+   overriding
+   procedure Process_Part (Req      : in out Part_Request;
+                           Position : in Positive;
+                           Process  : not null access
+                             procedure (Data : in Servlet.Parts.Part'Class));
+
+   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  with the part object.
+   overriding
+   procedure Process_Part (Req      : in out Part_Request;
+                           Id       : in String;
+                           Process  : not null access
+                             procedure (Data : in Servlet.Parts.Part'Class));
+
 private
 
    use Ada.Strings.Unbounded;
@@ -169,6 +199,10 @@ private
       Protocol   : Unbounded_String;
       Method     : Unbounded_String;
       Peer       : Unbounded_String;
+   end record;
+
+   type Part_Request (Count : Natural) is new Request with record
+      Parts      : Servlet.Parts.Mockup.Part_Array (1 .. Count);
    end record;
 
 end Servlet.Requests.Mockup;
