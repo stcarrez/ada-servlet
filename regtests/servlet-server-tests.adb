@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server-tests - Unit tests for server requests
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Test_Caller;
+with Util.Files;
 with Servlet.Tests;
 with Servlet.Core.Files;
 with Servlet.Core.Measures;
@@ -32,6 +33,7 @@ package body Servlet.Server.Tests is
    package Caller is new Util.Test_Caller (Test, "Server");
 
    Except_Servlet : aliased Servlet.Core.Tests.Test_Servlet3;
+   Upload         : aliased Servlet.Core.Tests.Test_Servlet2;
    Files          : aliased Servlet.Core.Files.File_Servlet;
    Dump           : aliased Servlet.Filters.Dump.Dump_Filter;
    Measures       : aliased Servlet.Core.Measures.Measure_Servlet;
@@ -45,7 +47,9 @@ package body Servlet.Server.Tests is
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET 404)",
                        Test_Get_404'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (POST)",
-                       Test_Post_File'Access);
+                       Test_Post_File_Error'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Server.Service (POST)",
+                       Test_Post_Content'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET measures)",
                        Test_Get_Measures'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Service (GET with exception)",
@@ -75,6 +79,9 @@ package body Servlet.Server.Tests is
          App.Add_Filter (Name => "dump", Filter => Dump'Access);
          App.Add_Filter (Name => "measures",
                          Filter => Servlet.Filters.Filter'Class (Measures)'Access);
+
+         App.Add_Servlet ("Upload", Upload'Access);
+         App.Add_Mapping ("*.upload", "Upload");
 
          --  Define servlet mappings
          App.Add_Mapping (Name => "files", Pattern => "*.css");
@@ -177,14 +184,32 @@ package body Servlet.Server.Tests is
    --  ------------------------------
    --  Test a POST on a file served by the File_Servlet.
    --  ------------------------------
-   procedure Test_Post_File (T : in out Test) is
+   procedure Test_Post_File_Error (T : in out Test) is
       Request : Servlet.Requests.Mockup.Request;
       Reply   : Servlet.Responses.Mockup.Response;
    begin
       Do_Post (Request, Reply, "/tests/file.css", "post-file.css");
       Assert_Header (T, "Content-Type", "text/html", Reply, "Content-Type",
                      Status => Servlet.Responses.SC_METHOD_NOT_ALLOWED);
-   end Test_Post_File;
+   end Test_Post_File_Error;
+
+   --  ------------------------------
+   --  Test a POST with a part file to a test servlet.
+   --  ------------------------------
+   procedure Test_Post_Content (T : in out Test) is
+      Path    : constant String := Util.Tests.Get_Test_Path ("regtests/result/upload.txt");
+      Request : Servlet.Requests.Mockup.Part_Request (1);
+      Reply   : Servlet.Responses.Mockup.Response;
+   begin
+      Util.Files.Write_File (Path, "Some content");
+      Request.Set_Part (Position => 1,
+                        Name => "file.txt",
+                        Path => Path,
+                        Content_Type => "text/plain");
+      Do_Post (Request, Reply, "/tests/file.upload", "post-file.upload");
+      Assert_Header (T, "Content-Type", "text/plain", Reply, "Content-Type",
+                     Status => Servlet.Responses.SC_OK);
+   end Test_Post_Content;
 
    --  ------------------------------
    --  Test a GET request on servlet that raises an exception.
