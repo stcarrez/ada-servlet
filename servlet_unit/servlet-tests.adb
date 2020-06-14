@@ -139,8 +139,8 @@ package body Servlet.Tests is
    --  Simulate a GET request on the given URI with the request parameters.
    --  Get the result in the response object.
    --  ------------------------------
-   procedure Do_Get (Request  : in out Servlet.Requests.Mockup.Request;
-                     Response : in out Servlet.Responses.Mockup.Response;
+   procedure Do_Get (Request  : in out Servlet.Requests.Mockup.Request'Class;
+                     Response : in out Servlet.Responses.Mockup.Response'Class;
                      URI      : in String;
                      Save     : in String := "") is
    begin
