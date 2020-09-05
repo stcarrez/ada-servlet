@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-streams -- Print streams for servlets
---  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,18 +55,6 @@ package Servlet.Streams is
    --  Write a string on the stream.
    procedure Write (Stream : in out Print_Stream;
                     Item   : in Ada.Strings.Wide_Wide_Unbounded.Unbounded_Wide_Wide_String);
-
-   --  Write a raw character on the stream.
-   procedure Write (Stream : in out Print_Stream;
-                    Char   : in Character);
-
-   --  Write a raw string on the stream.
-   procedure Write (Stream : in out Print_Stream;
-                    Item   : in String);
-
-   --  Write a raw string on the stream.
-   procedure Write_Wide (Stream : in out Print_Stream;
-                         Item   : in Wide_Wide_String);
 
    --  Write the object converted into a string on the stream.
    procedure Write (Stream : in out Print_Stream;
