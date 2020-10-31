@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets-rest -- REST servlet
---  Copyright (C) 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,13 +55,16 @@ package body Servlet.Core.Rest is
          Rest_Servlet'Class (Server).Dispatch (DELETE, Request, Response);
 
       elsif Method = "HEAD" then
-         Rest_Servlet'Class (Server).Dispatch (POST, Request, Response);
+         Rest_Servlet'Class (Server).Dispatch (HEAD, Request, Response);
 
       elsif Method = "OPTIONS" then
-         Rest_Servlet'Class (Server).Dispatch (HEAD, Request, Response);
+         Rest_Servlet'Class (Server).Dispatch (OPTIONS, Request, Response);
 
       elsif Method = "TRACE" then
          Rest_Servlet'Class (Server).Dispatch (TRACE, Request, Response);
+
+      elsif Method = "PATCH" then
+         Rest_Servlet'Class (Server).Dispatch (PATCH, Request, Response);
 
       elsif Method = "CONNECT" then
          Rest_Servlet'Class (Server).Dispatch (CONNECT, Request, Response);
