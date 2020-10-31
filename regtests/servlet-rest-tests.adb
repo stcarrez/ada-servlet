@@ -76,6 +76,11 @@ package body Servlet.Rest.Tests is
                                   URI        => "/simple/:id",
                                   Method     => Servlet.Rest.OPTIONS);
 
+   package API_Simple_Patch is
+      new Servlet.Rest.Operation (Handler    => Simple_Patch'Access,
+                                  URI        => "/simple/:id",
+                                  Method     => Servlet.Rest.PATCH);
+
    package Test_API_Definition is
      new Servlet.Rest.Definition (Object_Type => Test_API,
                                   URI         => "/test");
@@ -129,6 +134,13 @@ package body Servlet.Rest.Tests is
                                          Permission => 0)
      with Unreferenced;
 
+   package API_Patch is
+     new Test_API_Definition.Definition (Handler    => Patch'Access,
+                                         Method     => Servlet.Rest.PATCH,
+                                         Pattern    => ":id",
+                                         Permission => 0)
+     with Unreferenced;
+
    procedure Simple_Get (Req    : in out Servlet.Rest.Request'Class;
                          Reply  : in out Servlet.Rest.Response'Class;
                          Stream : in out Servlet.Rest.Output_Stream'Class) is
@@ -177,6 +189,14 @@ package body Servlet.Rest.Tests is
       Options (Data, Req, Reply, Stream);
    end Simple_Options;
 
+   procedure Simple_Patch (Req    : in out Servlet.Rest.Request'Class;
+                           Reply  : in out Servlet.Rest.Response'Class;
+                           Stream : in out Servlet.Rest.Output_Stream'Class) is
+      Data : Test_API;
+   begin
+      Patch (Data, Req, Reply, Stream);
+   end Simple_Patch;
+
    procedure Create (Data   : in out Test_API;
                      Req    : in out Servlet.Rest.Request'Class;
                      Reply  : in out Servlet.Rest.Response'Class;
@@ -222,6 +242,15 @@ package body Servlet.Rest.Tests is
    begin
       Reply.Set_Status (Servlet.Responses.SC_GONE);
    end Head;
+
+   procedure Patch (Data   : in out Test_API;
+                    Req    : in out Servlet.Rest.Request'Class;
+                    Reply  : in out Servlet.Rest.Response'Class;
+                    Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data, Req, Stream);
+   begin
+      Reply.Set_Status (Servlet.Responses.SC_ACCEPTED);
+   end Patch;
 
    procedure List (Data   : in out Test_API;
                    Req    : in out Servlet.Rest.Request'Class;
@@ -281,6 +310,8 @@ package body Servlet.Rest.Tests is
                        Test_Invalid'Access);
       Caller.Add_Test (Suite, "Test Servlet.Rest.OPTIONS API operation",
                        Test_Options'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Rest.PATCH API operation",
+                       Test_Patch'Access);
    end Add_Tests;
 
    procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
@@ -329,6 +360,7 @@ package body Servlet.Rest.Tests is
       Servlet.Rest.Register (Ctx, API_Simple_Delete.Definition);
       Servlet.Rest.Register (Ctx, API_Simple_Head.Definition);
       Servlet.Rest.Register (Ctx, API_Simple_Options.Definition);
+      Servlet.Rest.Register (Ctx, API_Simple_Patch.Definition);
       Ctx.Dump_Routes (Util.Log.INFO_LEVEL);
 
       Test_API_Definition.Register (Registry  => Ctx,
@@ -407,6 +439,15 @@ package body Servlet.Rest.Tests is
       Test_Operation (T, "OPTIONS", "/test/44", Servlet.Responses.SC_OK);
       Test_Operation (T, "OPTIONS", "/simple/44", Servlet.Responses.SC_OK);
    end Test_Options;
+
+   --  ------------------------------
+   --  Test REST PATCH operation
+   --  ------------------------------
+   procedure Test_Patch (T : in out Test) is
+   begin
+      Test_Operation (T, "PATCH", "/test/44", Servlet.Responses.SC_ACCEPTED);
+      Test_Operation (T, "PATCH", "/simple/44", Servlet.Responses.SC_ACCEPTED);
+   end Test_Patch;
 
    --  ------------------------------
    --  Test REST operation on invalid operation.
