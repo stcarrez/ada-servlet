@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/stcarrez/ada-servlet/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-servlet)
 [![Download](https://img.shields.io/badge/download-1.4.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.3.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+[![GitLab](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://gitlab.com/stcarrez/ada-servlet)
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.4.0.svg)
 
 Ada Servlet allows to create web applications using the same pattern
@@ -15,9 +16,9 @@ The Ada Servlet library is used by the [Ada Server Faces](https://github.com/stc
 framework and [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide server web requests.
 
-## Version 1.4.0 - May 2020
+## Version 1.5.0 -
 
-- Added support to configure the web container
+- Added support for PATCH and fix OPTIONS and HEAD requests
 
 [List all versions](https://github.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 
