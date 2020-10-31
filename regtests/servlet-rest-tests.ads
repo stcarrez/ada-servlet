@@ -16,8 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Strings.Unbounded;
-
 with Util.Tests;
 
 package Servlet.Rest.Tests is
@@ -38,6 +36,9 @@ package Servlet.Rest.Tests is
    procedure Simple_Head (Req    : in out Servlet.Rest.Request'Class;
                           Reply  : in out Servlet.Rest.Response'Class;
                           Stream : in out Servlet.Rest.Output_Stream'Class);
+   procedure Simple_Options (Req    : in out Servlet.Rest.Request'Class;
+                             Reply  : in out Servlet.Rest.Response'Class;
+                             Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  Test API with an object created for each request.
    type Test_API is record
@@ -69,6 +70,11 @@ package Servlet.Rest.Tests is
                    Reply  : in out Servlet.Rest.Response'Class;
                    Stream : in out Servlet.Rest.Output_Stream'Class);
 
+   procedure Options (Data   : in out Test_API;
+                      Req    : in out Servlet.Rest.Request'Class;
+                      Reply  : in out Servlet.Rest.Response'Class;
+                      Stream : in out Servlet.Rest.Output_Stream'Class);
+
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new Util.Tests.Test with null record;
@@ -87,6 +93,9 @@ package Servlet.Rest.Tests is
 
    --  Test REST HEAD operation
    procedure Test_Head (T : in out Test);
+
+   --  Test REST OPTIONS operation
+   procedure Test_Options (T : in out Test);
 
    --  Test REST operation on invalid operation.
    procedure Test_Invalid (T : in out Test);
