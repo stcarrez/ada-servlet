@@ -191,6 +191,12 @@ package body Servlet.Core.Tests is
       Req.Set_Method ("PATCH");
       Forward (Dispatcher, Req, Resp);
 
+      Assert_Equals (T, Responses.SC_METHOD_NOT_ALLOWED, Resp.Get_Status,
+                     "Invalid status for an operation not implemented");
+
+      Req.Set_Method ("CONNECT");
+      Forward (Dispatcher, Req, Resp);
+
       Assert_Equals (T, Responses.SC_NOT_IMPLEMENTED, Resp.Get_Status,
                      "Invalid status for an operation not implemented");
    end Check_Request;
@@ -308,7 +314,7 @@ package body Servlet.Core.Tests is
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/html/test.html", S1'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/html/test.html", "/html/test.html", "");
-      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /html/*.html");
+      Assert_Equals (T, 8, F1.Counter, "Filter was executed for /html/*.html");
       Assert_Equals (T, 0, F2.Counter, "Filter was not executed for /html/*.html");
 
       F1.Counter := 0;
@@ -316,20 +322,20 @@ package body Servlet.Core.Tests is
       T.Check_Mapping (Ctx, "/json/test.json", S2'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/json/test.json", "/json/test.json", "");
       Assert_Equals (T, 0, F1.Counter, "Filter was not executed for /json/*.json");
-      Assert_Equals (T, 7, F2.Counter, "Filter was executed for /json/*.json");
+      Assert_Equals (T, 8, F2.Counter, "Filter was executed for /json/*.json");
 
       F1.Counter := 0;
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/test.html", S1'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/list/test.html", "/list/test.html", "");
-      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/*.html");
+      Assert_Equals (T, 8, F1.Counter, "Filter was executed for /list/*.html");
       Assert_Equals (T, 0, F2.Counter, "Filter was not executed for /list/*.html");
 
       F1.Counter := 0;
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/test.json", S2'Unchecked_Access, 1);
       T.Check_Request (Ctx, "/list/test.json", "/list/test.json", "");
-      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/*.json");
+      Assert_Equals (T, 8, F1.Counter, "Filter was executed for /list/*.json");
       Assert_Equals (T, 0, F2.Counter, "Filter was not executed for /list/*.json");
 
       --  Both filters are traversed.
@@ -337,15 +343,15 @@ package body Servlet.Core.Tests is
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/admin/test.json", S2'Unchecked_Access, 2);
       T.Check_Request (Ctx, "/list/admin/test.json", "/list/admin/test.json", "");
-      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/admin/*.json");
-      Assert_Equals (T, 7, F2.Counter, "Filter was executed for /list/admin/*.json");
+      Assert_Equals (T, 8, F1.Counter, "Filter was executed for /list/admin/*.json");
+      Assert_Equals (T, 8, F2.Counter, "Filter was executed for /list/admin/*.json");
 
       F1.Counter := 0;
       F2.Counter := 0;
       T.Check_Mapping (Ctx, "/list/admin/test.html", S1'Unchecked_Access, 2);
       T.Check_Request (Ctx, "/list/admin/test.html", "/list/admin/test.html", "");
-      Assert_Equals (T, 7, F1.Counter, "Filter was executed for /list/admin/*.html");
-      Assert_Equals (T, 7, F2.Counter, "Filter was executed for /list/admin/*.html");
+      Assert_Equals (T, 8, F1.Counter, "Filter was executed for /list/admin/*.html");
+      Assert_Equals (T, 8, F2.Counter, "Filter was executed for /list/admin/*.html");
    end Test_Filter_Execution;
 
    --  ------------------------------
