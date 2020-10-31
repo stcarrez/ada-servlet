@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,6 @@
 with Ada.Strings.Unbounded;
 
 with Util.Tests;
-with Util.Beans.Objects;
-with Servlet.Tests;
 
 package Servlet.Rest.Tests is
 
@@ -37,6 +35,9 @@ package Servlet.Rest.Tests is
    procedure Simple_Delete (Req    : in out Servlet.Rest.Request'Class;
                             Reply  : in out Servlet.Rest.Response'Class;
                             Stream : in out Servlet.Rest.Output_Stream'Class);
+   procedure Simple_Head (Req    : in out Servlet.Rest.Request'Class;
+                          Reply  : in out Servlet.Rest.Response'Class;
+                          Stream : in out Servlet.Rest.Output_Stream'Class);
 
    --  Test API with an object created for each request.
    type Test_API is record
@@ -63,6 +64,11 @@ package Servlet.Rest.Tests is
                    Reply  : in out Servlet.Rest.Response'Class;
                    Stream : in out Servlet.Rest.Output_Stream'Class);
 
+   procedure Head (Data   : in out Test_API;
+                   Req    : in out Servlet.Rest.Request'Class;
+                   Reply  : in out Servlet.Rest.Response'Class;
+                   Stream : in out Servlet.Rest.Output_Stream'Class);
+
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new Util.Tests.Test with null record;
@@ -78,6 +84,9 @@ package Servlet.Rest.Tests is
 
    --  Test REST DELETE delete operation
    procedure Test_Delete (T : in out Test);
+
+   --  Test REST HEAD operation
+   procedure Test_Head (T : in out Test);
 
    --  Test REST operation on invalid operation.
    procedure Test_Invalid (T : in out Test);
