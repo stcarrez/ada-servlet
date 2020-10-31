@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ package Servlet.Rest is
    subtype Output_Stream is Util.Serialize.IO.Output_Stream;
 
    --  The HTTP rest method.
-   type Method_Type is (GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS);
+   type Method_Type is (GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH);
 
    type Descriptor is abstract tagged limited private;
    type Descriptor_Access is access all Descriptor'Class;
