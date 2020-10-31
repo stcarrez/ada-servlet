@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,9 +59,14 @@ package body Servlet.Rest.Tests is
                              URI        => "/simple/:id",
                              Method     => Servlet.Rest.PUT);
 
+   package API_Simple_Head is
+      new Servlet.Rest.Operation (Handler    => Simple_Head'Access,
+                                  URI        => "/simple/:id",
+                                  Method     => Servlet.Rest.HEAD);
+
    package Test_API_Definition is
      new Servlet.Rest.Definition (Object_Type => Test_API,
-                              URI         => "/test");
+                                  URI         => "/test");
 
    package API_Create is
      new Test_API_Definition.Definition (Handler    => Create'Access,
@@ -90,6 +95,12 @@ package body Servlet.Rest.Tests is
    package API_Get is
      new Test_API_Definition.Definition (Handler    => List'Access,
                                          Method     => Servlet.Rest.GET,
+                                         Pattern    => ":id",
+                                         Permission => 0);
+
+   package API_Head is
+     new Test_API_Definition.Definition (Handler    => Head'Access,
+                                         Method     => Servlet.Rest.HEAD,
                                          Pattern    => ":id",
                                          Permission => 0);
 
@@ -125,6 +136,14 @@ package body Servlet.Rest.Tests is
       Delete (Data, Req, Reply, Stream);
    end Simple_Delete;
 
+   procedure Simple_Head (Req    : in out Servlet.Rest.Request'Class;
+                          Reply  : in out Servlet.Rest.Response'Class;
+                          Stream : in out Servlet.Rest.Output_Stream'Class) is
+      Data : Test_API;
+   begin
+      Head (Data, Req, Reply, Stream);
+   end Simple_Head;
+
    procedure Create (Data   : in out Test_API;
                      Req    : in out Servlet.Rest.Request'Class;
                      Reply  : in out Servlet.Rest.Response'Class;
@@ -153,6 +172,14 @@ package body Servlet.Rest.Tests is
    begin
       Reply.Set_Status (Servlet.Responses.SC_NO_CONTENT);
    end Delete;
+
+   procedure Head (Data   : in out Test_API;
+                   Req    : in out Servlet.Rest.Request'Class;
+                   Reply  : in out Servlet.Rest.Response'Class;
+                   Stream : in out Servlet.Rest.Output_Stream'Class) is
+   begin
+      Reply.Set_Status (Servlet.Responses.SC_GONE);
+   end Head;
 
    procedure List (Data   : in out Test_API;
                    Req    : in out Servlet.Rest.Request'Class;
@@ -193,6 +220,8 @@ package body Servlet.Rest.Tests is
                        Test_Update'Access);
       Caller.Add_Test (Suite, "Test Servlet.Rest.DELETE API operation",
                        Test_Delete'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Rest.HEAD API operation",
+                       Test_Head'Access);
       Caller.Add_Test (Suite, "Test Servlet.Rest.TRACE API operation",
                        Test_Invalid'Access);
    end Add_Tests;
@@ -242,6 +271,7 @@ package body Servlet.Rest.Tests is
       Servlet.Rest.Register (Ctx, API_Simple_Post.Definition);
       Servlet.Rest.Register (Ctx, API_Simple_Put.Definition);
       Servlet.Rest.Register (Ctx, API_Simple_Delete.Definition);
+      Servlet.Rest.Register (Ctx, API_Simple_Head.Definition);
       Ctx.Dump_Routes (Util.Log.INFO_LEVEL);
 
       Test_API_Definition.Register (Registry  => Ctx,
@@ -302,6 +332,15 @@ package body Servlet.Rest.Tests is
       Test_Operation (T, "DELETE", "/test/44", Servlet.Responses.SC_NO_CONTENT);
       Test_Operation (T, "DELETE", "/simple/44", Servlet.Responses.SC_NO_CONTENT);
    end Test_Delete;
+
+   --  ------------------------------
+   --  Test REST HEAD operation
+   --  ------------------------------
+   procedure Test_Head (T : in out Test) is
+   begin
+      Test_Operation (T, "HEAD", "/test/44", Servlet.Responses.SC_GONE);
+      Test_Operation (T, "HEAD", "/simple/44", Servlet.Responses.SC_GONE);
+   end Test_Head;
 
    --  ------------------------------
    --  Test REST operation on invalid operation.
