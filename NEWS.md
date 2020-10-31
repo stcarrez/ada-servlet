@@ -1,3 +1,6 @@
+Version 1.5.0   -
+  - Added support for PATCH and fix OPTIONS and HEAD requests
+
 Version 1.4.0   - May 2020
   - Added support to configure the web container
 
