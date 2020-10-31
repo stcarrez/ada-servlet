@@ -280,6 +280,12 @@ package Servlet.Core is
                        Request  : in out Requests.Request'Class;
                        Response : in out Responses.Response'Class);
 
+   --  Called by the server (via the service method) to allow a servlet to handle
+   --  a PATCH request (RFC 5789).
+   procedure Do_Patch (Server   : in Servlet;
+                       Request  : in out Requests.Request'Class;
+                       Response : in out Responses.Response'Class);
+
    --  JSR 315 9. Dispatching Requests
    type Request_Dispatcher is limited private;
 
