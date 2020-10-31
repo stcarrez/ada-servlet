@@ -16,6 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Ada.Strings.Unbounded;
+
 with Util.Log;
 with Util.Test_Caller;
 with Util.Measures;
@@ -32,6 +34,11 @@ with Servlet.Rest.Operation;
 package body Servlet.Rest.Tests is
 
    package Caller is new Util.Test_Caller (Test, "Rest");
+
+   procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
+                        Title  : in String;
+                        Method : in String;
+                        URI    : in String);
 
    package Test_Permission is
       new Security.Permissions.Definition ("test-permission");
@@ -64,6 +71,11 @@ package body Servlet.Rest.Tests is
                                   URI        => "/simple/:id",
                                   Method     => Servlet.Rest.HEAD);
 
+   package API_Simple_Options is
+      new Servlet.Rest.Operation (Handler    => Simple_Options'Access,
+                                  URI        => "/simple/:id",
+                                  Method     => Servlet.Rest.OPTIONS);
+
    package Test_API_Definition is
      new Servlet.Rest.Definition (Object_Type => Test_API,
                                   URI         => "/test");
@@ -72,37 +84,50 @@ package body Servlet.Rest.Tests is
      new Test_API_Definition.Definition (Handler    => Create'Access,
                                          Method     => Servlet.Rest.POST,
                                          Pattern    => "",
-                                         Permission => Test_Permission.Permission);
+                                         Permission => Test_Permission.Permission)
+     with Unreferenced;
 
    package API_Update is
      new Test_API_Definition.Definition (Handler    => Update'Access,
                                          Method     => Servlet.Rest.PUT,
                                          Pattern    => ":id",
-                                         Permission => 0);
+                                         Permission => 0)
+     with Unreferenced;
 
    package API_Delete is
      new Test_API_Definition.Definition (Handler    => Delete'Access,
                                          Method     => Servlet.Rest.DELETE,
                                          Pattern    => ":id",
-                                         Permission => 0);
+                                         Permission => 0)
+     with Unreferenced;
 
    package API_List is
      new Test_API_Definition.Definition (Handler    => List'Access,
                                          Method     => Servlet.Rest.GET,
                                          Pattern    => "",
-                                         Permission => 0);
+                                         Permission => 0)
+     with Unreferenced;
 
    package API_Get is
      new Test_API_Definition.Definition (Handler    => List'Access,
                                          Method     => Servlet.Rest.GET,
                                          Pattern    => ":id",
-                                         Permission => 0);
+                                         Permission => 0)
+     with Unreferenced;
 
    package API_Head is
      new Test_API_Definition.Definition (Handler    => Head'Access,
                                          Method     => Servlet.Rest.HEAD,
                                          Pattern    => ":id",
-                                         Permission => 0);
+                                         Permission => 0)
+     with Unreferenced;
+
+   package API_Options is
+     new Test_API_Definition.Definition (Handler    => Options'Access,
+                                         Method     => Servlet.Rest.OPTIONS,
+                                         Pattern    => ":id",
+                                         Permission => 0)
+     with Unreferenced;
 
    procedure Simple_Get (Req    : in out Servlet.Rest.Request'Class;
                          Reply  : in out Servlet.Rest.Response'Class;
@@ -144,10 +169,19 @@ package body Servlet.Rest.Tests is
       Head (Data, Req, Reply, Stream);
    end Simple_Head;
 
+   procedure Simple_Options (Req    : in out Servlet.Rest.Request'Class;
+                             Reply  : in out Servlet.Rest.Response'Class;
+                             Stream : in out Servlet.Rest.Output_Stream'Class) is
+      Data : Test_API;
+   begin
+      Options (Data, Req, Reply, Stream);
+   end Simple_Options;
+
    procedure Create (Data   : in out Test_API;
                      Req    : in out Servlet.Rest.Request'Class;
                      Reply  : in out Servlet.Rest.Response'Class;
                      Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data, Req, Stream);
    begin
       Reply.Set_Status (Servlet.Responses.SC_CREATED);
 
@@ -160,15 +194,22 @@ package body Servlet.Rest.Tests is
                      Req    : in out Servlet.Rest.Request'Class;
                      Reply  : in out Servlet.Rest.Response'Class;
                      Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data, Stream);
+
       Id : constant String := Req.Get_Path_Parameter (1);
    begin
-      Reply.Set_Status (Servlet.Responses.SC_OK);
+      if Id'Length > 0 then
+         Reply.Set_Status (Servlet.Responses.SC_OK);
+      else
+         Reply.Set_Status (Servlet.Responses.SC_NOT_FOUND);
+      end if;
    end Update;
 
    procedure Delete (Data   : in out Test_API;
                      Req    : in out Servlet.Rest.Request'Class;
                      Reply  : in out Servlet.Rest.Response'Class;
                      Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data, Req, Stream);
    begin
       Reply.Set_Status (Servlet.Responses.SC_NO_CONTENT);
    end Delete;
@@ -177,6 +218,7 @@ package body Servlet.Rest.Tests is
                    Req    : in out Servlet.Rest.Request'Class;
                    Reply  : in out Servlet.Rest.Response'Class;
                    Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data, Req, Stream);
    begin
       Reply.Set_Status (Servlet.Responses.SC_GONE);
    end Head;
@@ -185,6 +227,7 @@ package body Servlet.Rest.Tests is
                    Req    : in out Servlet.Rest.Request'Class;
                    Reply  : in out Servlet.Rest.Response'Class;
                    Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data);
    begin
       if Req.Get_Path_Parameter_Count = 0 then
          Stream.Start_Document;
@@ -210,6 +253,18 @@ package body Servlet.Rest.Tests is
       end if;
    end List;
 
+   procedure Options (Data   : in out Test_API;
+                      Req    : in out Servlet.Rest.Request'Class;
+                      Reply  : in out Servlet.Rest.Response'Class;
+                      Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Data, Req, Stream);
+   begin
+      Reply.Set_Status (Servlet.Responses.SC_OK);
+
+      Reply.Set_Header (Name  => "Allow",
+                        Value => "OPTIONS, GET, POST, PUT, DELETE, PATCH");
+   end Options;
+
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
       Caller.Add_Test (Suite, "Test Servlet.Rest.POST API operation",
@@ -224,6 +279,8 @@ package body Servlet.Rest.Tests is
                        Test_Head'Access);
       Caller.Add_Test (Suite, "Test Servlet.Rest.TRACE API operation",
                        Test_Invalid'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Rest.OPTIONS API operation",
+                       Test_Options'Access);
    end Add_Tests;
 
    procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
@@ -238,7 +295,6 @@ package body Servlet.Rest.Tests is
             Reply   : Servlet.Responses.Mockup.Response;
             Dispatcher : constant Servlet.Core.Request_Dispatcher
               := Ctx.Get_Request_Dispatcher (Path => URI);
-            Result : Ada.Strings.Unbounded.Unbounded_String;
          begin
             Request.Set_Method (Method);
             Request.Set_Request_URI (URI);
@@ -272,6 +328,7 @@ package body Servlet.Rest.Tests is
       Servlet.Rest.Register (Ctx, API_Simple_Put.Definition);
       Servlet.Rest.Register (Ctx, API_Simple_Delete.Definition);
       Servlet.Rest.Register (Ctx, API_Simple_Head.Definition);
+      Servlet.Rest.Register (Ctx, API_Simple_Options.Definition);
       Ctx.Dump_Routes (Util.Log.INFO_LEVEL);
 
       Test_API_Definition.Register (Registry  => Ctx,
@@ -341,6 +398,15 @@ package body Servlet.Rest.Tests is
       Test_Operation (T, "HEAD", "/test/44", Servlet.Responses.SC_GONE);
       Test_Operation (T, "HEAD", "/simple/44", Servlet.Responses.SC_GONE);
    end Test_Head;
+
+   --  ------------------------------
+   --  Test REST OPTIONS operation
+   --  ------------------------------
+   procedure Test_Options (T : in out Test) is
+   begin
+      Test_Operation (T, "OPTIONS", "/test/44", Servlet.Responses.SC_OK);
+      Test_Operation (T, "OPTIONS", "/simple/44", Servlet.Responses.SC_OK);
+   end Test_Options;
 
    --  ------------------------------
    --  Test REST operation on invalid operation.
