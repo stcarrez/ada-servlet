@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets -- Servlet.Core
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -153,6 +153,9 @@ package body Servlet.Core is
 
       elsif Method = "TRACE" then
          Servlet'Class (Server).Do_Trace (Request, Response);
+
+      elsif Method = "PATCH" then
+         Servlet'Class (Server).Do_Patch (Request, Response);
 
       else
          Response.Send_Error (Responses.SC_NOT_IMPLEMENTED);
@@ -366,6 +369,18 @@ package body Servlet.Core is
    begin
       Response.Send_Error (Responses.SC_METHOD_NOT_ALLOWED);
    end Do_Trace;
+
+   --  ------------------------------
+   --  Called by the server (via the service method) to allow a servlet to handle
+   --  a PATCH request (RFC 5789).
+   --  ------------------------------
+   procedure Do_Patch (Server   : in Servlet;
+                       Request  : in out Requests.Request'Class;
+                       Response : in out Responses.Response'Class) is
+      pragma Unreferenced (Server, Request);
+   begin
+      Response.Send_Error (Responses.SC_METHOD_NOT_ALLOWED);
+   end Do_Patch;
 
    --  ------------------------------
    --  Forwards a request from a servlet to another resource
