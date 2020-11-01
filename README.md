@@ -19,6 +19,7 @@ to provide server web requests.
 ## Version 1.5.0 -
 
 - Added support for PATCH and fix OPTIONS and HEAD requests
+- Added a Docker image to play with Ada Servlet
 
 [List all versions](https://github.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 
