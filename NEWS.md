@@ -1,4 +1,4 @@
-Version 1.5.0   -
+Version 1.5.0   - Nov 2020
   - Added support for PATCH and fix OPTIONS and HEAD requests
   - Added a Docker image to play with Ada Servlet
 
