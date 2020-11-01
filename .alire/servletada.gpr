@@ -7,7 +7,7 @@ project ServletAda is
 
    Version := "1.5.0";
    Library_Dir := "lib";
-   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
+   Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
    for Source_Dirs use ("../src");
 
