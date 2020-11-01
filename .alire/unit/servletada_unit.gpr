@@ -1,4 +1,4 @@
-with "config";
+with "serlvetada_config";
 with "utilada_sys";
 with "utilada_unit";
 with "elada";
@@ -7,7 +7,7 @@ with "servletada";
 project ServletAda_Unit is
 
    Library_Dir := "lib";
-   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
+   Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
    for Source_Dirs use ("../../servlet_unit");
 
@@ -15,13 +15,12 @@ project ServletAda_Unit is
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & ServletAda.Version;
 
-   for Library_Dir use Library_Dir & "/servletada_unit/" & Project'Library_Kind;
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/servletada_unit/" & Project'Library_Kind;
-   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+   for Library_Dir use "../../lib/servletada_unit/" & Project'Library_Kind;
+   for Object_Dir use "../../obj/servletada_unit/" & Project'Library_Kind;
 
-   package Binder   renames Config.Binder;
-   package Builder  renames Config.Builder;
-   package Compiler renames Config.Compiler;
-   package Ide      renames Config.Ide;
+   package Binder   renames ServletAda_Config.Binder;
+   package Builder  renames ServletAda_Config.Builder;
+   package Compiler renames ServletAda_Config.Compiler;
+   package Ide      renames ServletAda_Config.Ide;
 
 end ServletAda_Unit;
