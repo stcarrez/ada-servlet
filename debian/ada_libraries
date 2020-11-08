@@ -1,0 +1,9 @@
+MODE=distrib SERVLET_LIBRARY_TYPE=relocatable
+servletada.gpr
+
+MODE=distrib SERVLET_LIBRARY_TYPE=relocatable
+servletada_aws.gpr
+
+MODE=distrib SERVLET_LIBRARY_TYPE=relocatable
+servletada_unit.gpr
+

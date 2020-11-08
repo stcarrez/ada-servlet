@@ -1,0 +1,80 @@
+Source: libservletada
+Priority: optional
+Section: libdevel
+Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
+Build-Depends: debhelper (>= 10), autotools-dev,
+ dh-ada-library,
+ gnat, gnat-7,
+# This line is parsed by debian/rules.
+ gprbuild (>= 2015-2),
+# 2015-2 is compatible with gnat-6
+ libxmlada-sax7-dev,
+ libutilada-xml1-dev,
+ libutilada-aws1-dev
+Standards-Version: 4.1.4
+Homepage: https://github.com/stcarrez/ada-servlet/
+Vcs-Git: https://github.com/stcarrez/ada-servlet.git -b debian-gnat-7
+Vcs-Browser: https://github.com/stcarrez/ada-servlet/tree/debian-gnat-7
+
+Package: libservletada1.5.0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Ada Servlet Engine (runtime)
+ Ada Servlet allows one to create web applications using the same pattern
+ as the Java Servlet (See JSR 154, JSR 315). 
+ .
+ This package contains the runtime libraries.
+
+Package: libservletada-aws1.5.0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Ada Servlet Engine for Ada Web Server (runtime)
+ Ada Servlet allows one to create web applications using the same pattern
+ as the Java Servlet (See JSR 154, JSR 315). 
+ .
+ This package contains the runtime libraries for the Ada Web Server.
+
+Package: libservletada-unit1.5.0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Ada Servlet Engine testing framework (runtime)
+ Ada Servlet allows one to create web applications using the same pattern
+ as the Java Servlet (See JSR 154, JSR 315). 
+ .
+ This package contains the runtime libraries for the unit test
+ framework.
+
+Package: libservletada1-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${ada:Depends}
+Description: Ada Servlet Engine (Development)
+ Ada Servlet allows one to create web applications using the same pattern
+ as the Java Servlet (See JSR 154, JSR 315). 
+ .
+ This package contains the development files.
+
+Package: libservletada-aws1-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${ada:Depends}
+Description: Ada Servlet Engine for Ada Web Server (Development)
+ Ada Servlet allows one to create web applications using the same pattern
+ as the Java Servlet (See JSR 154, JSR 315). 
+ .
+ This package contains the development files for the Ada Web Server.
+
+Package: libservletada-unit1-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${ada:Depends}
+Description: Ada Servlet Engine testing framework (Development)
+ Ada Servlet allows one to create web applications using the same pattern
+ as the Java Servlet (See JSR 154, JSR 315). 
+ .
+ The servlet testing framework provides some development files
+ to build unit tests for the validation of Ada servlets.
+
