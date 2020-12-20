@@ -37,6 +37,7 @@ package body Servlet.Server.Tests is
    Files          : aliased Servlet.Core.Files.File_Servlet;
    Dump           : aliased Servlet.Filters.Dump.Dump_Filter;
    Measures       : aliased Servlet.Core.Measures.Measure_Servlet;
+   All_Servlet    : aliased Servlet.Core.Tests.Test_Servlet3;
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
@@ -56,6 +57,8 @@ package body Servlet.Server.Tests is
                        Test_Get_With_Exception'Access);
       Caller.Add_Test (Suite, "Test Servlet.Server.Register_Application",
                        Test_Register_Remove_Application'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Server.Register_Application (all)",
+                       Test_Register_Application'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -240,5 +243,30 @@ package body Servlet.Server.Tests is
          T.Test_Get_File;
       end loop;
    end Test_Register_Remove_Application;
+
+   --  ------------------------------
+   --  Test a Register_Application and Remove_Application.
+   --  ------------------------------
+   procedure Test_Register_Application (T : in out Test) is
+      App1    : aliased Servlet.Core.Servlet_Registry;
+      Request : Servlet.Requests.Mockup.Request;
+      Reply   : Servlet.Responses.Mockup.Response;
+   begin
+      App1.Add_Servlet ("all", All_Servlet'Access);
+      App1.Add_Mapping ("/", "all");
+      App1.Add_Mapping ("/test", "all");
+      Servlet.Tests.Get_Server.Register_Application ("", App1'Unchecked_Access);
+      Servlet.Tests.Get_Application.Start;
+
+      Request.Set_Method (Method => "GET");
+      Request.Set_Request_URI (URI => "/test", Split => True);
+      Request.Set_Protocol (Protocol => "HTTP/1.1");
+      Servlet.Tests.Get_Server.Service (Request, Reply);
+      Assert_Equals (T, Servlet.Responses.SC_OK, Reply.Get_Status, "Invalid response");
+
+      T.Test_Get_File;
+
+      Servlet.Tests.Get_Server.Remove_Application (App1'Unchecked_Access);
+   end Test_Register_Application;
 
 end Servlet.Server.Tests;
