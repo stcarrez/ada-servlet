@@ -23,7 +23,6 @@ with Ada.Unchecked_Deallocation;
 with Ada.Task_Attributes;
 package body Servlet.Server is
 
-   use Ada.Strings.Unbounded;
    use type Core.Status_Type;
 
    --  The logger
@@ -37,6 +36,9 @@ package body Servlet.Server is
    procedure Free is
      new Ada.Unchecked_Deallocation (Object => Binding_Array,
                                      Name   => Binding_Array_Access);
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Object => Binding,
+                                     Name   => Binding_Access);
 
    --  ------------------------------
    --  Get the current registry associated with the current request being processed
@@ -95,8 +97,7 @@ package body Servlet.Server is
       if Old /= null then
          Apps (1 .. Count) := Server.Applications (1 .. Count);
       end if;
-      Apps (Count + 1).Context  := Context;
-      Apps (Count + 1).Base_URI := To_Unbounded_String (URI);
+      Apps (Count + 1) := new Binding '(Len => URI'Length, Context => Context, Base_URI => URI);
 
       --  Inform the servlet registry about the base URI.
       Context.Register_Application (URI);
@@ -128,6 +129,7 @@ package body Servlet.Server is
       for I in 1 .. Count loop
          if Old (I).Context = Context then
             Log.Info ("Removed application {0}", Old (I).Base_URI);
+            Free (Old (I));
             if I < Count then
                Old (I) := Old (Count);
             end if;
@@ -227,6 +229,39 @@ package body Servlet.Server is
                   Set_Context (Null_Context);
                   return;
             end;
+         elsif Application.Len = 0 and then Application.Context.Get_Status = Core.Started then
+            declare
+               Req        : Request_Context;
+               Context    : constant Core.Servlet_Registry_Access := Application.Context;
+               Dispatcher : constant Core.Request_Dispatcher
+                 := Context.Get_Request_Dispatcher (URI);
+            begin
+               Log.Info ("{0} {1}", Request.Get_Method, URI);
+               Req.Request     := Request'Unchecked_Access;
+               Req.Response    := Response'Unchecked_Access;
+               Req.Application := Context;
+               Set_Context (Req);
+               Core.Forward (Dispatcher, Request, Response);
+               case Response.Get_Status / 100 is
+                  when 2 | 3 =>
+                     null;
+
+                  when others =>
+                     if not Response.Is_Committed then
+                        Context.Send_Error_Page (Request, Response);
+                     end if;
+
+               end case;
+               Set_Context (Null_Context);
+               return;
+
+            exception
+               when E : others =>
+                  Context.Error (Request, Response, E);
+                  Set_Context (Null_Context);
+                  return;
+            end;
+
          end if;
       end loop;
 
@@ -248,7 +283,7 @@ package body Servlet.Server is
    begin
       if Server.Applications /= null then
          for Application of Server.Applications.all loop
-            Process (To_String (Application.Base_URI), Application.Context);
+            Process (Application.Base_URI, Application.Context);
          end loop;
       end if;
    end Iterate;
@@ -259,6 +294,11 @@ package body Servlet.Server is
    overriding
    procedure Finalize (Server : in out Container) is
    begin
+      if Server.Applications /= null then
+         for I in Server.Applications'Range loop
+            Free (Server.Applications (I));
+         end loop;
+      end if;
       Free (Server.Applications);
    end Finalize;
 
