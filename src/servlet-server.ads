@@ -87,12 +87,13 @@ private
    --  Binding to record the Servlet applications and bind them to URI prefixes.
    --  It is expected that the number of Servlet applications is small
    --  (1-10 per server).
-   type Binding is record
+   type Binding (Len : Natural) is record
       Context  : Core.Servlet_Registry_Access;
-      Base_URI : Ada.Strings.Unbounded.Unbounded_String;
+      Base_URI : String (1 .. Len);
    end record;
+   type Binding_Access is access all Binding;
 
-   type Binding_Array is array (Natural range <>) of Binding;
+   type Binding_Array is array (Natural range <>) of Binding_Access;
    type Binding_Array_Access is access all Binding_Array;
 
    type Container is new Ada.Finalization.Limited_Controlled with record
