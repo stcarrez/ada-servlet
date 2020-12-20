@@ -242,6 +242,12 @@ package body Servlet.Server.Tests is
          Servlet.Tests.Get_Server.Remove_Application (App1'Unchecked_Access);
          T.Test_Get_File;
       end loop;
+
+   exception
+      when others =>
+         Servlet.Tests.Get_Server.Remove_Application (App1'Unchecked_Access);
+         raise;
+
    end Test_Register_Remove_Application;
 
    --  ------------------------------
@@ -256,7 +262,7 @@ package body Servlet.Server.Tests is
       App1.Add_Mapping ("/", "all");
       App1.Add_Mapping ("/test", "all");
       Servlet.Tests.Get_Server.Register_Application ("", App1'Unchecked_Access);
-      Servlet.Tests.Get_Application.Start;
+      Servlet.Tests.Get_Server.Start;
 
       Request.Set_Method (Method => "GET");
       Request.Set_Request_URI (URI => "/test", Split => True);
