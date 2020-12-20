@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-tests - Unit tests for Servlet.Routes
---  Copyright (C) 2015, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,8 @@ package body Servlet.Routes.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
    begin
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (/)",
+                       Test_Add_Route_With_Root_Path'Access);
       Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (fixed path)",
                        Test_Add_Route_With_Path'Access);
       Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (:param path)",
@@ -124,6 +126,24 @@ package body Servlet.Routes.Tests is
       Router.Add_Route (Path, T.ELContext.all, Insert'Access);
       Verify_Route (T, Router, Path, Index, Bean);
    end Add_Route;
+
+   --  ------------------------------
+   --  Test the Add_Route with "/".
+   --  ------------------------------
+   procedure Test_Add_Route_With_Root_Path (T : in out Test) is
+      Router  : Router_Type;
+      Bean    : Test_Bean;
+   begin
+      Add_Route (T, Router, "/", 1, Bean);
+      Add_Route (T, Router, "/item", 2, Bean);
+
+      Verify_Route (T, Router, "/", 1, Bean);
+      Verify_Route (T, Router, "/item", 2, Bean);
+
+      Add_Route (T, Router, "/", 3, Bean);
+      Verify_Route (T, Router, "/", 3, Bean);
+      Verify_Route (T, Router, "/item", 2, Bean);
+   end Test_Add_Route_With_Root_Path;
 
    --  ------------------------------
    --  Test the Add_Route with simple fixed path components.
