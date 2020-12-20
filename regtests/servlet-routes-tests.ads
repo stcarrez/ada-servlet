@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-tests - Unit tests for Servlet.Routes
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,6 +72,9 @@ package Servlet.Routes.Tests is
                         Path   : in String;
                         Index  : in Positive;
                         Bean   : in out Test_Bean'Class);
+
+   --  Test the Add_Route with "/".
+   procedure Test_Add_Route_With_Root_Path (T : in out Test);
 
    --  Test the Add_Route with simple fixed path components.
    --  Example: /list/index.html
