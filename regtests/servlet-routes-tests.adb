@@ -34,6 +34,8 @@ package body Servlet.Routes.Tests is
                        Test_Add_Route_With_Path'Access);
       Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (:param path)",
                        Test_Add_Route_With_Param'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route ({param} path)",
+                       Test_Add_Route_With_Param_Alt'Access);
       Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (*.ext path)",
                        Test_Add_Route_With_Ext'Access);
       Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (#{} path)",
@@ -236,6 +238,48 @@ package body Servlet.Routes.Tests is
       T.Assert_Equals ("567", To_String (Bean.Name), "Bean injection failed for :name");
 
    end Test_Add_Route_With_Param;
+
+   --  ------------------------------
+   --  Test the Add_Route with fixed path components and path parameters.
+   --  Example: /users/{id}/view.html
+   --  ------------------------------
+   procedure Test_Add_Route_With_Param_Alt (T : in out Test) is
+      use Ada.Strings.Unbounded;
+
+      Router  : Router_Type;
+      Bean    : Test_Bean;
+   begin
+      Add_Route (T, Router, "/users/{id}/view.html", 1, Bean);
+      T.Assert_Equals ("{id}", To_String (Bean.Id), "Bean injection failed for {id}");
+
+      Bean.Id := To_Unbounded_String ("");
+      Add_Route (T, Router, "/users/{id}/list.html", 2, Bean);
+      T.Assert_Equals ("{id}", To_String (Bean.Id), "Bean injection failed for {id}");
+
+      Bean.Id := To_Unbounded_String ("");
+      Add_Route (T, Router, "/users/{id}/index.html", 3, Bean);
+      T.Assert_Equals ("{id}", To_String (Bean.Id), "Bean injection failed for {id}");
+
+      Bean.Id := To_Unbounded_String ("");
+      Add_Route (T, Router, "/view/page/content/index.html", 4, Bean);
+      Add_Route (T, Router, "/list//page/view.html", 5, Bean);
+      Add_Route (T, Router, "/list////page/content.html", 6, Bean);
+      T.Assert_Equals ("", To_String (Bean.Id), "Bean injection failed for fixed path");
+
+      Add_Route (T, Router, "/users/{id}/{name}/index.html", 7, Bean);
+      T.Assert_Equals ("{id}", To_String (Bean.Id), "Bean injection failed for {id}");
+      T.Assert_Equals ("{name}", To_String (Bean.Name), "Bean injection failed for {name}");
+
+      Add_Route (T, Router, "/users/list/index.html", 8, Bean);
+
+      Verify_Route (T, Router, "/users/1234/view.html", 1, Bean);
+      T.Assert_Equals ("1234", To_String (Bean.Id), "Bean injection failed for {id}");
+
+      Verify_Route (T, Router, "/users/234/567/index.html", 7, Bean);
+      T.Assert_Equals ("234", To_String (Bean.Id), "Bean injection failed for {id}");
+      T.Assert_Equals ("567", To_String (Bean.Name), "Bean injection failed for {name}");
+
+   end Test_Add_Route_With_Param_Alt;
 
    --  ------------------------------
    --  Test the Add_Route with fixed path components and EL path injection.
