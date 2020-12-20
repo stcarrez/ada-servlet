@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -250,7 +250,31 @@ package body Servlet.Routes is
          else
             Pos := Pos - 1;
          end if;
-         if Pattern (First) = '#' then
+         if First > Pattern'Last then
+            Found := False;
+
+            --  Find an exact match for this component.
+            while Node /= null loop
+               if Node.all in Path_Node_Type'Class then
+                  Match := Node.Matches (Pattern (First .. Pos), Pos = Pattern'Last);
+                  if Match = YES_MATCH then
+                     Parent := Node;
+                     Node := Node.Children;
+                     Found := True;
+                     exit;
+                  end if;
+               end if;
+               Node := Node.Next_Route;
+            end loop;
+
+            --  Add a path node matching the component at begining of the children list.
+            --  (before the Param_Node and EL_Node instances if any).
+            if not Found then
+               New_Path := new Path_Node_Type (Len => 0);
+               Insert (Parent, New_Path.all'Access, YES_MATCH);
+               Parent := Parent.Children;
+            end if;
+         elsif Pattern (First) = '#' then
             declare
                E : EL_Node_Access;
             begin
