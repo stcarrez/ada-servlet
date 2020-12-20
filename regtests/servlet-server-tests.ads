@@ -52,4 +52,7 @@ package Servlet.Server.Tests is
    --  Test a Register_Application and Remove_Application.
    procedure Test_Register_Remove_Application (T : in out Test);
 
+   --  Test a Register_Application with an empty URI (catch all requests).
+   procedure Test_Register_Application (T : in out Test);
+
 end Servlet.Server.Tests;
