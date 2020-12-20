@@ -88,6 +88,10 @@ package Servlet.Routes.Tests is
    --  Example: /users/:id/view.html
    procedure Test_Add_Route_With_Param (T : in out Test);
 
+   --  Test the Add_Route with fixed path components and path parameters (Alternate syntax).
+   --  Example: /users/{id}/view.html
+   procedure Test_Add_Route_With_Param_Alt (T : in out Test);
+
    --  Test the Add_Route with fixed path components and EL path injection.
    --  Example: /users/#{user.id}/view.html
    procedure Test_Add_Route_With_EL (T : in out Test);
