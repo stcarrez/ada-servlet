@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  volume_server -- Example of server with a servlet
---  Copyright (C) 2010, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2015, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,15 @@ with Volume_Servlet;
 with Util.Log.Loggers;
 
 procedure Volume_Server is
+   CONFIG_PATH  : constant String := "samples.properties";
+
    Compute : aliased Volume_Servlet.Servlet;
    App     : aliased Servlet.Core.Servlet_Registry;
    WS      : Servlet.Server.Web.AWS_Container;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Volume_Server");
 begin
+   Util.Log.Loggers.Initialize (CONFIG_PATH);
+
    --  Register the servlets and filters
    App.Add_Servlet (Name => "compute", Server => Compute'Unchecked_Access);
 

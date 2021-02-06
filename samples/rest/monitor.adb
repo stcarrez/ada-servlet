@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  monitor - A simple monitor API
---  Copyright (C) 2016, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Servlet.Responses;
-with Servlet.Rest.Definition;
 package body Monitor is
 
    type Monitor_Array is array (1 .. MAX_MONITOR) of Monitor_Data;
@@ -57,6 +56,8 @@ package body Monitor is
    procedure Put_Value (Req    : in out Servlet.Rest.Request'Class;
                         Reply  : in out Servlet.Rest.Response'Class;
                         Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Stream);
+
       Id  : constant String := Req.Get_Path_Parameter (1);
       Pos : Positive;
       Val : Natural;

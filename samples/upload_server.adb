@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_server -- Example of server with a servlet
---  Copyright (C) 2012, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,15 @@ with Upload_Servlet;
 with Util.Log.Loggers;
 
 procedure Upload_Server is
+   CONFIG_PATH  : constant String := "samples.properties";
+
    Upload  : aliased Upload_Servlet.Servlet;
    App     : aliased Servlet.Core.Servlet_Registry;
    WS      : Servlet.Server.Web.AWS_Container;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Upload_Server");
 begin
+   Util.Log.Loggers.Initialize (CONFIG_PATH);
+
    --  Register the servlets and filters
    App.Add_Servlet (Name => "upload", Server => Upload'Unchecked_Access);
 

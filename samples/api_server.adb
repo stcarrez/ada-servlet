@@ -22,7 +22,6 @@ with Servlet.Core.Files;
 with Servlet.Rest;
 with Util.Log.Loggers;
 with Monitor;
-with EL.Contexts.Default;
 
 procedure API_Server is
    CONFIG_PATH  : constant String := "samples.properties";
@@ -31,7 +30,6 @@ procedure API_Server is
    Files   : aliased Servlet.Core.Files.File_Servlet;
    App     : aliased Servlet.Core.Servlet_Registry;
    WS      : Servlet.Server.Web.AWS_Container;
-   Ctx     : EL.Contexts.Default.Default_Context;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Api_Server");
 begin
    Util.Log.Loggers.Initialize (CONFIG_PATH);

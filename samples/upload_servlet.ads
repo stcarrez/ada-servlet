@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_servlet -- Servlet example to upload files on the server
---  Copyright (C) 2012, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
 with Servlet.Core;
 with Servlet.Requests;
 with Servlet.Responses;
-with servlet.Streams;
+with Servlet.Streams;
 
 package Upload_Servlet is
 
