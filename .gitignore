@@ -24,5 +24,8 @@ bin/
 obj/
 lib/
 servlet-aunit.xml
-regtests/result/
-
+regtests/results
+cover
+wiki
+alire
+servlet.cov
