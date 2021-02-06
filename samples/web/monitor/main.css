@@ -1,0 +1,232 @@
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, label {
+    margin: 0;
+    padding: 0;
+}
+html, body {
+  height: 100%;
+}
+body {
+  font-family: Arial, Verdana, sans-serif;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  overflow-y: scroll;
+}
+/* IE 6 min-height hack */
+* html #pam-page-content {
+    height: 100%;
+}
+body.awa {
+  background-color: #81CFB7;
+}
+
+#awa-page {
+  position: relative;
+  min-height:100%;
+  margin-left: 1%;
+  margin-right: 1%;
+  background-color: white;
+  margin-bottom: -30px; /* See #awa-clfooter height */
+  display: block;
+  width: 98%;
+}
+.awa #awa-page {
+  background-color: #99DFCA;
+}
+#awa-hdr {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 25px;
+    background-color: #333; /* #9BCFBA; */
+    border-bottom: 5px solid #333; /* #3E6F5C; */
+    z-index: 1;
+}
+#awa-hdr ul {
+  float: right;
+  list-style-type: none;
+  padding-right: 50px;
+}
+#awa-hdr li {
+  float: right;
+  padding-left: 5px;
+  padding-right: 5px;
+  line-height: 24px;
+  font-size: 16px;
+}
+#awa-hdr li a {
+    color: #ddd;
+    font-size: 12px;
+    text-decoration: none;
+    border-bottom: 3px solid #333;
+}
+#awa-hdr li a:hover {
+    color: #fff;
+    border-bottom: 3px solid orange;
+}
+#awa-content {
+  padding-top: 5px;
+}
+div.awa-title {
+  margin: 10px;
+  float: left;
+  clear: both;
+  width: 90%;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  font-size: 24px;
+  background-color: #C2EFDD;
+  border-color: #FFFFFF #4CAF91 #4CAF91 #FFFFFF;
+  border-style: solid;
+  border-width: 1px;
+}
+div.awa-title dl {
+  float: left;
+  clear: both;
+  margin: 10px;
+}
+div.awa-title dt {
+  float: left;
+  clear: both;
+  font-weight: bold;
+  padding-top: 10px;
+  font-size: 20px;
+}
+div.awa-title dd {
+  float: left;
+  clear: both;
+  padding-left: 20px;
+  font-size: 16px;
+}
+.awa-ok {
+  float: left;
+  width: 48px;
+  height: 48px;
+  margin-left: 5px;
+  margin-right: 15px;
+}
+div.awa-title div {
+  float: left;
+}
+#awa-footer {
+  float: none;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  height: 2px;
+}
+#awa-copyright {
+  float: left;
+  margin-left: 20px;
+  margin-right: 5px;
+}
+#awa-clfooter {
+  clear: both;
+  height: 30px; /* See #awa-page margin bottom */
+  width: 100%;
+}
+#awa-footer_content {
+  float: right;
+  margin-right: 20px;
+}
+div.grid_12 ul.selector {
+    float: left;
+    width: 15%;
+    height: 100%;
+    overflow: hidden;
+    padding: .2em;
+/*    width: 100%; */
+}
+ul.ui-tabs-nav li a {
+    width: 100%;
+    display: block;
+}
+ul.selector li {
+    display: block;
+    float: left;
+    clear: both;
+    width: 100%;
+}
+.container_12 .grid_12 div.ui-tabs-panel {
+    float: right;
+    width: 80%;
+}
+#monitor-graph {
+    float: left;
+    display: block;
+    width: 1200px;
+    height: 100px;
+}
+@media screen and (max-width: 400px) {
+    #monitor-graph {
+       width: 400px;
+    }
+
+    /* @-ms-viewport { width: 320px; } */
+    #awa-top-nav li a {
+        font-size: 100%;
+        padding: 0px;
+    }
+    #awa-footer, body {
+        background-image: none;
+        font-size: 100%;
+    }
+    #awa-copyright {
+        margin: 0;
+    }
+    #demo-tabs {
+        width: 100%;
+    }
+    .tagedit-list li.tagedit-listelement {
+        float: right;
+    }
+    h3 {
+        overflow: hidden;
+        width: 100%;
+    }
+}
+@media screen and (min-width: 960px) {
+    body{
+        font-size:80%;
+    }
+    #awa-top-nav li {
+        width: 15%;
+    }
+}
+@media screen and (max-width: 600px) {
+    body{
+        font-size:100%;
+    }
+    .container_12 div.sample {
+        width: 98%;
+        padding-left: 1%;
+        padding-right: 0;
+    }
+    .container_12 .grid_4,
+    .container_12 .grid_8,
+    .container_12 .ui-tabs-panel div.grid_8,
+    .container_12 .grid_12,
+    div.grid_12 ul.selector, .container_12 .grid_12 div.ui-tabs-panel {
+        width: 97%;
+        padding: 0;
+    }
+    div.grid_12 ul.selector {
+        width: 100%;
+    }
+    .container_12 .ui-tabs-panel div.grid_8 {
+        float: left;
+    }
+    #doc-block ul.tag-doc b, #doc-block ul.tag-doc i {
+        width: 49%;
+    }
+    #doc-block ul.tag-doc span {
+        clear: both;
+        padding-left: 5%;
+        width: 94%;
+    }
+    #awa-page .ui-tabs .ui-tabs-nav li a {
+        padding: 2px;
+        font-weight: normal;
+    }
+}
