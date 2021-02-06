@@ -200,7 +200,7 @@ package body Servlet.Server.Tests is
    --  Test a POST with a part file to a test servlet.
    --  ------------------------------
    procedure Test_Post_Content (T : in out Test) is
-      Path    : constant String := Util.Tests.Get_Test_Path ("regtests/result/upload.txt");
+      Path    : constant String := Util.Tests.Get_Test_Path ("upload.txt");
       Request : Servlet.Requests.Mockup.Part_Request (1);
       Reply   : Servlet.Responses.Mockup.Response;
    begin

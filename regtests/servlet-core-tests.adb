@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Sessions Tests - Unit tests for Servlet.Sessions
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -598,7 +598,7 @@ package body Servlet.Core.Tests is
    --  ------------------------------
    procedure Test_Read_Configuration (T : in out Test) is
       Ctx : Servlet_Registry;
-      Dir : constant String := Util.Tests.Get_Test_Path ("regtests/config/");
+      Dir : constant String := Util.Tests.Get_Path ("regtests/config/");
    begin
       Core.Configs.Read_Configuration (Ctx, Dir & "empty.xml");
       Util.Tests.Assert_Equals (T, "", String '(Ctx.Get_Init_Parameter ("content-type.default")),
