@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  api_server -- Example of REST API server
---  Copyright (C) 2016, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,8 @@ procedure API_Server is
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Api_Server");
 begin
    Util.Log.Loggers.Initialize (CONFIG_PATH);
---   App.Set_Init_Parameter (ASF.Applications.VIEW_DIR, "samples/web/monitor");
+
+   App.Set_Init_Parameter (Servlet.Core.Files.VIEW_DIR_PARAM, "samples/web/monitor");
 
    --  Register the servlets and filters
    App.Add_Servlet (Name => "api", Server => Api'Unchecked_Access);
@@ -47,7 +48,6 @@ begin
    App.Add_Mapping (Name => "files", Pattern => "*.css");
    App.Add_Mapping (Name => "files", Pattern => "*.js");
 
---   Monitor.Mon_API.Register (App, "api", Ctx);
    Servlet.Rest.Register (App, Monitor.API_Get_Values.Definition);
    Servlet.Rest.Register (App, Monitor.API_Put_Value.Definition);
 

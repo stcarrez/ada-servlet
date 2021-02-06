@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  monitor - A simple monitor API
---  Copyright (C) 2016, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,12 +33,12 @@ package Monitor is
    --  GET /api/monitor/:id
    package API_Get_Values is new Servlet.Rest.Operation (Handler    => Get_Values'Access,
                                                          Method     => Servlet.Rest.GET,
-                                                         URI        => "/mon/:id");
+                                                         URI        => "/api/monitor/:id");
 
    --  PUT /api/monitor/:id
    package API_Put_Value is new Servlet.Rest.Operation (Handler    => Put_Value'Access,
                                                         Method     => Servlet.Rest.PUT,
-                                                        URI        => "/mon/:id");
+                                                        URI        => "/api/monitor/:id");
 
 private
 
