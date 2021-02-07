@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests.mockup -- Servlet Requests mockup
---  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -267,6 +267,7 @@ package body Servlet.Requests.Mockup is
    --  Get the number of parts included in the request.
    --  ------------------------------
    function Get_Part_Count (Req : in Request) return Natural is
+      pragma Unreferenced (Req);
    begin
       return 0;
    end Get_Part_Count;
