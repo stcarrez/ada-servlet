@@ -1,3 +1,7 @@
+Version 1.5.1   - Feb 2021
+  - Cleanup the examples
+  - Fix registration and support of application with an empty registration URI
+
 Version 1.5.0   - Nov 2020
   - Added support for PATCH and fix OPTIONS and HEAD requests
   - Added a Docker image to play with Ada Servlet
