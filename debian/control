@@ -4,17 +4,17 @@ Section: libdevel
 Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
 Build-Depends: debhelper (>= 10), autotools-dev,
  dh-ada-library,
- gnat, gnat-9,
+ gnat, gnat-8,
 # This line is parsed by debian/rules.
  gprbuild (>= 2015-2),
 # 2015-2 is compatible with gnat-6
- libxmlada-sax9-dev,
+ libxmlada-sax8-dev,
  libutilada-xml2-dev,
  libutilada-aws2-dev
 Standards-Version: 4.1.4
 Homepage: https://github.com/stcarrez/ada-servlet/
-Vcs-Git: https://github.com/stcarrez/ada-servlet.git -b debian-gnat-7
-Vcs-Browser: https://github.com/stcarrez/ada-servlet/tree/debian-gnat-7
+Vcs-Git: https://github.com/stcarrez/ada-servlet.git -b debian-gnat-8
+Vcs-Browser: https://github.com/stcarrez/ada-servlet/tree/debian-gnat-8
 
 Package: libservletada1.5.1
 Section: libs
