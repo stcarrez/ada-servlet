@@ -108,7 +108,7 @@ private
 
    type String_Access is access all String;
 
-   type Route_Node_Type is abstract tagged;
+   type Route_Node_Type is tagged;
 
    type Route_Node_Access is access all Route_Node_Type'Class;
 
