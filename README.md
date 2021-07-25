@@ -26,7 +26,7 @@ to provide server web requests.
 To build Ada Servlet, you will need:
 
 * Ada Util     (https://github.com/stcarrez/ada-util          2.4.1)
-* Ada EL       (https://github.com/stcarrez/ada-el            1.8.2)
+* Ada EL       (https://github.com/stcarrez/ada-el            1.8.3)
 * Ada Security (https://github.com/stcarrez/ada-security      1.4.0)
 * AWS          (https://libre.adacore.com/libre/tools/aws/     2018, 2019)
 * XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  4.4)
