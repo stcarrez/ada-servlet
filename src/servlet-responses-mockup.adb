@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Requests
---  Copyright (C) 2010, 2011, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2015, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -127,7 +127,7 @@ package body Servlet.Responses.Mockup is
    overriding
    procedure Initialize (Resp : in out Response) is
    begin
-      Resp.Content.Initialize (128 * 1024);
+      Resp.Content.Initialize (256 * 1024);
       Resp.Stream := Resp.Content'Unchecked_Access;
    end Initialize;
 

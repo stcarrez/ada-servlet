@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017, 2019 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2019, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,7 +108,8 @@ private
 
    type String_Access is access all String;
 
-   type Route_Node_Type;
+   type Route_Node_Type is tagged;
+
    type Route_Node_Access is access all Route_Node_Type'Class;
 
    --  Describes a variable path component whose value must be injected in an Ada bean.
