@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-sessions -- Servlet Sessions
---  Copyright (C) 2010, 2011, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2018, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -123,7 +123,7 @@ package Servlet.Sessions is
    Null_Session : constant Session;
 private
 
-   type Session_Record;
+   type Session_Record is tagged;
    type Session_Record_Access is access all Session_Record'Class;
 
    type Session_Record is new Ada.Finalization.Limited_Controlled with record

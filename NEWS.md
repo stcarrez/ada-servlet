@@ -1,3 +1,6 @@
+Version 1.5.2   - Jul 2021
+  - Fix for GNAT 2021
+
 Version 1.5.1   - Feb 2021
   - Cleanup the examples
   - Fix registration and support of application with an empty registration URI

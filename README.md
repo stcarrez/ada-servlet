@@ -16,9 +16,8 @@ The Ada Servlet library is used by the [Ada Server Faces](https://github.com/stc
 framework and [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide server web requests.
 
-## Version 1.5.1   - Feb 2021
-- Cleanup the examples
-- Fix registration and support of application with an empty registration URI
+## Version 1.5.2   - Jul 2021
+- Fix for GNAT 2021
 
 [List all versions](https://github.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 
@@ -26,8 +25,8 @@ to provide server web requests.
 
 To build Ada Servlet, you will need:
 
-* Ada Util     (https://github.com/stcarrez/ada-util          2.4.0)
-* Ada EL       (https://github.com/stcarrez/ada-el            1.8.2)
+* Ada Util     (https://github.com/stcarrez/ada-util          2.4.1)
+* Ada EL       (https://github.com/stcarrez/ada-el            1.8.3)
 * Ada Security (https://github.com/stcarrez/ada-security      1.4.0)
 * AWS          (https://libre.adacore.com/libre/tools/aws/     2018, 2019)
 * XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  4.4)
