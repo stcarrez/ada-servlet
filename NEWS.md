@@ -1,3 +1,6 @@
+Version 1.5.3   - 
+  - Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
+
 Version 1.5.2   - Jul 2021
   - Fix for GNAT 2021
 

@@ -16,6 +16,9 @@ The Ada Servlet library is used by the [Ada Server Faces](https://github.com/stc
 framework and [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide server web requests.
 
+## Version 1.5.3   - Under development
+- Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
+
 ## Version 1.5.2   - Jul 2021
 - Fix for GNAT 2021
 
