@@ -18,6 +18,7 @@ to provide server web requests.
 
 ## Version 1.5.3   - Under development
 - Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
+- Fix #5: The Input_Line_Size_Limit parameter is not taken into account
 - Fix #6: GNAT configuration project is not correct to build with debugging
 
 ## Version 1.5.2   - Jul 2021
