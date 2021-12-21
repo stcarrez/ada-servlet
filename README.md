@@ -20,6 +20,7 @@ to provide server web requests.
 - Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
 - Fix #5: The Input_Line_Size_Limit parameter is not taken into account
 - Fix #6: GNAT configuration project is not correct to build with debugging
+- Fix #7: Constraint error raised when matching empty path routes
 
 ## Version 1.5.2   - Jul 2021
 - Fix for GNAT 2021
