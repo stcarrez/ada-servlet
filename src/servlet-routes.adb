@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +49,7 @@ package body Servlet.Routes is
             else
                if Pos > Context.Path'Last then
                   return "";
-               elsif Pos /= 0 then
+               elsif Pos >= Context.Path'First then
                   return Context.Path (Pos .. Context.Path'Last);
                else
                   return Context.Path.all;
@@ -539,7 +539,11 @@ package body Servlet.Routes is
                   Ext   : constant Natural := Util.Strings.Rindex (Path, '/');
                   Count : Natural;
                begin
-                  Match := N.Matches (Path (Ext + 1 .. Path'Last), True);
+                  if Ext = 0 then
+                     Match := N.Matches (Path, True);
+                  else
+                     Match := N.Matches (Path (Ext + 1 .. Path'Last), True);
+                  end if;
                   if Match = YES_MATCH or Match = WILDCARD_MATCH or Match = EXT_MATCH then
                      Count := Context.Count + 1;
                      Context.Count := Count;
