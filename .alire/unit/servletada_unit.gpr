@@ -1,4 +1,4 @@
-with "serlvetada_config";
+with "servletada_config";
 with "utilada_sys";
 with "utilada_unit";
 with "elada";
