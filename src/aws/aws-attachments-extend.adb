@@ -33,7 +33,7 @@ package body AWS.Attachments.Extend is
    end Get_Length;
 
    --  ------------------------------
-   --  Get the name of the attachement.
+   --  Get the name of the attachment.
    --  ------------------------------
    function Get_Name (E : in Element) return String is
    begin
