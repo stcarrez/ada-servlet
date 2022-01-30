@@ -267,7 +267,7 @@ package body Servlet.Routes is
                Node := Node.Next_Route;
             end loop;
 
-            --  Add a path node matching the component at begining of the children list.
+            --  Add a path node matching the component at beginning of the children list.
             --  (before the Param_Node and EL_Node instances if any).
             if not Found then
                New_Path := new Path_Node_Type (Len => 0);
@@ -433,7 +433,7 @@ package body Servlet.Routes is
                Node := Node.Next_Route;
             end loop;
 
-            --  Add a path node matching the component at begining of the children list.
+            --  Add a path node matching the component at beginning of the children list.
             --  (before the Param_Node and EL_Node instances if any).
             if not Found then
                New_Path := new Path_Node_Type (Len => Pos - First + 1);
