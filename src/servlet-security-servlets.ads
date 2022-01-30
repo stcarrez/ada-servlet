@@ -58,7 +58,7 @@ with Security.Auth; use Security;
 --
 --            <li>For each OpenID provider, a URL to the Yadis entry point of the
 --                OpenID provider is necessary.  This URL is used to get the XRDS
---                stream giving endoint of the OpenID provider.  Example:
+--                stream giving endpoint of the OpenID provider.  Example:
 --
 --                    openid.provider.google=https://www.google.com/accounts/o8/id
 --        </ul>
