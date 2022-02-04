@@ -144,7 +144,7 @@ package Servlet.Requests.Mockup is
                            Process  : not null access
                              procedure (Data : in Servlet.Parts.Part'Class));
 
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
@@ -180,7 +180,7 @@ package Servlet.Requests.Mockup is
                            Process  : not null access
                              procedure (Data : in Servlet.Parts.Part'Class));
 
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    overriding
    procedure Process_Part (Req      : in out Part_Request;

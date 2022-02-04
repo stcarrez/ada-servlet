@@ -387,7 +387,7 @@ package Servlet.Requests is
                            Process  : not null access
                              procedure (Data : in Servlet.Parts.Part'Class)) is abstract;
 
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;

@@ -21,7 +21,7 @@ package AWS.Attachments.Extend is
    --  Get the length of the data content.
    function Get_Length (E : in Element) return Natural;
 
-   --  Get the name of the attachement.
+   --  Get the name of the attachment.
    function Get_Name (E : in Element) return String;
 
 end AWS.Attachments.Extend;

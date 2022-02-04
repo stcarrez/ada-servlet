@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  servlet-reoutes-servlets-rest -- Route for the REST API
+--  servlet-routes-servlets-rest -- Route for the REST API
 --  Copyright (C) 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
