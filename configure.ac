@@ -16,7 +16,8 @@ dnl  limitations under the License.
 dnl 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src/servlet.ads)
+AC_INIT
+AC_CONFIG_SRCDIR([src/servlet.ads])
 
 # Current release settings
 SERVLET_MAJOR_VERSION=1
@@ -72,13 +73,13 @@ esac
 AC_MSG_RESULT(${SERVLET_AWS_VERSION})
 AC_SUBST(SERVLET_AWS_VERSION)
 
-AC_OUTPUT(
-Makefile.conf
+AC_CONFIG_FILES([Makefile.conf
 servletada.gpr
 servletada_aws.gpr
 servletada_all.gpr
 servletada_tests.gpr
 servletada_unit.gpr
 samples.gpr
-)
+])
+AC_OUTPUT
 
