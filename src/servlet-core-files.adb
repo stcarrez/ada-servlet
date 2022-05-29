@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets.files -- Static file servlet
---  Copyright (C) 2010, 2011, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2013, 2015, 2016, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -118,6 +118,18 @@ package body Servlet.Core.Files is
       end if;
       if Path (Pos .. Path'Last) = ".ico" then
          Response.Set_Content_Type ("image/vnd.microsoft.icon");
+         return;
+      end if;
+      if Path (Pos .. Path'Last) = ".woff2" then
+         Response.Set_Content_Type ("font/woff2");
+         return;
+      end if;
+      if Path (Pos .. Path'Last) = ".woff" then
+         Response.Set_Content_Type ("font/woff");
+         return;
+      end if;
+      if Path (Pos .. Path'Last) = ".ttf" then
+         Response.Set_Content_Type ("font/ttf");
          return;
       end if;
       Response.Set_Content_Type (Server.Default_Content_Type.all);
