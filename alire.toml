@@ -17,8 +17,8 @@ long-description = """
 Ada Servlet allows to create web applications using the same pattern
 as the Java Servlet (See JSR 154, JSR 315). 
 
-The Ada Servlet library is used by the [Ada Server Faces](https://github.com/stcarrez/ada-asf)
-framework and [Ada Web Application](https://github.com/stcarrez/ada-awa)
+The Ada Servlet library is used by the [Ada Server Faces](https://gitlab.com/stcarrez/ada-asf)
+framework and [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide server web requests.
 
 """
