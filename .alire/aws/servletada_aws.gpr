@@ -1,4 +1,4 @@
-with "config";
+with "servletada_config";
 with "servletada";
 with "utilada_aws";
 with "aws";
@@ -7,7 +7,7 @@ project ServletAda_Aws is
 
    Version := "1.5.3";
    Library_Dir := "lib";
-   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
+   Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
    for Source_Dirs use project'Source_Dirs & ("../../src/aws");
 
@@ -20,13 +20,13 @@ project ServletAda_Aws is
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use Library_Dir & "/servletada_aws/" & Project'Library_Kind;
-   for Object_Dir use "./" & Config'Object_Dir & "/obj/servletada_aws/" & Project'Library_Kind;
+   for Library_Dir use "../../lib/servletada_aws/" & Project'Library_Kind;
+   for Object_Dir use "../../obj/servletada_aws/" & Project'Library_Kind;
 
-   package Binder renames Config.Binder;
-   package Builder renames Config.Builder;
-   package Compiler renames Config.Compiler;
-   package Ide      renames Config.Ide;
+   package Binder   renames ServletAda.Binder;
+   package Builder  renames ServletAda.Builder;
+   package Compiler renames ServletAda.Compiler;
+   package Ide      renames ServletAda.Ide;
 
 end ServletAda_Aws;
 
