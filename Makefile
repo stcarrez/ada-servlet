@@ -33,6 +33,9 @@ runtest:
 	export PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)unit/relocatable:$$PATH"; \
 	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
 
+samples:
+	$(GNATMAKE) $(GPRFLAGS) -p samples.gpr $(MAKE_ARGS)
+
 $(eval $(call ada_library,$(NAME)))
 
 ifeq ($(HAVE_AWS),yes)
@@ -41,3 +44,4 @@ endif
 
 $(eval $(call ada_library,servletada_unit))
 
+.PHONY: samples
