@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Requests
---  Copyright (C) 2010, 2011, 2015, 2018, 2021 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2015, 2018, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ package body Servlet.Responses.Mockup is
    --  Returns a boolean indicating whether the named response header has already
    --  been set.
    --  ------------------------------
+   overriding
    function Contains_Header (Resp : in Response;
                              Name : in String) return Boolean is
       Pos : constant Util.Strings.Maps.Cursor := Resp.Headers.Find (Name);
@@ -34,6 +35,7 @@ package body Servlet.Responses.Mockup is
    --  ------------------------------
    --  Iterate over the response headers and executes the <b>Process</b> procedure.
    --  ------------------------------
+   overriding
    procedure Iterate_Headers (Resp    : in Response;
                               Process : not null access
                                 procedure (Name  : in String;
@@ -56,6 +58,7 @@ package body Servlet.Responses.Mockup is
    --  been set, the new value overwrites the previous one. The containsHeader
    --  method can be used to test for the presence of a header before setting its value.
    --  ------------------------------
+   overriding
    procedure Set_Header (Resp  : in out Response;
                          Name  : in String;
                          Value : in String) is
@@ -67,6 +70,7 @@ package body Servlet.Responses.Mockup is
    --  Adds a response header with the given name and value.
    --  This method allows response headers to have multiple values.
    --  ------------------------------
+   overriding
    procedure Add_Header (Resp  : in out Response;
                          Name  : in String;
                          Value : in String) is

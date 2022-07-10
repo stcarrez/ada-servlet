@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets-rest -- REST servlet
---  Copyright (C) 2016, 2017, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ package body Servlet.Core.Rest is
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out Rest_Servlet;
                          Context : in Servlet_Registry'Class) is
       pragma Unreferenced (Context);

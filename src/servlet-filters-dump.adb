@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-filters.dump -- Filter to dump the request information
---  Copyright (C) 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,7 @@ package body Servlet.Filters.Dump is
    --  5. Directly set headers on the response after invocation of the next
    --     entity in the filter chain.
    --  ------------------------------
+   overriding
    procedure Do_Filter (F        : in Dump_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;

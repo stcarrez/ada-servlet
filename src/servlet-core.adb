@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets -- Servlet.Core
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2017, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,6 @@ with Util.Strings;
 with Util.Strings.Maps;
 with Util.Files;
 with Util.Log.Loggers;
-
 
 --  The <b>Servlet.Core</b> package implements a subset of the
 --  Java Servlet Specification adapted for the Ada language.
@@ -1111,7 +1110,7 @@ package body Servlet.Core is
 
       Context   : aliased EL.Contexts.Default.Default_Context;
    begin
-      if Pattern'Length = 0 or Server = null then
+      if Pattern'Length = 0 or else Server = null then
          return;
       end if;
       Registry.Routes.Add_Route (Pattern, Context, Insert'Access);

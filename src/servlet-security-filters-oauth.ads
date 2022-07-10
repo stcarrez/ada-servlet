@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-security-filters-oauth -- OAuth Security filter
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +53,7 @@ package Servlet.Security.Filters.OAuth is
    --  If a permission manager is defined, check that the user has the permission
    --  to view the page.  Invokes the <b>Do_Deny</b> procedure if the permission
    --  is denied.
+   overriding
    procedure Do_Filter (F        : in Auth_Filter;
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;

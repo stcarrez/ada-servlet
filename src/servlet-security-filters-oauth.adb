@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-security-filters-oauth -- OAuth Security filter
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ package body Servlet.Security.Filters.OAuth is
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
    begin
@@ -64,6 +65,7 @@ package body Servlet.Security.Filters.OAuth is
    --  to view the page.  Invokes the <b>Do_Deny</b> procedure if the permission
    --  is denied.
    --  ------------------------------
+   overriding
    procedure Do_Filter (F        : in Auth_Filter;
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;

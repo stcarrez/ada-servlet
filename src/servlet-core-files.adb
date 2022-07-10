@@ -40,6 +40,7 @@ package body Servlet.Core.Files is
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out File_Servlet;
                          Context : in Servlet_Registry'Class) is
       Dir      : constant String := Context.Get_Init_Parameter (VIEW_DIR_PARAM);
@@ -64,6 +65,7 @@ package body Servlet.Core.Files is
    --  proxy caches work more effectively, reducing the load on server and network
    --  resources.
    --  ------------------------------
+   overriding
    function Get_Last_Modified (Server  : in File_Servlet;
                                Request : in Requests.Request'Class)
                                return Ada.Calendar.Time is
@@ -173,6 +175,7 @@ package body Servlet.Core.Files is
    --
    --  If the request is incorrectly formatted, Do_Get  returns an HTTP "Bad Request"
    --  ------------------------------
+   overriding
    procedure Do_Get (Server   : in File_Servlet;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is

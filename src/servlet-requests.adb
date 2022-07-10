@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -501,7 +501,6 @@ package body Servlet.Requests is
    begin
       return Util.Dates.RFC7231.Value (Header);
    end Get_Date_Header;
-
 
    --  Returns the value of the specified request header as a String. If the request
    --  did not include a header of the specified name, this method returns null.
