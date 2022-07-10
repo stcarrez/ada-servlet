@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests-tests - Unit tests for requests
---  Copyright (C) 2012, 2013, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2015, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,14 +51,14 @@ package body Servlet.Requests.Tests is
       procedure Process_Text (Item    : in String;
                               Quality : in Quality_Type) is
       begin
-         T.Assert (Item = "text/plain" or Item = "text/html" or Item = "text/x-dvi"
-                   or Item = "text/x-c", "Invalid item: " & Item);
-         T.Assert (Quality = 0.5 or Quality = 0.8 or Quality = 1.0,
+         T.Assert (Item = "text/plain" or else Item = "text/html" or else Item = "text/x-dvi"
+                     or else Item = "text/x-c", "Invalid item: " & Item);
+         T.Assert (Quality = 0.5 or else Quality = 0.8 or else Quality = 1.0,
                    "Invalid quality");
          if Item = "text/plain" then
             T.Assert (Quality = 0.5, "Invalid quality for " & Item);
 
-         elsif Item = "text/x-dvi" or Item = "text/html" then
+         elsif Item = "text/x-dvi" or else Item = "text/html" then
             T.Assert (Quality = 0.8, "Invalid quality for " & Item);
 
          else
@@ -92,7 +92,7 @@ package body Servlet.Requests.Tests is
       begin
          Log.Info ("Found locale: {0}", Util.Locales.To_String (Locale));
 
-         T.Assert (Lang = "da" or Lang = "en_GB" or Lang = "en",
+         T.Assert (Lang = "da" or else Lang = "en_GB" or else Lang = "en",
                    "Invalid lang: " & Lang);
 
          Count := Count + 1;

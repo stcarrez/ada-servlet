@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Filters Tests - Unit tests for Servlet.Filters
---  Copyright (C) 2015, 2018 Stephane Carrez
+--  Copyright (C) 2015, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ package body Servlet.Filters.Tests is
    --  ------------------------------
    --  Increment the counter each time Do_Filter is called.
    --  ------------------------------
+   overriding
    procedure Do_Filter (F        : in Test_Filter;
                         Request  : in out Requests.Request'Class;
                         Response : in out Responses.Response'Class;

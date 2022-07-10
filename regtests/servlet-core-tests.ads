@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Servlets Tests - Unit tests for Servlet.Core
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,14 @@ package Servlet.Core.Tests is
       Add_Resource : Boolean := False;
    end record;
 
+   overriding
    procedure Do_Get (Server   : in Test_Servlet1;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class);
 
    type Test_Servlet2 is new Test_Servlet1 with null record;
 
+   overriding
    procedure Do_Post (Server   : in Test_Servlet2;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class);
@@ -44,6 +46,7 @@ package Servlet.Core.Tests is
       Raise_Exception : Boolean := False;
    end record;
 
+   overriding
    procedure Do_Get (Server   : in Test_Servlet3;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class);
