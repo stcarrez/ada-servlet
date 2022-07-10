@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  volume_servlet -- Servlet example to compute some volumes
---  Copyright (C) 2010, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,14 @@ package Volume_Servlet is
 
    --  Called by the servlet container when a GET request is received.
    --  Display the volume form page.
+   overriding
    procedure Do_Get (Server   : in Servlet;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class);
 
    --  Called by the servlet container when a POST request is received.
    --  Computes the cylinder volume and display the result page.
+   overriding
    procedure Do_Post (Server   : in Servlet;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class);
