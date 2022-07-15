@@ -11,7 +11,7 @@ project ServletAda_Ews is
 
    for Library_Name use "servletada_ews";
    for Library_Kind use Library_Type;
-   for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & ServletAda.Version;
 
    for Library_Dir use Library_Dir & "/servletada_ews/" & Project'Library_Kind;
    for Object_Dir use "./" & Config'Object_Dir & "/obj/servletada_ews/" & Project'Library_Kind;

@@ -4,13 +4,13 @@ with "@UTIL_DIR@utilada_sys";
 with "@EL_DIR@elada";
 with "@SECURITY_DIR@security";
 @WITH_SERVLET_AWS@
+@WITH_SERVLET_EWS@
 
 abstract project ServletAda_All is
 
    Version := ServletAda.Version;
 
-   type Server_Type is ("none", "aws");
-   Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
+   Server : ServletAda.Server_Type := external ("SERVER", "@SERVLET_SERVER@");
 
    for Source_Files use ();
 end ServletAda_All;

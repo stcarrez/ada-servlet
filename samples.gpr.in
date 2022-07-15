@@ -11,6 +11,20 @@ project Samples is
 
    for Source_Dirs use ("samples", "samples/rest");
 
+   Server : ServletAda.Server_Type := external ("SERVER", "@SERVLET_SERVER@");
+
+   case Server is
+      when "aws" =>
+         for Source_Dirs use Project'Source_Dirs & ("samples/aws");
+
+      when "ews" =>
+         for Source_Dirs use Project'Source_Dirs & ("samples/ews");
+
+      when others =>
+         null;
+
+   end case;
+
    for Object_Dir use "./" & Config'Object_Dir & "/obj";
    for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
 
