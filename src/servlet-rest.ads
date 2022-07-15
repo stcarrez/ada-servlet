@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Strings;
+with Util.Http.Mimes;
 with Util.Serialize.IO;
 with Servlet.Requests;
 with Servlet.Responses;
@@ -33,10 +34,12 @@ package Servlet.Rest is
 
    subtype Output_Stream is Util.Serialize.IO.Output_Stream;
 
-   subtype Mime_Access is Util.Strings.Name_Access;
+   subtype Mime_Access is Util.Http.Mimes.Mime_Access;
+   use all type Util.Strings.Name_Access;
 
-   type Mime_List is array (Positive range <>) of Mime_Access;
-   type Mime_List_Access is access constant Mime_List;
+   subtype Mime_List is Util.Http.Mimes.Mime_List;
+   subtype Mime_List_Access is Util.Http.Mimes.Mime_List_Access;
+   use all type Util.Http.Mimes.Mime_List_Access;
 
    --  The HTTP rest method.
    type Method_Type is (GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH);
