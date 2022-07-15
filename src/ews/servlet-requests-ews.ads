@@ -16,12 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with EWS.HTTP; use EWS;
-with Ada.Streams;
-with Util.Streams;
 with Servlet.Streams;
 package Servlet.Requests.EWS is
 
-   type Request (Data : Http.Request_P) is new Servlet.Requests.Request with null record;
+   type Request (Data : HTTP.Request_P) is new Servlet.Requests.Request with null record;
    type Request_Access is access all Request'Class;
 
    overriding

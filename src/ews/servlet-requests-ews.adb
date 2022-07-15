@@ -16,13 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Strings;
-
-with Servlet.Parts.EWS;
 package body Servlet.Requests.EWS is
-
-   use Ada.Strings.Unbounded;
-   use type Ada.Streams.Stream_Element_Offset;
 
    overriding
    function Get_Parameter (R : Request; Name : String) return String is
