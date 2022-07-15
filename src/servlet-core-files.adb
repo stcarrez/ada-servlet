@@ -18,6 +18,7 @@
 
 with Util.Files;
 with Util.Log.Loggers;
+with Util.Http.Mimes;
 with Util.Strings;
 with Util.Streams;
 with Util.Streams.Files;
@@ -87,39 +88,39 @@ package body Servlet.Core.Files is
          return;
       end if;
       if Path (Pos .. Path'Last) = ".css" then
-         Response.Set_Content_Type ("text/css");
+         Response.Set_Content_Type (Util.Http.Mimes.Css);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".js" then
-         Response.Set_Content_Type ("text/javascript");
+         Response.Set_Content_Type (Util.Http.Mimes.Js);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".html" then
-         Response.Set_Content_Type ("text/html");
+         Response.Set_Content_Type (Util.Http.Mimes.Html);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".txt" then
-         Response.Set_Content_Type ("text/plain");
+         Response.Set_Content_Type (Util.Http.Mimes.Text);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".png" then
-         Response.Set_Content_Type ("image/png");
+         Response.Set_Content_Type (Util.Http.Mimes.Png);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".jpg" then
-         Response.Set_Content_Type ("image/jpg");
+         Response.Set_Content_Type (Util.Http.Mimes.Jpg);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".pdf" then
-         Response.Set_Content_Type ("application/pdf");
+         Response.Set_Content_Type (Util.Http.Mimes.Pdf);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".svg" then
-         Response.Set_Content_Type ("image/svg+xml");
+         Response.Set_Content_Type (Util.Http.Mimes.Svg);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".ico" then
-         Response.Set_Content_Type ("image/vnd.microsoft.icon");
+         Response.Set_Content_Type (Util.Http.Mimes.Ico);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".woff2" then
