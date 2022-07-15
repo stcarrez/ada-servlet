@@ -22,6 +22,8 @@ with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 package body Servlet.Requests.Tests is
 
+   use type Util.Http.Headers.Quality_Type;
+
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Servlet.Requests.Tests");
 
