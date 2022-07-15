@@ -21,8 +21,8 @@ AC_CONFIG_SRCDIR([src/servlet.ads])
 
 # Current release settings
 SERVLET_MAJOR_VERSION=1
-SERVLET_MINOR_VERSION=5
-SERVLET_MICRO_VERSION=2
+SERVLET_MINOR_VERSION=6
+SERVLET_MICRO_VERSION=0
 SERVLET_VERSION=$SERVLET_MAJOR_VERSION.$SERVLET_MINOR_VERSION.$SERVLET_MICRO_VERSION
 
 # Set the version number of Ada Server Faces
@@ -37,6 +37,17 @@ AM_GNAT_LIBRARY_SETUP(servletada_aws)
 AM_GNAT_FIND_ADA_UTIL([Ada Servlet])
 AM_GNAT_FIND_ADA_EL([Ada Servlet])
 AM_GNAT_FIND_ADA_SECURITY([Ada Servlet])
+
+SERVLET_HAVE_EWS=no
+AM_GNAT_FIND_PROJECT([ews],[Embedded Web Server],[ews],
+ [https://github.com/simonjwright/ews],
+ [],
+ [
+   EWS_DIR=${ac_cv_gnat_project_dir_ews}
+   SERVLET_HAVE_EWS=yes
+ ])
+AC_SUBST(EWS_DIR)
+AC_SUBST(SERVLET_HAVE_EWS)
 
 AM_GNAT_CHECK_AWS(
   [
@@ -76,6 +87,7 @@ AC_SUBST(SERVLET_AWS_VERSION)
 AC_CONFIG_FILES([Makefile.conf
 servletada.gpr
 servletada_aws.gpr
+servletada_ews.gpr
 servletada_all.gpr
 servletada_tests.gpr
 servletada_unit.gpr
