@@ -39,26 +39,33 @@ AM_GNAT_FIND_ADA_EL([Ada Servlet])
 AM_GNAT_FIND_ADA_SECURITY([Ada Servlet])
 
 SERVLET_HAVE_EWS=no
+WITH_SERVLET_EWS=''
+SERVER_EWS=''
 AM_GNAT_FIND_PROJECT([ews],[Embedded Web Server],[ews],
  [https://github.com/simonjwright/ews],
  [],
  [
    EWS_DIR=${ac_cv_gnat_project_dir_ews}
    SERVLET_HAVE_EWS=yes
+   WITH_SERVLET_EWS="with \"servletada_ews\";";
+   SERVER_EWS="\"ews\""
  ])
 AC_SUBST(EWS_DIR)
 AC_SUBST(SERVLET_HAVE_EWS)
+AC_SUBST(WITH_SERVLET_EWS)
 
 AM_GNAT_CHECK_AWS(
   [
     SERVLET_HAVE_AWS=no
     SERVLET_SERVER=none
     WITH_SERVER=
+    SERVER_AWS=''
   ], [
     SERVLET_SERVER=aws
     SERVLET_HAVE_AWS=yes
     WITH_SERVER=$ac_cv_gnat_project_with_aws
     WITH_SERVLET_AWS="with \"servletada_aws\";";
+    SERVER_AWS="\"aws\""
   ])
 AC_SUBST(SERVLET_SERVER)
 AC_SUBST(SERVLET_HAVE_AWS)
@@ -83,6 +90,19 @@ case $AWS_VERSION in
 esac
 AC_MSG_RESULT(${SERVLET_AWS_VERSION})
 AC_SUBST(SERVLET_AWS_VERSION)
+
+if test x"$SERVER_EWS" != x && test x"$SERVER_AWS" != x; then
+  SERVLET_SERVER_TYPES=",$SERVER_EWS,$SERVER_AWS"
+else
+  if test x"$SERVER_EWS" != x; then
+    SERVLET_SERVER_TYPES=",$SERVER_EWS"
+  fi
+  if test x"$SERVER_AWS" != x; then
+    SERVLET_SERVER_TYPES=",$SERVER_AWS"
+  fi
+fi
+
+AC_SUBST(SERVLET_SERVER_TYPES)
 
 AC_CONFIG_FILES([Makefile.conf
 servletada.gpr
