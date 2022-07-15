@@ -584,12 +584,14 @@ PACKAGE_URL=
 ac_unique_file="src/servlet.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+SERVLET_SERVER_TYPES
 SERVLET_AWS_VERSION
 AWS_VERSION
 WITH_SERVLET_AWS
 WITH_SERVER
 SERVLET_HAVE_AWS
 SERVLET_SERVER
+WITH_SERVLET_EWS
 SERVLET_HAVE_EWS
 EWS_DIR
 SECURITY_DIR
@@ -2855,6 +2857,8 @@ $as_echo "no" >&6; }
 
 
 SERVLET_HAVE_EWS=no
+WITH_SERVLET_EWS=''
+SERVER_EWS=''
 
 
 # Check whether --with-ews was given.
@@ -2958,6 +2962,8 @@ $as_echo "$ac_cv_gnat_project_ews" >&6; }
 
    EWS_DIR=${ac_cv_gnat_project_dir_ews}
    SERVLET_HAVE_EWS=yes
+   WITH_SERVLET_EWS="with \"servletada_ews\";";
+   SERVER_EWS="\"ews\""
 
   else
     if test x"" != x; then
@@ -2976,6 +2982,7 @@ $as_echo "no" >&6; }
 " "$LINENO" 5
     fi
   fi
+
 
 
 
@@ -3046,6 +3053,7 @@ $as_echo "$ac_cv_gnat_project_aws" >&6; }
     SERVLET_HAVE_AWS=no
     SERVLET_SERVER=none
     WITH_SERVER=
+    SERVER_AWS=''
 
   else
 
@@ -3053,6 +3061,7 @@ $as_echo "$ac_cv_gnat_project_aws" >&6; }
     SERVLET_HAVE_AWS=yes
     WITH_SERVER=$ac_cv_gnat_project_with_aws
     WITH_SERVLET_AWS="with \"servletada_aws\";";
+    SERVER_AWS="\"aws\""
 
   fi
 
@@ -3147,6 +3156,19 @@ case $AWS_VERSION in
 esac
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${SERVLET_AWS_VERSION}" >&5
 $as_echo "${SERVLET_AWS_VERSION}" >&6; }
+
+
+if test x"$SERVER_EWS" != x && test x"$SERVER_AWS" != x; then
+  SERVLET_SERVER_TYPES=",$SERVER_EWS,$SERVER_AWS"
+else
+  if test x"$SERVER_EWS" != x; then
+    SERVLET_SERVER_TYPES=",$SERVER_EWS"
+  fi
+  if test x"$SERVER_AWS" != x; then
+    SERVLET_SERVER_TYPES=",$SERVER_AWS"
+  fi
+fi
+
 
 
 ac_config_files="$ac_config_files Makefile.conf servletada.gpr servletada_aws.gpr servletada_ews.gpr servletada_all.gpr servletada_tests.gpr servletada_unit.gpr samples.gpr"
