@@ -15,9 +15,13 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Util.Http.Mimes;
 with Servlet.Streams.JSON;
+with Servlet.Streams.XML;
+with Servlet.Streams.Raw;
 package body Servlet.Core.Rest is
+
+   use type Util.Strings.Name_Access;
 
    --  ------------------------------
    --  Called by the servlet container to indicate to a servlet that the servlet
@@ -100,20 +104,40 @@ package body Servlet.Core.Rest is
               := Routes.Servlets.Rest.API_Route_Type'Class (Route.Element.all)'Access;
             Desc   : constant Descriptor_Access := Api.Descriptors (Method);
             Output : constant Streams.Print_Stream := Response.Get_Output_Stream;
-            Stream : Streams.JSON.Print_Stream;
+            Mime   : Mime_Access;
          begin
             if Desc = null then
                Response.Set_Status (Responses.SC_NOT_FOUND);
                Response.Set_Committed;
                return;
             end if;
---         if not App.Has_Permission (Desc.Permission) then
---            Response.Set_Status (Responses.SC_FORBIDDEN);
---            return;
---         end if;
-            Streams.JSON.Initialize (Stream, Output);
-            Response.Set_Content_Type ("application/json; charset=utf-8");
-            Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+            Mime := Desc.Get_Mime_Type (Request);
+            if Mime = null or else Mime.all = Util.Http.Mimes.Json then
+               declare
+                  Stream : Streams.JSON.Print_Stream;
+               begin
+                  Streams.JSON.Initialize (Stream, Output);
+                  Response.Set_Content_Type ("application/json; charset=utf-8");
+                  Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+               end;
+            elsif Mime.all = Util.Http.Mimes.Xml then
+               declare
+                  Stream : Streams.XML.Print_Stream;
+               begin
+                  Streams.XML.Initialize (Stream, Output);
+                  Response.Set_Content_Type ("application/xml; charset=utf-8");
+                  Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+               end;
+            else
+               declare
+                  Stream : Streams.Raw.Print_Stream;
+               begin
+                  Streams.Raw.Initialize (Stream, Output);
+
+                  Response.Set_Content_Type (Mime.all);
+                  Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+               end;
+            end if;
          end;
       end;
    end Dispatch;
