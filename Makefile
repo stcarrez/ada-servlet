@@ -42,6 +42,10 @@ ifeq ($(HAVE_AWS),yes)
 $(eval $(call ada_library,servletada_aws))
 endif
 
+ifeq ($(HAVE_EWS),yes)
+$(eval $(call ada_library,servletada_ews))
+endif
+
 $(eval $(call ada_library,servletada_unit))
 
 .PHONY: samples
