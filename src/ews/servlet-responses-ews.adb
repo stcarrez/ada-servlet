@@ -75,6 +75,7 @@ package body Servlet.Responses.EWS is
 
    overriding
    function Cacheable (This : Dynamic_Response) return Boolean is
+      pragma Unreferenced (This);
    begin
       return True;
    end Cacheable;

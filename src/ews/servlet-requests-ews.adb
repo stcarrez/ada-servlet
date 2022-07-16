@@ -32,6 +32,7 @@ package body Servlet.Requests.EWS is
                                  Process : not null access
                                    procedure (Name  : in String;
                                               Value : in String)) is
+      pragma Unreferenced (Req, Process);
    begin
       null;
    end Iterate_Parameters;
@@ -95,6 +96,7 @@ package body Servlet.Requests.EWS is
                               Process : not null access
                                 procedure (Name  : in String;
                                            Value : in String)) is
+      pragma Unreferenced (Req, Process);
    begin
       null;
    end Iterate_Headers;
@@ -114,6 +116,7 @@ package body Servlet.Requests.EWS is
    overriding
    function Get_Headers (Req  : in Request;
                          Name : in String) return String is
+      pragma Unreferenced (Req, Name);
    begin
       return "";
    end Get_Headers;
@@ -125,6 +128,7 @@ package body Servlet.Requests.EWS is
    --  ------------------------------
    overriding
    function Get_Remote_Addr (Req : in Request) return String is
+      pragma Unreferenced (Req);
    begin
       return "";
    end Get_Remote_Addr;
@@ -134,6 +138,7 @@ package body Servlet.Requests.EWS is
    --  ------------------------------
    overriding
    function Get_Part_Count (Req : in Request) return Natural is
+      pragma Unreferenced (Req);
    begin
       return 0;
    end Get_Part_Count;

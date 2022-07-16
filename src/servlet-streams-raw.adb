@@ -52,6 +52,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in String) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Attribute;
@@ -60,6 +61,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Wide_Attribute (Stream : in out Print_Stream;
                                    Name   : in String;
                                    Value  : in Wide_Wide_String) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write_Wide (Value);
    end Write_Wide_Attribute;
@@ -68,6 +70,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in Integer) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Attribute;
@@ -76,6 +79,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in Boolean) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write ((if Value then "true" else "false"));
    end Write_Attribute;
@@ -84,6 +88,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in Util.Beans.Objects.Object) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Util.Beans.Objects.To_String (Value));
    end Write_Attribute;
@@ -92,6 +97,7 @@ package body Servlet.Streams.Raw is
    overriding
    procedure Write_Null_Attribute (Stream : in out Print_Stream;
                                    Name   : in String) is
+      pragma Unreferenced (Name);
    begin
       null;
    end Write_Null_Attribute;
@@ -101,6 +107,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in String) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Entity;
@@ -109,6 +116,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Wide_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in Wide_Wide_String) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write_Wide (Value);
    end Write_Wide_Entity;
@@ -117,6 +125,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Boolean) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write ((if Value then "true" else "false"));
    end Write_Entity;
@@ -125,6 +134,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Integer) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Entity;
@@ -133,6 +143,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Ada.Calendar.Time) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Entity;
@@ -141,6 +152,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Long_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in Long_Long_Integer) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Long_Entity;
@@ -149,6 +161,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Enum_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in String) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
    end Write_Enum_Entity;
@@ -157,6 +170,7 @@ package body Servlet.Streams.Raw is
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Util.Beans.Objects.Object) is
+      pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Util.Beans.Objects.To_String (Value));
    end Write_Entity;
