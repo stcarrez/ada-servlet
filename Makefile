@@ -48,4 +48,6 @@ endif
 
 $(eval $(call ada_library,servletada_unit))
 
+$(eval $(call ada_library,servletada_all))
+
 .PHONY: samples
