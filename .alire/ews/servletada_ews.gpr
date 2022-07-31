@@ -1,31 +1,25 @@
 with "servletada_config";
 with "servletada";
-with "utilada_aws";
-with "aws";
+with "ews";
 
-project ServletAda_Aws is
+project ServletAda_Ews is
 
    Version := "1.6.0";
    Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
-   for Source_Dirs use project'Source_Dirs & ("../../src/aws");
+   for Source_Dirs use project'Source_Dirs & ("../../src/ews");
 
-   package Naming is
-      for Implementation ("Servlet.Server.Web")
-         use "servlet-server-web__2.adb";
-   end Naming;
-
-   for Library_Name use "servletada_aws";
+   for Library_Name use "servletada_ews";
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "../../lib/servletada_aws/" & Project'Library_Kind;
-   for Object_Dir use "../../obj/servletada_aws/" & Project'Library_Kind;
+   for Library_Dir use "../../lib/servletada_ews/" & Project'Library_Kind;
+   for Object_Dir use "../../obj/servletada_ews/" & Project'Library_Kind;
 
    package Binder   renames ServletAda.Binder;
    package Builder  renames ServletAda.Builder;
    package Compiler renames ServletAda.Compiler;
    package Ide      renames ServletAda.Ide;
 
-end ServletAda_Aws;
+end ServletAda_Ews;
 
