@@ -26,7 +26,7 @@ to provide server web requests.
 [[depends-on]]
 security = "^1.4.1"
 utilada = "^2.5.0"
-elada = "^1.8.0"
+elada = "^1.8.5"
 
 [gpr-externals]
 BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]

@@ -1,3 +1,9 @@
+libservletada (1.6.0) unstable; urgency=medium
+
+  * Update with release 1.6.0
+
+ -- Stephane Carrez <Stephane.Carrez@gmail.com>  Tue, 2 Aug 2022 08:21:26 +0200
+
 libservletada (1.5.1) unstable; urgency=medium
 
   * Update with release 1.5.1

@@ -1,4 +1,4 @@
-Version 1.6.0   - 
+Version 1.6.0   - Aug 2022
   - Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
   - Fix #5: The Input_Line_Size_Limit parameter is not taken into account
   - Fix #6: GNAT configuration project is not correct to build with debugging
