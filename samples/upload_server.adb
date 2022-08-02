@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_server -- Example of server with a servlet
---  Copyright (C) 2012, 2015, 2018, 2021 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Servlet.Server.Web;
+with Server;
 with Servlet.Core;
 with Upload_Servlet;
 with Util.Log.Loggers;
@@ -26,7 +26,6 @@ procedure Upload_Server is
 
    Upload  : aliased Upload_Servlet.Servlet;
    App     : aliased Servlet.Core.Servlet_Registry;
-   WS      : Servlet.Server.Web.AWS_Container;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Upload_Server");
 begin
    Util.Log.Loggers.Initialize (CONFIG_PATH);
@@ -37,11 +36,11 @@ begin
    --  Define servlet mappings
    App.Add_Mapping (Name => "upload", Pattern => "*.html");
 
-   WS.Register_Application ("/upload", App'Unchecked_Access);
+   Server.WS.Register_Application ("/upload", App'Unchecked_Access);
 
    Log.Info ("Connect you browser to: http://localhost:8080/upload/upload.html");
 
-   WS.Start;
+   Server.WS.Start;
 
    delay 6000.0;
 

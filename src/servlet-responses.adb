@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Responses
---  Copyright (C) 2010, 2011, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,7 +84,6 @@ package body Servlet.Responses is
    begin
       Response'Class (Resp).Set_Header ("Content-Length", Util.Strings.Image (Length));
    end Set_Content_Length;
-
 
    --  ------------------------------
    --  Sets the content type of the response being sent to the client, if the response

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_servlet -- Servlet example to upload files on the server
---  Copyright (C) 2012, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2015, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,6 +63,7 @@ package body Upload_Servlet is
    --  Called by the servlet container when a GET request is received.
    --  Display the volume form page.
    --  ------------------------------
+   overriding
    procedure Do_Get (Server   : in Servlet;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is
@@ -104,7 +105,7 @@ package body Upload_Servlet is
    begin
       if Content_Type = "application/pdf" then
          return PDF;
-      elsif Content_Type = "image/png" or Content_Type = "image/jpeg" then
+      elsif Content_Type = "image/png" or else Content_Type = "image/jpeg" then
          return IMAGE;
       elsif Content_Type = "image/gif" then
          return IMAGE;
@@ -115,21 +116,23 @@ package body Upload_Servlet is
          Ext_Pos      : constant Natural := Util.Strings.Rindex (Name, '.');
       begin
          if Ext_Pos > 0 then
-            if Name (Ext_Pos .. Name'Last) = ".gz" or Name (Ext_Pos .. Name'Last) = ".tgz" then
+            if Name (Ext_Pos .. Name'Last) = ".gz"
+              or else Name (Ext_Pos .. Name'Last) = ".tgz"
+            then
                return TAR_GZ;
 
             elsif Name (Ext_Pos .. Name'Last) = ".tar" then
                return TAR;
 
             elsif Name (Ext_Pos .. Name'Last) = ".jpg"
-              or Name (Ext_Pos .. Name'Last) = ".gif"
-              or Name (Ext_Pos .. Name'Last) = ".xbm"
-              or Name (Ext_Pos .. Name'Last) = ".png"
+              or else Name (Ext_Pos .. Name'Last) = ".gif"
+              or else Name (Ext_Pos .. Name'Last) = ".xbm"
+              or else Name (Ext_Pos .. Name'Last) = ".png"
             then
                return IMAGE;
 
             elsif Name (Ext_Pos .. Name'Last) = ".zip"
-              or Name (Ext_Pos .. Name'Last) = ".jar"
+              or else Name (Ext_Pos .. Name'Last) = ".jar"
             then
                return ZIP;
 
@@ -146,6 +149,7 @@ package body Upload_Servlet is
    --  Called by the servlet container when a POST request is received.
    --  Receives the uploaded files and identify them using some external command.
    --  ------------------------------
+   overriding
    procedure Do_Post (Server   : in Servlet;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class) is

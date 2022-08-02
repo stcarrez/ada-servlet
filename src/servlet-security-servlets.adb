@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid-servlets - Servlets for OpenID 2.0 Authentication
---  Copyright (C) 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,7 @@ package body Servlet.Security.Servlets is
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out Openid_Servlet;
                          Context : in Servlet.Core.Servlet_Registry'Class) is
    begin
@@ -81,6 +82,7 @@ package body Servlet.Security.Servlets is
    --  After OpenID discovery and association, the user will be redirected to
    --  the OpenID provider.
    --  ------------------------------
+   overriding
    procedure Do_Get (Server   : in Request_Auth_Servlet;
                      Request  : in out Servlet.Requests.Request'Class;
                      Response : in out Servlet.Responses.Response'Class) is
@@ -91,7 +93,7 @@ package body Servlet.Security.Servlets is
    begin
       Log.Info ("Request OpenId authentication to {0} - {1}", Name, URL);
 
-      if Name'Length = 0 or URL'Length = 0 then
+      if Name'Length = 0 or else URL'Length = 0 then
          Response.Set_Status (Servlet.Responses.SC_NOT_FOUND);
          return;
       end if;
@@ -130,6 +132,7 @@ package body Servlet.Security.Servlets is
    --  If the authentication succeeded and the signature was correct, sets a
    --  user principals on the session.
    --  ------------------------------
+   overriding
    procedure Do_Get (Server   : in Verify_Auth_Servlet;
                      Request  : in out Servlet.Requests.Request'Class;
                      Response : in out Servlet.Responses.Response'Class) is

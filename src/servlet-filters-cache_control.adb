@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-filters-cache_control -- HTTP response Cache-Control settings
---  Copyright (C) 2015 Stephane Carrez
+--  Copyright (C) 2015, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,7 @@ package body Servlet.Filters.Cache_Control is
    --  Called by the servlet container to indicate to a filter that the filter
    --  instance is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out Cache_Control_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
    begin

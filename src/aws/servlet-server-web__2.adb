@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-server -- Servlet Server for AWS
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2019, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,7 @@ package body Servlet.Server.Web is
 
    Server : AWS_Container_Access;
 
+   overriding
    procedure Initialize (Instance : in out AWS_Container) is
    begin
       Instance.Conf := AWS.Config.Get_Current;
@@ -47,6 +48,7 @@ package body Servlet.Server.Web is
    ----------------------
    --  Start the applications that have been registered.
    ----------------------
+   overriding
    procedure Start (Server : in out AWS_Container) is
    begin
       Log.Info ("Starting server...");
@@ -70,6 +72,7 @@ package body Servlet.Server.Web is
    ----------------------
    --  Configure the server before starting it.
    ----------------------
+   overriding
    procedure Configure (Server : in out AWS_Container;
                         Config : in Configuration) is
    begin
@@ -81,6 +84,7 @@ package body Servlet.Server.Web is
       AWS.Config.Set.TCP_No_Delay (Server.Conf, Config.TCP_No_Delay);
       AWS.Config.Set.Upload_Size_Limit (Server.Conf, Config.Upload_Size_Limit);
       AWS.Config.Set.Upload_Directory (Server.Conf, To_String (Config.Upload_Directory));
+      AWS.Config.Set.Input_Line_Size_Limit (Config.Input_Line_Size_Limit);
    end Configure;
 
    ----------------------

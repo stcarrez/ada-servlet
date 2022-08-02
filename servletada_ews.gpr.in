@@ -1,0 +1,25 @@
+with "@UTIL_DIR@config";
+with "servletada";
+with "@EWS_DIR@ews";
+
+project ServletAda_Ews is
+
+   Library_Dir := "lib";
+   Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
+
+   for Source_Dirs use ("src/ews");
+
+   for Library_Name use "servletada_ews";
+   for Library_Kind use Library_Type;
+   for Library_Version use "lib" & Project'Library_Name & ".so." & ServletAda.Version;
+
+   for Library_Dir use Library_Dir & "/servletada_ews/" & Project'Library_Kind;
+   for Object_Dir use "./" & Config'Object_Dir & "/obj/servletada_ews/" & Project'Library_Kind;
+
+   package Binder renames Config.Binder;
+   package Builder renames Config.Builder;
+   package Compiler renames Config.Compiler;
+   package Ide      renames Config.Ide;
+
+end ServletAda_Ews;
+

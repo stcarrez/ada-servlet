@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets.files -- Static file servlet
---  Copyright (C) 2010, 2011, 2013, 2015, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2013, 2015, 2016, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 
 with Util.Files;
 with Util.Log.Loggers;
+with Util.Http.Mimes;
 with Util.Strings;
 with Util.Streams;
 with Util.Streams.Files;
@@ -40,6 +41,7 @@ package body Servlet.Core.Files is
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out File_Servlet;
                          Context : in Servlet_Registry'Class) is
       Dir      : constant String := Context.Get_Init_Parameter (VIEW_DIR_PARAM);
@@ -64,6 +66,7 @@ package body Servlet.Core.Files is
    --  proxy caches work more effectively, reducing the load on server and network
    --  resources.
    --  ------------------------------
+   overriding
    function Get_Last_Modified (Server  : in File_Servlet;
                                Request : in Requests.Request'Class)
                                return Ada.Calendar.Time is
@@ -85,39 +88,51 @@ package body Servlet.Core.Files is
          return;
       end if;
       if Path (Pos .. Path'Last) = ".css" then
-         Response.Set_Content_Type ("text/css");
+         Response.Set_Content_Type (Util.Http.Mimes.Css);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".js" then
-         Response.Set_Content_Type ("text/javascript");
+         Response.Set_Content_Type (Util.Http.Mimes.Js);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".html" then
-         Response.Set_Content_Type ("text/html");
+         Response.Set_Content_Type (Util.Http.Mimes.Html);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".txt" then
-         Response.Set_Content_Type ("text/plain");
+         Response.Set_Content_Type (Util.Http.Mimes.Text);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".png" then
-         Response.Set_Content_Type ("image/png");
+         Response.Set_Content_Type (Util.Http.Mimes.Png);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".jpg" then
-         Response.Set_Content_Type ("image/jpg");
+         Response.Set_Content_Type (Util.Http.Mimes.Jpg);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".pdf" then
-         Response.Set_Content_Type ("application/pdf");
+         Response.Set_Content_Type (Util.Http.Mimes.Pdf);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".svg" then
-         Response.Set_Content_Type ("image/svg+xml");
+         Response.Set_Content_Type (Util.Http.Mimes.Svg);
          return;
       end if;
       if Path (Pos .. Path'Last) = ".ico" then
-         Response.Set_Content_Type ("image/vnd.microsoft.icon");
+         Response.Set_Content_Type (Util.Http.Mimes.Ico);
+         return;
+      end if;
+      if Path (Pos .. Path'Last) = ".woff2" then
+         Response.Set_Content_Type ("font/woff2");
+         return;
+      end if;
+      if Path (Pos .. Path'Last) = ".woff" then
+         Response.Set_Content_Type ("font/woff");
+         return;
+      end if;
+      if Path (Pos .. Path'Last) = ".ttf" then
+         Response.Set_Content_Type ("font/ttf");
          return;
       end if;
       Response.Set_Content_Type (Server.Default_Content_Type.all);
@@ -161,6 +176,7 @@ package body Servlet.Core.Files is
    --
    --  If the request is incorrectly formatted, Do_Get  returns an HTTP "Bad Request"
    --  ------------------------------
+   overriding
    procedure Do_Get (Server   : in File_Servlet;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is

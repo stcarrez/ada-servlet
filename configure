@@ -584,12 +584,16 @@ PACKAGE_URL=
 ac_unique_file="src/servlet.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+SERVLET_SERVER_TYPES
 SERVLET_AWS_VERSION
 AWS_VERSION
 WITH_SERVLET_AWS
 WITH_SERVER
 SERVLET_HAVE_AWS
 SERVLET_SERVER
+WITH_SERVLET_EWS
+SERVLET_HAVE_EWS
+EWS_DIR
 SECURITY_DIR
 EL_DIR
 UTIL_DIR
@@ -677,6 +681,7 @@ enable_coverage
 with_ada_util
 with_ada_el
 with_ada_security
+with_ews
 enable_aws
 with_aws
 '
@@ -1319,6 +1324,7 @@ Optional Packages:
   --with-ada-util=x       Path for Ada Utility Library
   --with-ada-el=x         Path for Ada Expression Language Library
   --with-ada-security=x   Path for Ada Security Library
+  --with-ews=x            Path for Embedded Web Server
   --with-aws=x            Path for the Ada Web Server library
                           (http://libre.adacore.com/libre/tools/aws/)
 
@@ -1751,10 +1757,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
 # Current release settings
 SERVLET_MAJOR_VERSION=1
-SERVLET_MINOR_VERSION=5
-SERVLET_MICRO_VERSION=2
+SERVLET_MINOR_VERSION=6
+SERVLET_MICRO_VERSION=0
 SERVLET_VERSION=$SERVLET_MAJOR_VERSION.$SERVLET_MINOR_VERSION.$SERVLET_MICRO_VERSION
 
 # Set the version number of Ada Server Faces
@@ -2849,6 +2856,137 @@ $as_echo "no" >&6; }
 
 
 
+SERVLET_HAVE_EWS=no
+WITH_SERVLET_EWS=''
+SERVER_EWS=''
+
+
+# Check whether --with-ews was given.
+if test "${with_ews+set}" = set; then :
+  withval=$with_ews;
+      if test "${withval}/" = "yes/"; then
+        ac_cv_gnat_project_name_ews=${awa_build_root}ews
+      else
+        ac_cv_gnat_project_name_ews=${withval}/
+        if test -d "${withval}"; then
+	      ac_cv_gnat_project_name_ews=${withval}/ews
+	    fi
+      fi
+
+else
+
+      ac_cv_gnat_project_name_ews=${awa_build_root}ews
+
+fi
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Embedded Web Server" >&5
+$as_echo_n "checking Embedded Web Server... " >&6; }
+if ${ac_cv_gnat_project_ews+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    rm -f conftest.gpr
+    # Search in the GNAT project path.
+    echo "with \"${ac_cv_gnat_project_name_ews}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+    then
+      ac_cv_gnat_project_ews=yes
+    else
+      ac_cv_gnat_project_ews=no
+
+      # Search in ../ews-*/ews.gpr
+      dir=`cd .. && pwd ${awa_pwd_option}`
+      files=`ls -r $dir/ews/ews.gpr $dir/ews/ews.gpr $dir/ews-*/ews.gpr 2>/dev/null`
+      for name in $files; do
+        dir=`dirname $name`
+        # AC_MSG_CHECKING([for Embedded Web Server project in ${dir}])
+        echo "with \"${name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+        then
+           ac_cv_gnat_project_ews=yes
+		   ac_cv_gnat_project_name_ews=${name}
+           # AC_MSG_RESULT(yes, using ${name})
+           break
+        else
+           ac_cv_gnat_project_ews=no
+           # AC_MSG_RESULT(no)
+        fi
+      done
+      if test x${ac_cv_gnat_project_ews} != xyes; then
+        echo "with \"ews\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+        if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+        then
+           ac_cv_gnat_project_ews=yes
+           ac_cv_gnat_project_name_ews=ews
+        else
+           ac_cv_gnat_project_ews=no
+        fi
+      fi
+    fi
+    rm -f conftest.gpr
+
+    if test x${ac_cv_gnat_project_ews} = xyes; then
+      ac_cv_gnat_project_with_ews="with \"${ac_cv_gnat_project_name_ews}\";";
+      ac_cv_gnat_project_dir_ews=`dirname ${ac_cv_gnat_project_name_ews}`
+      if test ${ac_cv_gnat_project_dir_ews} = . ; then
+        ac_cv_gnat_project_dir_ews=
+      else
+        ac_cv_gnat_project_dir_ews="${ac_cv_gnat_project_dir_ews}/"
+      fi
+    else
+      ac_cv_gnat_project_dir_ews=
+      ac_cv_gnat_project_name_ews=
+    fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_project_ews" >&5
+$as_echo "$ac_cv_gnat_project_ews" >&6; }
+
+  if test x${ac_cv_gnat_project_ews} = xyes; then
+
+   EWS_DIR=${ac_cv_gnat_project_dir_ews}
+   SERVLET_HAVE_EWS=yes
+   WITH_SERVLET_EWS="with \"servletada_ews\";";
+   SERVER_EWS="\"ews\""
+
+  else
+    if test x"" != x; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+      as_fn_error $? "
+  You should build and install the Embedded Web Server component.
+  It must be available and found by ${GNATMAKE}.
+  This project was not found in the ADA_PROJECT_PATH environment variable.
+  This project was not found in ../ews nor in ../ews-*.
+  The component is available at https://github.com/simonjwright/ews.
+  Please, download and configure Embedded Web Server.
+  The current configuration was using:
+    ${GNATMAKE}
+    ADA_PROJECT_PATH=$ADA_PROJECT_PATH
+" "$LINENO" 5
+    fi
+  fi
+
+
+
+
+
 
     gnat_enable_aws=yes
   gnat_project_aws=no
@@ -2915,6 +3053,7 @@ $as_echo "$ac_cv_gnat_project_aws" >&6; }
     SERVLET_HAVE_AWS=no
     SERVLET_SERVER=none
     WITH_SERVER=
+    SERVER_AWS=''
 
   else
 
@@ -2922,6 +3061,7 @@ $as_echo "$ac_cv_gnat_project_aws" >&6; }
     SERVLET_HAVE_AWS=yes
     WITH_SERVER=$ac_cv_gnat_project_with_aws
     WITH_SERVLET_AWS="with \"servletada_aws\";";
+    SERVER_AWS="\"aws\""
 
   fi
 
@@ -2964,6 +3104,29 @@ EOF
     else
        ac_cv_gnat_aws_version='none'
     fi
+
+    rm -f conftest conftest.o conftest.ali
+    if test "$ac_cv_gnat_aws_version" = "20.0"; then
+                        cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.HTTP_2);
+end Conftest;
+EOF
+      if { ac_try='gnatmake -Pconftest.gpr >/dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
+         ac_cv_gnat_aws_version="22.0"
+      fi
+
+    fi
+
     rm -f conftest.gpr conftest.adb conftest.o conftest.ali
     rm -f b__conftest.ads b__conftest.adb b__conftest.o b__conftest.ali
 
@@ -2979,23 +3142,36 @@ $as_echo "$ac_cv_gnat_aws_version" >&6; }
 $as_echo_n "checking using AWS http server... " >&6; }
 SERVLET_AWS_VERSION=1
 case $AWS_VERSION in
-  *2019*|*202*|20.0)
+  *2019*|*202*|20.0|22.0)
      SERVLET_AWS_VERSION=2
      ;;
 
-  3.3.2|*2017*|*2028*)
+  3.3.2|*2017*|*2018*)
      SERVLET_AWS_VERSION=1
      ;;
 
   *)
-     SERVLET_AWS_VERSION=1
+     SERVLET_AWS_VERSION=2
      ;;
 esac
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${SERVLET_AWS_VERSION}" >&5
 $as_echo "${SERVLET_AWS_VERSION}" >&6; }
 
 
-ac_config_files="$ac_config_files Makefile.conf servletada.gpr servletada_aws.gpr servletada_all.gpr servletada_tests.gpr servletada_unit.gpr samples.gpr"
+if test x"$SERVER_EWS" != x && test x"$SERVER_AWS" != x; then
+  SERVLET_SERVER_TYPES=",$SERVER_EWS,$SERVER_AWS"
+else
+  if test x"$SERVER_EWS" != x; then
+    SERVLET_SERVER_TYPES=",$SERVER_EWS"
+  fi
+  if test x"$SERVER_AWS" != x; then
+    SERVLET_SERVER_TYPES=",$SERVER_AWS"
+  fi
+fi
+
+
+
+ac_config_files="$ac_config_files Makefile.conf servletada.gpr servletada_aws.gpr servletada_ews.gpr servletada_all.gpr servletada_tests.gpr servletada_unit.gpr samples.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3706,6 +3882,7 @@ do
     "Makefile.conf") CONFIG_FILES="$CONFIG_FILES Makefile.conf" ;;
     "servletada.gpr") CONFIG_FILES="$CONFIG_FILES servletada.gpr" ;;
     "servletada_aws.gpr") CONFIG_FILES="$CONFIG_FILES servletada_aws.gpr" ;;
+    "servletada_ews.gpr") CONFIG_FILES="$CONFIG_FILES servletada_ews.gpr" ;;
     "servletada_all.gpr") CONFIG_FILES="$CONFIG_FILES servletada_all.gpr" ;;
     "servletada_tests.gpr") CONFIG_FILES="$CONFIG_FILES servletada_tests.gpr" ;;
     "servletada_unit.gpr") CONFIG_FILES="$CONFIG_FILES servletada_unit.gpr" ;;

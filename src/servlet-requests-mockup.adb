@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests.mockup -- Servlet Requests mockup
---  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,6 +51,7 @@ package body Servlet.Requests.Mockup is
    --  an HTTP POST request, then reading the body directly via getInputStream()
    --  or getReader() can interfere with the execution of this method.
    --  ------------------------------
+   overriding
    function Get_Parameter (Req  : in Request;
                            Name : in String) return String is
    begin
@@ -60,6 +61,7 @@ package body Servlet.Requests.Mockup is
    --  ------------------------------
    --  Iterate over the request parameters and executes the <b>Process</b> procedure.
    --  ------------------------------
+   overriding
    procedure Iterate_Parameters (Req     : in Request;
                                  Process : not null access
                                    procedure (Name  : in String;
@@ -92,6 +94,7 @@ package body Servlet.Requests.Mockup is
    --  for example, GET, POST, or PUT. Same as the value of the CGI variable
    --  REQUEST_METHOD.
    --  ------------------------------
+   overriding
    function Get_Method (Req : in Request) return String is
    begin
       return To_String (Req.Method);
@@ -111,6 +114,7 @@ package body Servlet.Requests.Mockup is
    --  protocol/majorVersion.minorVersion, for example, HTTP/1.1. For HTTP servlets,
    --  the value returned is the same as the value of the CGI variable SERVER_PROTOCOL.
    --  ------------------------------
+   overriding
    function Get_Protocol (Req : in Request) return String is
    begin
       return To_String (Req.Protocol);
@@ -134,6 +138,7 @@ package body Servlet.Requests.Mockup is
    --  GET http://foo.bar/a.html HTTP/1.0       /a.html
    --  HEAD /xyz?a=b HTTP/1.1       /xyz
    --  ------------------------------
+   overriding
    function Get_Request_URI (Req : in Request) return String is
    begin
       return To_String (Req.URI);
@@ -190,6 +195,7 @@ package body Servlet.Requests.Mockup is
    --  first head in the request. The header name is case insensitive. You can use
    --  this method with any request header.
    --  ------------------------------
+   overriding
    function Get_Header (Req  : in Request;
                         Name : in String) return String is
    begin
@@ -218,6 +224,7 @@ package body Servlet.Requests.Mockup is
    --  returns an empty Enumeration. The header name is case insensitive. You can use
    --  this method with any request header.
    --  ------------------------------
+   overriding
    function Get_Headers (Req  : in Request;
                          Name : in String) return String is
    begin
@@ -227,6 +234,7 @@ package body Servlet.Requests.Mockup is
    --  ------------------------------
    --  Iterate over the request headers and executes the <b>Process</b> procedure.
    --  ------------------------------
+   overriding
    procedure Iterate_Headers (Req     : in Request;
                               Process : not null access
                                 procedure (Name  : in String;
@@ -249,6 +257,7 @@ package body Servlet.Requests.Mockup is
    --  sent the request. For HTTP servlets, same as the value of the CGI variable
    --  REMOTE_ADDR.
    --  ------------------------------
+   overriding
    function Get_Remote_Addr (Req : in Request) return String is
    begin
       return To_String (Req.Peer);
@@ -266,6 +275,7 @@ package body Servlet.Requests.Mockup is
    --  ------------------------------
    --  Get the number of parts included in the request.
    --  ------------------------------
+   overriding
    function Get_Part_Count (Req : in Request) return Natural is
       pragma Unreferenced (Req);
    begin
@@ -276,6 +286,7 @@ package body Servlet.Requests.Mockup is
    --  Process the part at the given position and executes the <b>Process</b> operation
    --  with the part object.
    --  ------------------------------
+   overriding
    procedure Process_Part (Req      : in out Request;
                            Position : in Positive;
                            Process  : not null access
@@ -285,9 +296,10 @@ package body Servlet.Requests.Mockup is
    end Process_Part;
 
    --  ------------------------------
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    --  ------------------------------
+   overriding
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;
                            Process  : not null access
@@ -350,7 +362,7 @@ package body Servlet.Requests.Mockup is
    end Process_Part;
 
    --  ------------------------------
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    --  ------------------------------
    overriding

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  upload_servlet -- Servlet example to upload files on the server
---  Copyright (C) 2012, 2018, 2021 Stephane Carrez
+--  Copyright (C) 2012, 2018, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,12 +41,14 @@ package Upload_Servlet is
 
    --  Called by the servlet container when a GET request is received.
    --  Display the upload form page.
+   overriding
    procedure Do_Get (Server   : in Servlet;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class);
 
    --  Called by the servlet container when a POST request is received.
    --  Receives the uploaded files and identify them using some external command.
+   overriding
    procedure Do_Post (Server   : in Servlet;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class);

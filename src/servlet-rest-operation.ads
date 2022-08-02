@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-operation -- REST API Operation Definition
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ generic
    Method     : Method_Type := GET;
    URI        : String;
    Permission : Security.Permissions.Permission_Index := Security.Permissions.NONE;
+   Mimes      : Mime_List_Access := null;
 package Servlet.Rest.Operation is
 
    function Definition return Descriptor_Access;

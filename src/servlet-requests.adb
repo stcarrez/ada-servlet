@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Unchecked_Deallocation;
-with Ada.Strings.Fixed;
 
 with Servlet.Core;
 with Servlet.Routes.Servlets;
 
 with Util.Strings;
 with Util.Strings.Transforms;
-with Util.Strings.Tokenizers;
 with Util.Dates.RFC7231;
 
 --  The <b>Servlet.Requests</b> package is an Ada implementation of
@@ -273,72 +271,6 @@ package body Servlet.Requests is
       return Request'Class (Req).Get_Remote_Addr;
    end Get_Remote_Host;
 
-   --  ------------------------------
-   --  Split an accept like header into multiple tokens and a quality value.
-   --  Invoke the <b>Process</b> procedure for each token.  Example:
-   --   Accept-Language: de, en;q=0.7, jp, fr;q=0.8, ru
-   --  The <b>Process</b> will be called for "de", "en" with quality 0.7,
-   --  and "jp", "fr" with quality 0.8 and then "ru" with quality 1.0.
-   --  ------------------------------
-   procedure Split_Header (Header  : in String;
-                           Process : access procedure (Item : in String;
-                                                       Quality : in Quality_Type)) is
-      use Util.Strings;
-      procedure Process_Token (Token : in String;
-                               Done  : out Boolean);
-
-      Quality : Quality_Type := 1.0;
-
-      procedure Process_Token (Token : in String;
-                               Done  : out Boolean) is
-         Name : constant String := Ada.Strings.Fixed.Trim (Token, Ada.Strings.Both);
-      begin
-         Process (Name, Quality);
-         Done := False;
-      end Process_Token;
-
-      Q, N, Pos  : Natural;
-      Last    : Natural := Header'First;
-   begin
-      while Last < Header'Last loop
-         Quality := 1.0;
-         Pos := Index (Header, ';', Last);
-         if Pos > 0 then
-            N := Index (Header, ',', Pos);
-            if N = 0 then
-               N := Header'Last + 1;
-            end if;
-            Q := Pos + 1;
-            while Q < N loop
-               if Header (Q .. Q + 1) = "q=" then
-                  begin
-                     Quality := Quality_Type'Value (Header (Q + 2 .. N - 1));
-                  exception
-                     when others =>
-                        null;
-                  end;
-                  exit;
-
-               elsif Header (Q) /= ' ' then
-                  exit;
-
-               end if;
-               Q := Q + 1;
-            end loop;
-
-            Util.Strings.Tokenizers.Iterate_Tokens (Content => Header (Last .. Pos - 1),
-                                                    Pattern => ",",
-                                                    Process => Process_Token'Access);
-            Last := N + 1;
-         else
-            Util.Strings.Tokenizers.Iterate_Tokens (Content => Header (Last .. Header'Last),
-                                                    Pattern => ",",
-                                                    Process => Process_Token'Access);
-            return;
-         end if;
-      end loop;
-   end Split_Header;
-
    --  Returns the preferred Locale that the client will accept content in, based
    --  on the Accept-Language header. If the client request doesn't provide an
    --  Accept-Language header, this method returns the default locale for the server.
@@ -501,7 +433,6 @@ package body Servlet.Requests is
    begin
       return Util.Dates.RFC7231.Value (Header);
    end Get_Date_Header;
-
 
    --  Returns the value of the specified request header as a String. If the request
    --  did not include a header of the specified name, this method returns null.

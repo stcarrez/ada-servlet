@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-filters -- Security filter
---  Copyright (C) 2011, 2012, 2013, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ package body Servlet.Security.Filters is
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
    --  ------------------------------
+   overriding
    procedure Initialize (Server  : in out Auth_Filter;
                          Config  : in Servlet.Core.Filter_Config) is
       pragma Unreferenced (Server, Config);
@@ -56,6 +57,7 @@ package body Servlet.Security.Filters is
    --  to view the page.  Invokes the <b>Do_Deny</b> procedure if the permission
    --  is denied.
    --  ------------------------------
+   overriding
    procedure Do_Filter (F        : in Auth_Filter;
                         Request  : in out Servlet.Requests.Request'Class;
                         Response : in out Servlet.Responses.Response'Class;
@@ -98,7 +100,7 @@ package body Servlet.Security.Filters is
 
       --  If the session does not have a principal, try to authenticate the user with
       --  the auto-login cookie.
-      if Auth = null and Length (AID) > 0 then
+      if Auth = null and then Length (AID) > 0 then
          Auth_Filter'Class (F).Authenticate (Request, Response, Session, To_String (AID), Auth);
          if Auth /= null then
 

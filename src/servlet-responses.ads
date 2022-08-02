@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Requests
---  Copyright (C) 2010 Stephane Carrez
+--  Copyright (C) 2010, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -119,7 +119,6 @@ package Servlet.Responses is
    procedure Set_Content_Length (Resp   : in out Response;
                                  Length : in Integer);
 
-
    --  Sets the content type of the response being sent to the client, if the response
    --  has not been committed yet. The given content type may include a character
    --  encoding specification, for example, text/html;charset=UTF-8. The response's
@@ -140,7 +139,6 @@ package Servlet.Responses is
    --  Returns a boolean indicating if the response has been committed.
    --  A committed response has already had its status code and headers written.
    function Is_Committed (Resp : in Response) return Boolean;
-
 
    --  Sets the locale of the response, if the response has not been committed yet.
    --  It also sets the response's character encoding appropriately for the locale,

@@ -9,6 +9,8 @@ project ServletAda is
    Library_Dir := "lib";
    Library_Type : Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "@DEFAULT_LIBRARY_TYPE@");
 
+   type Server_Type is ("none"@SERVLET_SERVER_TYPES@);
+
    for Source_Dirs use ("src");
 
    for Library_Name use "servletada";

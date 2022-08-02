@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes -- Request routing
---  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +49,7 @@ package body Servlet.Routes is
             else
                if Pos > Context.Path'Last then
                   return "";
-               elsif Pos /= 0 then
+               elsif Pos >= Context.Path'First then
                   return Context.Path (Pos .. Context.Path'Last);
                else
                   return Context.Path.all;
@@ -188,8 +188,8 @@ package body Servlet.Routes is
          when EXT_MATCH =>
             while Current /= null loop
                if not (Current.all in Path_Node_Type'Class)
-                 and not (Current.all in Param_Node_Type'Class)
-                 and not (Current.all in EL_Node_Type'Class)
+                 and then not (Current.all in Param_Node_Type'Class)
+                 and then not (Current.all in EL_Node_Type'Class)
                then
                   exit;
                end if;
@@ -267,7 +267,7 @@ package body Servlet.Routes is
                Node := Node.Next_Route;
             end loop;
 
-            --  Add a path node matching the component at begining of the children list.
+            --  Add a path node matching the component at beginning of the children list.
             --  (before the Param_Node and EL_Node instances if any).
             if not Found then
                New_Path := new Path_Node_Type (Len => 0);
@@ -332,7 +332,10 @@ package body Servlet.Routes is
                end if;
             end;
 
-         elsif Pattern (First) = '{' and First < Pos - 1 and Pattern (Pos) = '}' then
+         elsif Pattern (First) = '{'
+           and then First < Pos - 1
+           and then Pattern (Pos) = '}'
+         then
             declare
                Param    : Param_Node_Access;
             begin
@@ -362,7 +365,7 @@ package body Servlet.Routes is
                end if;
             end;
 
-         elsif Pattern (First) = '*' and First = Pattern'Last then
+         elsif Pattern (First) = '*' and then First = Pattern'Last then
             Found := False;
 
             --  Find the Wildcard_Node.
@@ -384,10 +387,7 @@ package body Servlet.Routes is
             Parent2 := Parent;
             Parent := Node;
 
-         elsif Pattern (First) = '*' and Pos = Pattern'Last then
---              if First + 1 >= Pattern'Last or else Pattern (First + 1) /= '.' then
---                 return;
---              end if;
+         elsif Pattern (First) = '*' and then Pos = Pattern'Last then
             declare
                Ext      : Extension_Node_Access;
             begin
@@ -433,7 +433,7 @@ package body Servlet.Routes is
                Node := Node.Next_Route;
             end loop;
 
-            --  Add a path node matching the component at begining of the children list.
+            --  Add a path node matching the component at beginning of the children list.
             --  (before the Param_Node and EL_Node instances if any).
             if not Found then
                New_Path := new Path_Node_Type (Len => Pos - First + 1);
@@ -522,7 +522,7 @@ package body Servlet.Routes is
                   Context.Params (Count).Last := Last;
 
                   --  We reached the end of the path and we have a route, this is a match.
-                  if Last = Path'Last and not N.Route.Is_Null then
+                  if Last = Path'Last and then not N.Route.Is_Null then
                      Match := YES_MATCH;
                      Context.Route := N.Route;
                      return;
@@ -539,15 +539,19 @@ package body Servlet.Routes is
                   Ext   : constant Natural := Util.Strings.Rindex (Path, '/');
                   Count : Natural;
                begin
-                  Match := N.Matches (Path (Ext + 1 .. Path'Last), True);
-                  if Match = YES_MATCH or Match = WILDCARD_MATCH or Match = EXT_MATCH then
+                  if Ext = 0 then
+                     Match := N.Matches (Path, True);
+                  else
+                     Match := N.Matches (Path (Ext + 1 .. Path'Last), True);
+                  end if;
+                  if Match in YES_MATCH | WILDCARD_MATCH | EXT_MATCH then
                      Count := Context.Count + 1;
                      Context.Count := Count;
                      Context.Params (Count).Route := N;
                      Context.Params (Count).First := Pos;
                      Context.Params (Count).Last := Path'Last;
                      Context.Route := N.Route;
-                     if Match = EXT_MATCH or Match = WILDCARD_MATCH then
+                     if Match in EXT_MATCH | WILDCARD_MATCH then
                         Match := YES_MATCH;
                      end if;
                      return;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016, 2020 Stephane Carrez
+--  Copyright (C) 2016, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Strings;
+with Util.Http.Mimes;
 with Util.Serialize.IO;
 with Servlet.Requests;
 with Servlet.Responses;
@@ -33,8 +34,20 @@ package Servlet.Rest is
 
    subtype Output_Stream is Util.Serialize.IO.Output_Stream;
 
+   subtype Mime_Access is Util.Http.Mimes.Mime_Access;
+   use all type Util.Strings.Name_Access;
+
+   subtype Mime_List is Util.Http.Mimes.Mime_List;
+   subtype Mime_List_Access is Util.Http.Mimes.Mime_List_Access;
+   use all type Util.Http.Mimes.Mime_List_Access;
+
    --  The HTTP rest method.
    type Method_Type is (GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT, OPTIONS, PATCH);
+
+   --  The supported stream types for the operation.
+   type Stream_Type is (JSON, XML, FORM, RAW);
+
+   type Stream_Modes is array (Stream_Type) of Boolean;
 
    type Descriptor is abstract tagged limited private;
    type Descriptor_Access is access all Descriptor'Class;
@@ -42,6 +55,10 @@ package Servlet.Rest is
    --  Get the permission index associated with the REST operation.
    function Get_Permission (Handler : in Descriptor)
                             return Security.Permissions.Permission_Index;
+
+   --  Get the mime type selected for the operation.
+   function Get_Mime_Type (Handler : in Descriptor;
+                           Req     : in Servlet.Rest.Request'Class) return Mime_Access;
 
    --  Dispatch the request to the API handler.
    procedure Dispatch (Handler : in Descriptor;
@@ -63,6 +80,7 @@ private
    type Descriptor is abstract tagged limited record
       Next       : Descriptor_Access;
       Method     : Method_Type;
+      Mimes      : Mime_List_Access;
       Pattern    : Util.Strings.Name_Access;
       Permission : Security.Permissions.Permission_Index := 0;
    end record;

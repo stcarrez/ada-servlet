@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-streams -- Print streams for servlets
---  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2017, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,11 +61,13 @@ package Servlet.Streams is
                     Item   : in EL.Objects.Object);
 
    --  Write the buffer array to the output stream.
+   overriding
    procedure Write (Stream : in out Print_Stream;
                     Buffer : in Ada.Streams.Stream_Element_Array);
 
    --  Flush the buffer by writing on the output stream.
    --  Raises Data_Error if there is no output stream.
+   overriding
    procedure Flush (Stream : in out Print_Stream);
 
    --  Write into the text stream.

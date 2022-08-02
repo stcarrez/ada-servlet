@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ package Servlet.Requests.Web is
    type Request is new Servlet.Requests.Request and Util.Streams.Input_Stream with private;
    type Request_Access is access all Request'Class;
 
+   overriding
    function Get_Parameter (R : Request; Name : String) return String;
 
    --  Iterate over the request parameters and executes the <b>Process</b> procedure.
@@ -108,7 +109,7 @@ package Servlet.Requests.Web is
                            Process  : not null access
                              procedure (Data : in Servlet.Parts.Part'Class));
 
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    overriding
    procedure Process_Part (Req      : in out Request;

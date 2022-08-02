@@ -33,11 +33,30 @@ runtest:
 	export PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)unit/relocatable:$$PATH"; \
 	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
 
+samples:
+	$(GNATMAKE) $(GPRFLAGS) -p samples.gpr $(MAKE_ARGS)
+
 $(eval $(call ada_library,$(NAME)))
 
 ifeq ($(HAVE_AWS),yes)
 $(eval $(call ada_library,servletada_aws))
 endif
 
+ifeq ($(HAVE_EWS),yes)
+$(eval $(call ada_library,servletada_ews))
+endif
+
 $(eval $(call ada_library,servletada_unit))
 
+$(eval $(call ada_library,servletada_all))
+
+$(eval $(call alire_publish,alire.toml,se/servletada,servletada-$(VERSION).toml))
+$(eval $(call alire_publish,alire-unit.toml,se/servletada_unit,servletada_unit-$(VERSION).toml))
+ifeq ($(HAVE_EWS),yes)
+$(eval $(call alire_publish,alire-ews.toml,se/servletada_ews,servletada_ews-$(VERSION).toml))
+endif
+ifeq ($(HAVE_AWS),yes)
+$(eval $(call alire_publish,alire-aws.toml,se/servletada_aws,servletada_aws-$(VERSION).toml))
+endif
+
+.PHONY: samples

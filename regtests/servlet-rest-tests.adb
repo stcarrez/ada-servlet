@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
---  Copyright (C) 2016, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,8 @@ with Ada.Strings.Unbounded;
 with Util.Log;
 with Util.Test_Caller;
 with Util.Measures;
+with Util.Http.Headers;
+with Util.Http.Mimes;
 
 with EL.Contexts.Default;
 
@@ -40,12 +42,16 @@ package body Servlet.Rest.Tests is
                         Method : in String;
                         URI    : in String);
 
+   Default_Mimes : aliased constant Mime_List :=
+     (1 => Util.Http.Mimes.Json'Access, 2 => Util.Http.Mimes.Xml'Access);
+
    package Test_Permission is
       new Security.Permissions.Definition ("test-permission");
 
    package API_Simple_Get is
      new Servlet.Rest.Operation (Handler    => Simple_Get'Access,
-                             URI        => "/simple/:id");
+                                 URI        => "/simple/:id",
+                                 Mimes      => Default_Mimes'Access);
 
    package API_Simple_List is
      new Servlet.Rest.Operation (Handler    => Simple_Get'Access,
@@ -312,6 +318,8 @@ package body Servlet.Rest.Tests is
                        Test_Options'Access);
       Caller.Add_Test (Suite, "Test Servlet.Rest.PATCH API operation",
                        Test_Patch'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Rest.Get_Mime_Type",
+                       Test_Get_Mime_Type'Access);
    end Add_Tests;
 
    procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
@@ -457,5 +465,31 @@ package body Servlet.Rest.Tests is
       Test_Operation (T, "TRACE", "/test/44", Servlet.Responses.SC_NOT_FOUND);
       Test_Operation (T, "TRACE", "/simple/44", Servlet.Responses.SC_NOT_FOUND);
    end Test_Invalid;
+
+   --  ------------------------------
+   --  Test Get_Mime_Type and resolution to handle the Accept header.
+   --  ------------------------------
+   procedure Test_Get_Mime_Type (T : in out Test) is
+      use Util.Tests;
+
+      Request : Servlet.Requests.Mockup.Request;
+      Mime    : Mime_Access;
+   begin
+      Request.Set_Header (Util.Http.Headers.Accept_Header, "application/json");
+      Mime := API_Simple_Get.Definition.Get_Mime_Type (Request);
+      T.Assert (Mime /= null, "No matching mime type");
+      Assert_Equals (T, Util.Http.Mimes.Json, Mime.all, "Invalid matching mime type");
+
+      Request.Set_Header (Util.Http.Headers.Accept_Header, "application/xml");
+      Mime := API_Simple_Get.Definition.Get_Mime_Type (Request);
+      T.Assert (Mime /= null, "No matching mime type");
+      Assert_Equals (T, Util.Http.Mimes.Xml, Mime.all, "Invalid matching mime type");
+
+      Request.Set_Header (Util.Http.Headers.Accept_Header, "application/*");
+      Mime := API_Simple_Get.Definition.Get_Mime_Type (Request);
+      T.Assert (Mime /= null, "No matching mime type");
+      Assert_Equals (T, Util.Http.Mimes.Json, Mime.all, "Invalid matching mime type");
+
+   end Test_Get_Mime_Type;
 
 end Servlet.Rest.Tests;

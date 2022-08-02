@@ -15,12 +15,8 @@ project ServletAda_Aws is
 
    Has_Aws     : Config.Yes_No := "@SERVLET_HAVE_AWS@";
 
-   type Server_Type is ("none", "aws");
-   Server : Server_Type := external ("SERVER", "@SERVLET_SERVER@");
-
-   for Source_Dirs use ();
-   case Server is
-      when "aws" =>
+   case Has_Aws is
+      when "yes" =>
           for Source_Dirs use project'Source_Dirs & ("src/aws");
 
       when others =>

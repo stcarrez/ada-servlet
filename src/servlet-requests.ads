@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with EL.Contexts;
 
 with Util.Locales;
 with Util.Beans.Objects.Maps;
+with Util.Http.Headers;
 
 with Ada.Calendar;
 with Ada.Strings.Unbounded;
@@ -37,7 +38,7 @@ with Servlet.Streams;
 --  the Java servlet request (JSR 315 3. The Request).
 package Servlet.Requests is
 
-   type Quality_Type is digits 4 range 0.0 .. 1.0;
+   subtype Quality_Type is Util.Http.Headers.Quality_Type;
 
    --  Split an accept like header into multiple tokens and a quality value.
    --  Invoke the <b>Process</b> procedure for each token.  Example:
@@ -46,7 +47,8 @@ package Servlet.Requests is
    --  and "jp", "fr" with quality 0.8 and then "ru" with quality 1.0.
    procedure Split_Header (Header  : in String;
                            Process : access procedure (Item : in String;
-                                                       Quality : in Quality_Type));
+                                                       Quality : in Quality_Type))
+     renames Util.Http.Headers.Split_Header;
 
    --  ------------------------------
    --  Request
@@ -387,7 +389,7 @@ package Servlet.Requests is
                            Process  : not null access
                              procedure (Data : in Servlet.Parts.Part'Class)) is abstract;
 
-   --  Process the part identifed by <b>Id</b> and executes the <b>Process</b> operation
+   --  Process the part identified by <b>Id</b> and executes the <b>Process</b> operation
    --  with the part object.
    procedure Process_Part (Req      : in out Request;
                            Id       : in String;

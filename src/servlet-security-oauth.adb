@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-security-oauth - OAuth2 servlets
---  Copyright (C) 2018 Stephane Carrez
+--  Copyright (C) 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,10 +92,10 @@ package body Servlet.Security.OAuth is
       function Get_Parameter (Params : in Auth_Params;
                               Name   : in String) return String is
       begin
-         if Name = "client_id" and Params.Has_Authorization then
+         if Name = "client_id" and then Params.Has_Authorization then
             return To_String (Params.Client_Id);
          end if;
-         if Name = "client_secret" and Params.Has_Authorization then
+         if Name = "client_secret" and then Params.Has_Authorization then
             return To_String (Params.Client_Secret);
          end if;
          return Request.Get_Parameter (Name);

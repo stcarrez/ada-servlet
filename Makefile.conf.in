@@ -14,3 +14,4 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 PROCESSORS=@NR_CPUS@
 HAVE_AWS=@SERVLET_HAVE_AWS@
+HAVE_EWS=@SERVLET_HAVE_EWS@

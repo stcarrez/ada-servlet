@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Sessions Tests - Unit tests for Servlet.Sessions
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,6 +78,7 @@ package body Servlet.Core.Tests is
       end if;
    end Set_Value;
 
+   overriding
    procedure Do_Get (Server   : in Test_Servlet1;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is
@@ -97,6 +98,7 @@ package body Servlet.Core.Tests is
       Response.Set_Status (Responses.SC_OK);
    end Do_Get;
 
+   overriding
    procedure Do_Post (Server   : in Test_Servlet2;
                       Request  : in out Requests.Request'Class;
                       Response : in out Responses.Response'Class) is
@@ -115,6 +117,7 @@ package body Servlet.Core.Tests is
       end if;
    end Do_Post;
 
+   overriding
    procedure Do_Get (Server   : in Test_Servlet3;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class) is

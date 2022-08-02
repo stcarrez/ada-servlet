@@ -48,7 +48,7 @@ package body Servlet.Sessions is
    --  ------------------------------
    --  Returns the last time the client sent a request associated with this session,
    --  as the number of milliseconds since midnight January 1, 1970 GMT, and marked
-   --  by the time the container recieved the request.
+   --  by the time the container received the request.
    --
    --  Actions that your application takes, such as getting or setting a value associated
    --  with the session, do not affect the access time.

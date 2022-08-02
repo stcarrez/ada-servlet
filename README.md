@@ -4,10 +4,10 @@
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-servlet/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-servlet)
-[![Download](https://img.shields.io/badge/download-1.5.1-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.5.1.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.6.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.6.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 [![GitLab](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://gitlab.com/stcarrez/ada-servlet)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.5.1.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-servlet/1.6.0.svg)
 
 Ada Servlet allows to create web applications using the same pattern
 as the Java Servlet (See JSR 154, JSR 315). 
@@ -16,8 +16,13 @@ The Ada Servlet library is used by the [Ada Server Faces](https://github.com/stc
 framework and [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide server web requests.
 
-## Version 1.5.2   - Jul 2021
-- Fix for GNAT 2021
+## Version 1.6.0   - Aug 2022
+- Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
+- Fix #5: The Input_Line_Size_Limit parameter is not taken into account
+- Fix #6: GNAT configuration project is not correct to build with debugging
+- Fix #7: Constraint error raised when matching empty path routes
+- Fix #11: Support for Embedded Web Server
+- Fix #12: Support for multiple response types in REST operations
 
 [List all versions](https://github.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 

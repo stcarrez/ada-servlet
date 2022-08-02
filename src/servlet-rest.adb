@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Util.Http.Headers;
 with Servlet.Routes;
 with Servlet.Routes.Servlets.Rest;
 with Servlet.Core.Rest;
@@ -32,6 +33,20 @@ package body Servlet.Rest is
    begin
       return Handler.Permission;
    end Get_Permission;
+
+   --  ------------------------------
+   --  Get the mime type selected for the operation.
+   --  ------------------------------
+   function Get_Mime_Type (Handler : in Descriptor;
+                           Req     : in Servlet.Rest.Request'Class) return Mime_Access is
+      Accept_Header : constant String := Req.Get_Header ("Accept");
+   begin
+      if Handler.Mimes /= null then
+         return Util.Http.Headers.Get_Accepted (Accept_Header, Handler.Mimes.all);
+      else
+         return null;
+      end if;
+   end Get_Mime_Type;
 
    --  ------------------------------
    --  Register the API descriptor in a list.

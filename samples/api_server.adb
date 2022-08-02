@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  api_server -- Example of REST API server
---  Copyright (C) 2016, 2018, 2021 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
-with Servlet.Server.Web;
+with Server;
 with Servlet.Core.Rest;
 with Servlet.Core.Files;
 with Servlet.Rest;
@@ -29,7 +28,6 @@ procedure API_Server is
    Api     : aliased Servlet.Core.Rest.Rest_Servlet;
    Files   : aliased Servlet.Core.Files.File_Servlet;
    App     : aliased Servlet.Core.Servlet_Registry;
-   WS      : Servlet.Server.Web.AWS_Container;
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Api_Server");
 begin
    Util.Log.Loggers.Initialize (CONFIG_PATH);
@@ -49,11 +47,11 @@ begin
    Servlet.Rest.Register (App, Monitor.API_Get_Values.Definition);
    Servlet.Rest.Register (App, Monitor.API_Put_Value.Definition);
 
-   WS.Register_Application ("/monitor", App'Unchecked_Access);
+   Server.WS.Register_Application ("/monitor", App'Unchecked_Access);
 
    Log.Info ("Connect you browser to: http://localhost:8080/monitor/index.html");
 
-   WS.Start;
+   Server.WS.Start;
 
    delay 6000.0;
 

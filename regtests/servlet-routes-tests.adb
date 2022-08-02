@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-tests - Unit tests for Servlet.Routes
---  Copyright (C) 2015, 2016, 2017, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,8 @@ package body Servlet.Routes.Tests is
                        Test_Add_Route_With_EL'Access);
       Caller.Add_Test (Suite, "Test Servlet.Routes.Iterate",
                        Test_Iterate'Access);
+      Caller.Add_Test (Suite, "Test Servlet.Routes.Add_Route (/*)",
+                       Test_Wildcard_Route'Access);
    end Add_Tests;
 
    overriding
@@ -196,6 +198,18 @@ package body Servlet.Routes.Tests is
       Verify_Route (T, Router, "/ajax/form/save", 7, Bean);
       Verify_Route (T, Router, "/ajax/timeKeeper/save", 9, Bean);
    end Test_Add_Route_With_Ext;
+
+   --  ------------------------------
+   --  Test the wildcard route /* with a path whose starting index is > 1.
+   --  ------------------------------
+   procedure Test_Wildcard_Route (T : in out Test) is
+      Router  : Router_Type;
+      Bean    : Test_Bean;
+      Path    : constant String := "/v1";
+   begin
+      Add_Route (T, Router, "/*", 1, Bean);
+      Verify_Route (T, Router, Path (4 .. 3), 1, Bean);
+   end Test_Wildcard_Route;
 
    --  ------------------------------
    --  Test the Add_Route with fixed path components and path parameters.

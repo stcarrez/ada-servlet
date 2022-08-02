@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-tests - Unit tests for Servlet.Routes
---  Copyright (C) 2015, 2020 Stephane Carrez
+--  Copyright (C) 2015, 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,6 +95,9 @@ package Servlet.Routes.Tests is
    --  Test the Add_Route with fixed path components and EL path injection.
    --  Example: /users/#{user.id}/view.html
    procedure Test_Add_Route_With_EL (T : in out Test);
+
+   --  Test the wildcard route /* with a path whose starting index is > 1.
+   procedure Test_Wildcard_Route (T : in out Test);
 
    --  Test the Iterate over several paths.
    procedure Test_Iterate (T : in out Test);

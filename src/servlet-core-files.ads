@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-servlets.files -- Static file servlet
---  Copyright (C) 2010, 2011, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,7 @@ package Servlet.Core.Files is
 
    --  Called by the servlet container to indicate to a servlet that the servlet
    --  is being placed into service.
+   overriding
    procedure Initialize (Server  : in out File_Servlet;
                          Context : in Servlet_Registry'Class);
 
@@ -42,6 +43,7 @@ package Servlet.Core.Files is
    --  last modification time should override this method. This makes browser and
    --  proxy caches work more effectively, reducing the load on server and network
    --  resources.
+   overriding
    function Get_Last_Modified (Server  : in File_Servlet;
                                Request : in Requests.Request'Class)
                                return Ada.Calendar.Time;
@@ -87,6 +89,7 @@ package Servlet.Core.Files is
    --  data is neither safe nor idempotent.
    --
    --  If the request is incorrectly formatted, Do_Get  returns an HTTP "Bad Request"
+   overriding
    procedure Do_Get (Server   : in File_Servlet;
                      Request  : in out Requests.Request'Class;
                      Response : in out Responses.Response'Class);
