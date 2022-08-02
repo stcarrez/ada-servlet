@@ -4,17 +4,17 @@ Section: libdevel
 Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
 Build-Depends: debhelper (>= 10), autotools-dev,
  dh-ada-library,
- gnat, gnat-9,
+ gnat, gnat-10,
 # This line is parsed by debian/rules.
  gprbuild (>= 2015-2),
 # 2015-2 is compatible with gnat-6
- libxmlada-sax9-dev,
- libutilada-xml3-dev,
- libutilada-aws3-dev
+ libxmlada-sax10-dev,
+ libutilada-xml4-dev,
+ libutilada-aws4-dev
 Standards-Version: 4.1.4
 Homepage: https://github.com/stcarrez/ada-servlet/
-Vcs-Git: https://github.com/stcarrez/ada-servlet.git -b debian-gnat-7
-Vcs-Browser: https://github.com/stcarrez/ada-servlet/tree/debian-gnat-7
+Vcs-Git: https://github.com/stcarrez/ada-servlet.git -b debian-gnat-10
+Vcs-Browser: https://github.com/stcarrez/ada-servlet/tree/debian-gnat-10
 
 Package: libservletada1.6.0
 Section: libs
@@ -47,7 +47,7 @@ Description: Ada Servlet Engine testing framework (runtime)
  This package contains the runtime libraries for the unit test
  framework.
 
-Package: libservletada3-dev
+Package: libservletada4-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends}, ${ada:Depends}
@@ -57,7 +57,7 @@ Description: Ada Servlet Engine (Development)
  .
  This package contains the development files.
 
-Package: libservletada-aws3-dev
+Package: libservletada-aws4-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends}, ${ada:Depends}
@@ -67,7 +67,7 @@ Description: Ada Servlet Engine for Ada Web Server (Development)
  .
  This package contains the development files for the Ada Web Server.
 
-Package: libservletada-unit3-dev
+Package: libservletada-unit4-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends}, ${ada:Depends}
