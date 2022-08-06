@@ -1,8 +1,8 @@
 # Ada Servlet
 
 [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/servletada.json)](https://alire.ada.dev/crates/servletada)
-[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
-[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Ada-Servlet/)
+[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Bionic-Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Bionic-Ada-Servlet/)
+[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Bionic-Ada-Servlet.svg)](https://jenkins.vacs.fr/job/Bionic-Ada-Servlet/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-servlet/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-servlet)
 [![Download](https://img.shields.io/badge/download-1.6.0-brightgreen.svg)](http://download.vacs.fr/ada-servlet/ada-servlet-1.6.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
@@ -30,9 +30,9 @@ to provide server web requests.
 
 To build Ada Servlet, you will need:
 
-* Ada Util     (https://github.com/stcarrez/ada-util          2.4.1)
-* Ada EL       (https://github.com/stcarrez/ada-el            1.8.3)
-* Ada Security (https://github.com/stcarrez/ada-security      1.4.0)
+* Ada Util     (https://github.com/stcarrez/ada-util          2.5.0)
+* Ada EL       (https://github.com/stcarrez/ada-el            1.8.5)
+* Ada Security (https://github.com/stcarrez/ada-security      1.4.1)
 * AWS          (https://libre.adacore.com/libre/tools/aws/     2018, 2019)
 * XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  4.4)
 
