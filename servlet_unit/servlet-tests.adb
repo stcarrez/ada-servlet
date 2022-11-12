@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Servlet tests - Servlet Tests Framework
---  Copyright (C) 2011, 2012, 2013, 2015, 2017, 2018, 2020 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2015, 2017, 2018, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,19 +108,18 @@ package body Servlet.Tests is
                             Response : in out Servlet.Responses.Mockup.Response'Class) is
       use Servlet.Responses;
 
-      Info        : constant String := Tools.To_String (Reply         => Response,
-                                                        Html          => False,
-                                                        Print_Headers => True);
-      Result_Path : constant String := Util.Tests.Get_Test_Path ("regtests/result");
-      Content     : Unbounded_String;
-      Stream      : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
+      Info     : constant String := Tools.To_String (Reply         => Response,
+                                                     Html          => False,
+                                                     Print_Headers => True);
+      Path     : constant String := Util.Tests.Get_Test_Path (Name);
+      Content  : Unbounded_String;
+      Stream   : Servlet.Streams.Print_Stream := Response.Get_Output_Stream;
    begin
       Response.Read_Content (Content);
       Stream.Write (Content);
 
       Insert (Content, 1, Info);
-      Util.Files.Write_File (Result_Path & "/" & Name, Content);
-
+      Util.Files.Write_File (Path, Content);
    end Save_Response;
 
    --  ------------------------------
@@ -279,7 +278,6 @@ package body Servlet.Tests is
         new Ada.Unchecked_Deallocation (EL.Contexts.Default.Default_ELResolver'Class,
                                         EL.Contexts.Default.Default_ELResolver_Access);
    begin
---        Servlet.Contexts.Faces.Restore (null);
       Free (T.ELContext);
       Free (T.Variables);
       Free (T.Root_Resolver);
