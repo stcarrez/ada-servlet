@@ -50,13 +50,13 @@ $(eval $(call ada_library,servletada_unit))
 
 $(eval $(call ada_library,servletada_all))
 
-$(eval $(call alire_publish,alire.toml,se/servletada,servletada-$(VERSION).toml))
-$(eval $(call alire_publish,alire-unit.toml,se/servletada_unit,servletada_unit-$(VERSION).toml))
+$(eval $(call alire_publish,.,se/servletada,servletada-$(VERSION).toml))
+$(eval $(call alire_publish,.alire/unit,se/servletada_unit,servletada_unit-$(VERSION).toml))
 ifeq ($(HAVE_EWS),yes)
-$(eval $(call alire_publish,alire-ews.toml,se/servletada_ews,servletada_ews-$(VERSION).toml))
+$(eval $(call alire_publish,.alire/ews,se/servletada_ews,servletada_ews-$(VERSION).toml))
 endif
 ifeq ($(HAVE_AWS),yes)
-$(eval $(call alire_publish,alire-aws.toml,se/servletada_aws,servletada_aws-$(VERSION).toml))
+$(eval $(call alire_publish,.alire/aws,se/servletada_aws,servletada_aws-$(VERSION).toml))
 endif
 
 .PHONY: samples
