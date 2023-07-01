@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Servlet
-dnl Copyright (C) 2009 - 2021 Stephane Carrez
+dnl Copyright (C) 2009 - 2023 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ AC_CONFIG_SRCDIR([src/servlet.ads])
 # Current release settings
 SERVLET_MAJOR_VERSION=1
 SERVLET_MINOR_VERSION=6
-SERVLET_MICRO_VERSION=0
+SERVLET_MICRO_VERSION=1
 SERVLET_VERSION=$SERVLET_MAJOR_VERSION.$SERVLET_MINOR_VERSION.$SERVLET_MICRO_VERSION
 
 # Set the version number of Ada Server Faces
