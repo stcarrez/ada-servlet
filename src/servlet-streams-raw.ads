@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-streams-json -- JSON Print streams for servlets
---  Copyright (C) 2016, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,6 +101,11 @@ package Servlet.Streams.Raw is
    procedure Write_Long_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in Long_Long_Integer);
+
+   overriding
+   procedure Write_Long_Entity (Stream : in out Print_Stream;
+                                Name   : in String;
+                                Value  : in Long_Long_Float);
 
    overriding
    procedure Write_Enum_Entity (Stream : in out Print_Stream;

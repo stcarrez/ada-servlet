@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-streams-json -- JSON Print streams for servlets
---  Copyright (C) 2016, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2018, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -155,6 +155,15 @@ package body Servlet.Streams.Raw is
       pragma Unreferenced (Name);
    begin
       Stream.Stream.Write (Value);
+   end Write_Long_Entity;
+
+   overriding
+   procedure Write_Long_Entity (Stream : in out Print_Stream;
+                                Name   : in String;
+                                Value  : in Long_Long_Float) is
+      pragma Unreferenced (Name);
+   begin
+      Stream.Stream.Write (Long_Long_Float'Image (Value));
    end Write_Long_Entity;
 
    overriding
