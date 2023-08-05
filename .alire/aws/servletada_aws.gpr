@@ -5,7 +5,7 @@ with "aws";
 
 project ServletAda_Aws is
 
-   Version := "1.6.0";
+   Version := "1.7.0";
    Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
    for Source_Dirs use project'Source_Dirs & ("../../src/aws");
