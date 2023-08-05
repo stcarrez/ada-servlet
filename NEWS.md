@@ -1,3 +1,6 @@
+Version 1.7.0   - Aug 2023
+  - Feature #14: Monitoring the health of the AWS instance
+
 Version 1.6.0   - Aug 2022
   - Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
   - Fix #5: The Input_Line_Size_Limit parameter is not taken into account
