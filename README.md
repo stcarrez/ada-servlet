@@ -16,13 +16,8 @@ The Ada Servlet library is used by the [Ada Server Faces](https://gitlab.com/stc
 framework and [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide server web requests.
 
-## Version 1.6.0   - Aug 2022
-- Fix #4: Alire servletada_aws GNAT project fails due to missing Naming rule
-- Fix #5: The Input_Line_Size_Limit parameter is not taken into account
-- Fix #6: GNAT configuration project is not correct to build with debugging
-- Fix #7: Constraint error raised when matching empty path routes
-- Fix #11: Support for Embedded Web Server
-- Fix #12: Support for multiple response types in REST operations
+## Version 1.7.0   - Aug 2023
+  - Feature #14: Monitoring the health of the AWS instance
 
 [List all versions](https://gitlab.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 
@@ -30,17 +25,23 @@ to provide server web requests.
 
 ```
 alr with servletada
+alr with servletada_aws
+alr with servletada_ews
 ```
 
 ## Build with configure
 
 To build Ada Servlet, you will need:
 
-* Ada Util     (https://gitlab.com/stcarrez/ada-util          2.5.0)
+* Ada Util     (https://gitlab.com/stcarrez/ada-util          2.6.0)
 * Ada EL       (https://gitlab.com/stcarrez/ada-el            1.8.5)
 * Ada Security (https://gitlab.com/stcarrez/ada-security      1.4.1)
-* AWS          (https://libre.adacore.com/libre/tools/aws/     2018, 2019)
-* XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  4.4)
+* XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  23)
+
+For the web server, you have the choice between:
+
+* [AWS](https://github.com/AdaCore/aws)
+* [EWS](https://github.com/simonjwright/ews)
 
 Build with the following commands:
 ```
@@ -50,17 +51,12 @@ Build with the following commands:
 
 The samples can be built using:
 ```
-   gnatmake -Psamples
+   make samples
 ```
    
 The unit tests are built using:
 ```
-   gnatmake -Ptests
-```
-
-And unit tests are executed with:
-```
-   bin/asf_harness
+   make test
 ```
 
 ## Documentation
