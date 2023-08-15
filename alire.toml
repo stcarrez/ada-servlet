@@ -24,7 +24,7 @@ to provide server web requests.
 """
 
 [[depends-on]]
-security = "^1.4.1"
+security = "^1.5.0"
 utilada = "^2.6.0"
 elada = "^1.8.5"
 
