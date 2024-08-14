@@ -2,6 +2,7 @@ with "servletada_config";
 with "servletada";
 with "utilada_aws";
 with "aws";
+with "gnatcoll";
 
 project ServletAda_Aws is
 
