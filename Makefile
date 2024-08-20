@@ -1,4 +1,10 @@
 NAME=servletada
+VERSION=1.7.1
+
+DIST_DIR=ada-servlet-$(VERSION)
+DIST_FILE=ada-servlet-$(VERSION).tar.gz
+
+MAKE_ARGS += -XSERVLET_BUILD=$(BUILD)
 
 -include Makefile.conf
 
@@ -21,8 +27,8 @@ endif
 include Makefile.defaults
 
 # Build executables for all mains defined by the project.
-build-test:: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -Pservletada_tests $(MAKE_ARGS)
+build-test:: lib-setup
+	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 # Build and run the unit tests
 test:	build runtest
@@ -34,21 +40,14 @@ runtest:
 	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
 
 samples:
-	$(GNATMAKE) $(GPRFLAGS) -p samples.gpr $(MAKE_ARGS)
+	cd samples && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
-$(eval $(call ada_library,$(NAME)))
+$(eval $(call ada_library,$(NAME),.))
+$(eval $(call ada_library,servletada_aws,aws))
+$(eval $(call ada_library,servletada_ews,ews))
+$(eval $(call ada_library,servletada_unit,unit))
 
-ifeq ($(HAVE_AWS),yes)
-$(eval $(call ada_library,servletada_aws))
-endif
-
-ifeq ($(HAVE_EWS),yes)
-$(eval $(call ada_library,servletada_ews))
-endif
-
-$(eval $(call ada_library,servletada_unit))
-
-$(eval $(call ada_library,servletada_all))
+# $(eval $(call ada_library,servletada_all))
 
 $(eval $(call alire_publish,.,se/servletada,servletada-$(VERSION).toml))
 $(eval $(call alire_publish,.alire/unit,se/servletada_unit,servletada_unit-$(VERSION).toml))
