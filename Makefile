@@ -40,7 +40,8 @@ runtest:
 	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
 
 samples:
-	cd samples && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
+	cd samples/aws && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
+	cd samples/ews && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 $(eval $(call ada_library,$(NAME),.))
 $(eval $(call ada_library,servletada_aws,aws))
