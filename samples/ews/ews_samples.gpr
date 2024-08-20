@@ -1,0 +1,27 @@
+with "servletada_config";
+with "utilada_base";
+with "elada";
+with "servletada";
+with "servletada_ews";
+
+project EWS_Samples is
+
+   Mains := ("volume_server.adb", "upload_server.adb", "api_server.adb");
+
+   for Main use Mains;
+
+   for Source_Dirs use (".", "../src", "../src/rest");
+
+   for Object_Dir use "../../" & ServletAda_Config'Object_Dir & "/obj";
+   for Exec_Dir use "../../bin";
+
+   package Binder renames ServletAda_Config.Binder;
+   package Builder is
+      for Executable ("volume_server.adb") use "ews_volume_server";
+      for Executable ("upload_server.adb") use "ews_upload_server";
+      for Executable ("api_server.adb") use "ews_api_server";
+   end Builder;
+   package Compiler renames ServletAda_Config.Compiler;
+   package Linker renames ServletAda_Config.Linker;
+
+end EWS_Samples;
