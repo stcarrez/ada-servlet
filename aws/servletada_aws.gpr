@@ -6,10 +6,10 @@ with "gnatcoll";
 
 project ServletAda_Aws is
 
-   Version := "1.7.0";
+   Version := "1.7.1";
    Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
-   for Source_Dirs use project'Source_Dirs & ("../../src/aws");
+   for Source_Dirs use project'Source_Dirs & ("src");
 
    package Naming is
       for Implementation ("Servlet.Server.Web")
@@ -20,8 +20,8 @@ project ServletAda_Aws is
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "../../lib/servletada_aws/" & Project'Library_Kind;
-   for Object_Dir use "../../obj/servletada_aws/" & Project'Library_Kind;
+   for Library_Dir use "../lib/servletada_aws/" & Project'Library_Kind;
+   for Object_Dir use "../obj/servletada_aws/" & Project'Library_Kind;
 
    package Binder   renames ServletAda.Binder;
    package Builder  renames ServletAda.Builder;
