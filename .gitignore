@@ -1,7 +1,6 @@
 *~
 *.log
 Makefile.conf
-config.status
 CHANGES
 *.cproject
 *.gb_project
@@ -9,18 +8,9 @@ CHANGES
 *.log
 ChangeLog
 .settings
-configure.lineno
-servletada.gpr
-servletada_tests.gpr
-servletada_aws.gpr
-servletada_all.gpr
-servletada_ews.gpr
-samples.gpr
 t.gpr
-servletada_unit.gpr
 tests.xml
 servlet-tests.xml
-autom4te.cache
 bin/
 obj/
 lib/
