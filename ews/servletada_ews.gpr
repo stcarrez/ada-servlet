@@ -7,14 +7,14 @@ project ServletAda_Ews is
    Version := "1.7.0";
    Library_Type : ServletAda_Config.Library_Type_Type := external ("SERVLET_LIBRARY_TYPE", "static");
 
-   for Source_Dirs use project'Source_Dirs & ("../../src/ews");
+   for Source_Dirs use project'Source_Dirs & ("src");
 
    for Library_Name use "servletada_ews";
    for Library_Kind use Library_Type;
    for Library_Version use "lib" & Project'Library_Name & ".so." & Version;
 
-   for Library_Dir use "../../lib/servletada_ews/" & Project'Library_Kind;
-   for Object_Dir use "../../obj/servletada_ews/" & Project'Library_Kind;
+   for Library_Dir use "../lib/servletada_ews/" & Project'Library_Kind;
+   for Object_Dir use "../obj/servletada_ews/" & Project'Library_Kind;
 
    package Binder   renames ServletAda.Binder;
    package Builder  renames ServletAda.Builder;
