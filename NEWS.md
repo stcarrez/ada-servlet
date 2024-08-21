@@ -1,3 +1,6 @@
+Version 1.7.1   - Under development
+  - Cleanup build environment to drop configure
+
 Version 1.7.0   - Aug 2023
   - Feature #14: Monitoring the health of the AWS instance
 

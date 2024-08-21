@@ -16,6 +16,9 @@ The Ada Servlet library is used by the [Ada Server Faces](https://gitlab.com/stc
 framework and [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide server web requests.
 
+## Version 1.7.1   - Under development
+  - Cleanup build environment to drop configure
+
 ## Version 1.7.0   - Aug 2023
   - Feature #14: Monitoring the health of the AWS instance
 
@@ -25,34 +28,33 @@ to provide server web requests.
 
 ```
 alr with servletada
-alr with servletada_aws
-alr with servletada_ews
 ```
-
-## Build with configure
-
-To build Ada Servlet, you will need:
-
-* Ada Util     (https://gitlab.com/stcarrez/ada-util          2.6.0)
-* Ada EL       (https://gitlab.com/stcarrez/ada-el            1.8.5)
-* Ada Security (https://gitlab.com/stcarrez/ada-security      1.4.1)
-* XML/Ada      (https://libre.adacore.com/libre/tools/xmlada/  23)
 
 For the web server, you have the choice between:
 
 * [AWS](https://github.com/AdaCore/aws)
 * [EWS](https://github.com/simonjwright/ews)
 
-Build with the following commands:
+Choose one of the following crates:
+
 ```
-   ./configure
-   make
+alr with servletada_aws
+alr with servletada_ews
 ```
 
 The samples can be built using:
+
 ```
    make samples
 ```
+
+or
+
+```
+cd samples
+alr build
+```
+
    
 The unit tests are built using:
 ```
