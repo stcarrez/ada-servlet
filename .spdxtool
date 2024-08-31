@@ -1,0 +1,15 @@
+[default]
+ignore=[
+"*.md",
+"*.xml",
+"*.xhtml",
+"*.html",
+".readthedocs.yaml",
+"docs/pagebreak.tex",
+"debian/",
+"*.properties",
+"*.gpr",
+"alire.toml",
+"Makefile",
+"Makefile.defaults"
+]
