@@ -16,11 +16,8 @@ The Ada Servlet library is used by the [Ada Server Faces](https://gitlab.com/stc
 framework and [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide server web requests.
 
-## Version 1.7.1   - Under development
+## Version 1.7.1   - Aug 2024
   - Cleanup build environment to drop configure
-
-## Version 1.7.0   - Aug 2023
-  - Feature #14: Monitoring the health of the AWS instance
 
 [List all versions](https://gitlab.com/stcarrez/ada-servlet/blob/master/NEWS.md)
 
