@@ -43,20 +43,16 @@ samples:
 	cd samples/aws && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 	cd samples/ews && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
-$(eval $(call ada_library,$(NAME),.))
+$(eval $(call ada_library,servletada,.))
 $(eval $(call ada_library,servletada_aws,aws))
 $(eval $(call ada_library,servletada_ews,ews))
 $(eval $(call ada_library,servletada_unit,unit))
 
 # $(eval $(call ada_library,servletada_all))
 
-$(eval $(call alire_publish,.,se/servletada,servletada-$(VERSION).toml))
-$(eval $(call alire_publish,.alire/unit,se/servletada_unit,servletada_unit-$(VERSION).toml))
-ifeq ($(HAVE_EWS),yes)
-$(eval $(call alire_publish,.alire/ews,se/servletada_ews,servletada_ews-$(VERSION).toml))
-endif
-ifeq ($(HAVE_AWS),yes)
-$(eval $(call alire_publish,.alire/aws,se/servletada_aws,servletada_aws-$(VERSION).toml))
-endif
+$(eval $(call alire_publish,alire.toml,se/servletada,servletada-$(VERSION).toml))
+$(eval $(call alire_publish,unit/alire.toml,servletada_unit-$(VERSION).toml))
+$(eval $(call alire_publish,ews/alire.toml,se/servletada_ews,servletada_ews-$(VERSION).toml))
+$(eval $(call alire_publish,aws/alire.toml,se/servletada_aws,servletada_aws-$(VERSION).toml))
 
 .PHONY: samples
