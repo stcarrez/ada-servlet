@@ -50,9 +50,9 @@ $(eval $(call ada_library,servletada_unit,unit))
 
 # $(eval $(call ada_library,servletada_all))
 
-$(eval $(call alire_publish,alire.toml,se/servletada,servletada-$(VERSION).toml))
-$(eval $(call alire_publish,unit/alire.toml,servletada_unit-$(VERSION).toml))
-$(eval $(call alire_publish,ews/alire.toml,se/servletada_ews,servletada_ews-$(VERSION).toml))
-$(eval $(call alire_publish,aws/alire.toml,se/servletada_aws,servletada_aws-$(VERSION).toml))
+$(eval $(call alire_publish,.,se/servletada,servletada-$(VERSION).toml))
+$(eval $(call alire_publish,unit,servletada_unit-$(VERSION).toml))
+$(eval $(call alire_publish,ews,se/servletada_ews,servletada_ews-$(VERSION).toml))
+$(eval $(call alire_publish,aws,se/servletada_aws,servletada_aws-$(VERSION).toml))
 
 .PHONY: samples
