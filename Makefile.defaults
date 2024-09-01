@@ -195,7 +195,7 @@ define alire_publish
 	-rm -f $(aliredir)/$(2)/$(3)
 	cd $(1) && alr -f --no-tty publish --skip-submit
 	mkdir -p $(aliredir)/index/$(2)
-	cp alire/releases/$(3) $(aliredir)/index/$(2)/$(3)
+	cp $(1)/alire/releases/$(3) $(aliredir)/index/$(2)/$(3)
 
 endef
 
