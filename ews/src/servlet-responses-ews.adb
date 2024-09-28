@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses-ews -- Servlet Responses with EWS server
---  Copyright (C) 2022 Stephane Carrez
+--  Copyright (C) 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -10,7 +10,7 @@ package body Servlet.Responses.EWS is
    overriding
    function Response_Kind (This : Dynamic_Response) return String is
    begin
-      case (This.Status) is
+      case This.Status is
          when 200 =>
             return "200 OK";
 
