@@ -30,3 +30,6 @@ SERVLET_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 
 [configuration]
 disabled = true
+
+[[pins]]
+servletada = { path = '..' }
