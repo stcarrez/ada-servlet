@@ -8,6 +8,9 @@ MAKE_ARGS += -XSERVLET_BUILD=$(BUILD)
 
 -include Makefile.conf
 
+HAVE_AWS?=yes
+HAVE_EWS?=yes
+
 STATIC_MAKE_ARGS = $(MAKE_ARGS) -XSERVLET_LIBRARY_TYPE=static
 SHARED_MAKE_ARGS = $(MAKE_ARGS) -XSERVLET_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XELADA_BUILD=relocatable -XEL_LIBRARY_TYPE=relocatable
@@ -25,6 +28,8 @@ SHARED_MAKE_ARGS += -XAWS_BUILD=relocatable
 endif
 
 include Makefile.defaults
+
+DEFAULT_ADA_PROJECT_PATH=$(SRC_ROOT):$(SRC_ROOT)/unit:$(SRC_ROOT)/aws:$(SRC_ROOT)/ews:$(ADA_PROJECT_PATH)
 
 # Build executables for all mains defined by the project.
 build-test:: lib-setup
@@ -44,15 +49,31 @@ samples:
 	cd samples/ews && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 $(eval $(call ada_library,servletada,.))
-$(eval $(call ada_library,servletada_aws,aws))
-$(eval $(call ada_library,servletada_ews,ews))
 $(eval $(call ada_library,servletada_unit,unit))
+
+ifeq ($(HAVE_AWS),yes)
+$(eval $(call ada_library,servletada_aws,aws))
+endif
+
+ifeq ($(HAVE_EWS),yes)
+$(eval $(call ada_library,servletada_ews,ews))
+endif
 
 # $(eval $(call ada_library,servletada_all))
 
 $(eval $(call alire_publish,.,se/servletada,servletada-$(VERSION).toml))
 $(eval $(call alire_publish,unit,se/servletada_unit,servletada_unit-$(VERSION).toml))
+
+ifeq ($(HAVE_AWS),yes)
 $(eval $(call alire_publish,ews,se/servletada_ews,servletada_ews-$(VERSION).toml))
+endif
+
+ifeq ($(HAVE_EWS),yes)
 $(eval $(call alire_publish,aws,se/servletada_aws,servletada_aws-$(VERSION).toml))
+endif
+
+setup::
+	echo "HAVE_AWS=$(HAVE_AWS)" >> Makefile.conf
+	echo "HAVE_EWS=$(HAVE_EWS)" >> Makefile.conf
 
 .PHONY: samples
