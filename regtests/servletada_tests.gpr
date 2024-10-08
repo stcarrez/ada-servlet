@@ -3,15 +3,13 @@ with "utilada_sys";
 with "utilada_unit";
 with "elada";
 with "servletada";
-with "servletada_aws";
-with "servletada_ews";
 with "servletada_unit";
 
 project ServletAda_Tests is
 
    Mains := ("servlet_harness.adb");
 
-   for Source_Dirs use ("src", "aws");
+   for Source_Dirs use ("src");
 
    for Main use Mains;
 
