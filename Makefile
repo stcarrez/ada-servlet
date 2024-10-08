@@ -45,8 +45,12 @@ runtest:
 	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
 
 samples:
+ifeq ($(HAVE_AWS),yes)
 	cd samples/aws && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
+endif
+ifeq ($(HAVE_EWS),yes)
 	cd samples/ews && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
+endif
 
 $(eval $(call ada_library,servletada,.))
 $(eval $(call ada_library,servletada_unit,unit))
