@@ -29,7 +29,17 @@ endif
 
 include Makefile.defaults
 
-DEFAULT_ADA_PROJECT_PATH=$(SRC_ROOT):$(SRC_ROOT)/unit:$(SRC_ROOT)/aws:$(SRC_ROOT)/ews:$(ADA_PROJECT_PATH)
+DEFAULT_ADA_PROJECT_PATH=$(SRC_ROOT)
+
+ifeq ($(HAVE_AWS),yes)
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/aws
+endif
+
+ifeq ($(HAVE_EWS),yes)
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/ews
+endif
+
+DEFAULT_ADA_PROJECT_PATH:=$(DEFAULT_ADA_PROJECT_PATH):$(SRC_ROOT)/unit:$(ADA_PROJECT_PATH)
 
 # Build executables for all mains defined by the project.
 build-test:: lib-setup
