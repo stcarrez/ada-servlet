@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  servlet-streams-json -- JSON Print streams for servlets
---  Copyright (C) 2016, 2018, 2022, 2023, 2024 Stephane Carrez
+--  servlet-streams-dynamic -- Print streams for REST API
+--  Copyright (C) 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -10,18 +10,27 @@ with Ada.Finalization;
 with Util.Beans.Objects;
 with Util.Serialize.IO;
 with Util.Http.Mimes;
-package Servlet.Streams.Raw is
+package Servlet.Streams.Dynamic is
+
+   --  The supported stream types for the operation.
+   type Stream_Type is (JSON, XML, FORM, RAW, DYNAMIC);
 
    type Print_Stream is limited new Ada.Finalization.Limited_Controlled
      and Util.Serialize.IO.Output_Stream with private;
 
-   type Print_Stream_Access is access all Print_Stream'Class;
-
    --  Initialize the stream
    procedure Initialize (Stream : in out Print_Stream;
                          To     : in Util.Streams.Texts.Print_Stream_Access);
-   procedure Initialize (Stream : in out Print_Stream;
-                         To     : in Servlet.Streams.Print_Stream);
+
+   procedure Set_JSON (Stream : in out Print_Stream);
+   procedure Set_XML (Stream : in out Print_Stream);
+   procedure Set_Raw (Stream : in out Print_Stream);
+
+   procedure Set_Stream_Type (Stream : in out Print_Stream;
+                              Kind   : in Stream_Type);
+
+   overriding
+   procedure Finalize (Stream : in out Print_Stream);
 
    --  Flush the buffer (if any) to the sink.
    overriding
@@ -118,12 +127,18 @@ package Servlet.Streams.Raw is
    procedure Write_Null_Entity (Stream : in out Print_Stream;
                                 Name   : in String);
 
+   procedure Set_Content_Type (Stream : in out Print_Stream;
+                               Mime   : in Util.Http.Mimes.Mime_Access);
+
 private
+
+   type IO_Output_Stream_Access is access all Util.Serialize.IO.Output_Stream'Class;
 
    type Print_Stream is limited new Ada.Finalization.Limited_Controlled
      and Util.Serialize.IO.Output_Stream with record
-      Stream    : Util.Streams.Texts.Print_Stream_Access;
-      Allocated : Boolean := False;
+      Raw_Stream : Util.Streams.Texts.Print_Stream_Access;
+      Stream     : IO_Output_Stream_Access;
+      Allocated  : Boolean := False;
    end record;
 
-end Servlet.Streams.Raw;
+end Servlet.Streams.Dynamic;

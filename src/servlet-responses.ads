@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Requests
---  Copyright (C) 2010, 2022 Stephane Carrez
+--  Copyright (C) 2010, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -9,7 +9,10 @@ with Ada.Calendar;
 with Ada.Strings.Unbounded;
 with Ada.Finalization;
 
-with Servlet.Streams;
+with Servlet.Streams.Raw;
+with Servlet.Streams.XML;
+with Servlet.Streams.JSON;
+with Servlet.Streams.Dynamic;
 with Servlet.Cookies;
 private with Util.Streams.Texts;
 
@@ -298,6 +301,12 @@ package Servlet.Responses is
 
    --  Get the output stream
    function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Print_Stream;
+
+   --  Get the output stream
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Dynamic.Print_Stream;
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.XML.Print_Stream;
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.JSON.Print_Stream;
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Raw.Print_Stream;
 
    --  Mark the response as being committed.
    procedure Set_Committed (Resp : in out Response);

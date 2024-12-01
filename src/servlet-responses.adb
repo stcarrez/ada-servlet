@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-responses -- Servlet Responses
---  Copyright (C) 2010, 2011, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2018, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -327,6 +327,37 @@ package body Servlet.Responses is
    begin
       return Result : Servlet.Streams.Print_Stream do
          Result.Initialize (Resp.Stream.all'Access);
+      end return;
+   end Get_Output_Stream;
+
+   --  ------------------------------
+   --  Get the output stream
+   --  ------------------------------
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Dynamic.Print_Stream is
+   begin
+      return Result : Servlet.Streams.Dynamic.Print_Stream do
+         Result.Initialize (Resp.Stream);
+      end return;
+   end Get_Output_Stream;
+
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.XML.Print_Stream is
+   begin
+      return Result : Servlet.Streams.XML.Print_Stream do
+         Result.Initialize (Resp.Stream);
+      end return;
+   end Get_Output_Stream;
+
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.JSON.Print_Stream is
+   begin
+      return Result : Servlet.Streams.JSON.Print_Stream do
+         Result.Initialize (Resp.Stream);
+      end return;
+   end Get_Output_Stream;
+
+   function Get_Output_Stream (Resp : in Response) return Servlet.Streams.Raw.Print_Stream is
+   begin
+      return Result : Servlet.Streams.Raw.Print_Stream do
+         Result.Initialize (Resp.Stream);
       end return;
    end Get_Output_Stream;
 

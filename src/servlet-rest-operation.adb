@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-operation -- REST API Operation Definition
---  Copyright (C) 2017, 2022 Stephane Carrez
+--  Copyright (C) 2017, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -13,7 +13,8 @@ package body Servlet.Rest.Operation is
           Handler    => Handler,
           Pattern    => URI_Mapping'Access,
           Mimes      => Mimes,
-          Permission => Permission);
+          Permission => Permission,
+          Streams     => Streams);
 
    function Definition return Descriptor_Access is
    begin

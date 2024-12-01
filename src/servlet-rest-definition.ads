@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-definition -- REST API Definition
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -32,6 +32,7 @@ package Servlet.Rest.Definition is
       Method     : Method_Type := Servlet.Rest.GET;
       Pattern    : String;
       Permission : Security.Permissions.Permission_Index := Security.Permissions.NONE;
+      Streams    : Stream_Modes := (others => True);
    package Definition is
       Instance : aliased Descriptor;
    end Definition;

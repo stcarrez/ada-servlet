@@ -1,13 +1,13 @@
 -----------------------------------------------------------------------
 --  servlet-servlets-rest -- REST servlet
---  Copyright (C) 2016, 2017, 2018, 2019, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2019, 2020, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
-with Util.Http.Mimes;
 with Servlet.Streams.JSON;
 with Servlet.Streams.XML;
 with Servlet.Streams.Raw;
+with Servlet.Streams.Dynamic;
 package body Servlet.Core.Rest is
 
    use type Util.Strings.Name_Access;
@@ -89,44 +89,62 @@ package body Servlet.Core.Rest is
             return;
          end if;
          declare
+            use Streams.Dynamic;
+
             Api    : constant access Routes.Servlets.Rest.API_Route_Type'Class
               := Routes.Servlets.Rest.API_Route_Type'Class (Route.Element.all)'Access;
             Desc   : constant Descriptor_Access := Api.Descriptors (Method);
-            Output : constant Streams.Print_Stream := Response.Get_Output_Stream;
-            Mime   : Mime_Access;
+            Kind   : Streams.Dynamic.Stream_Type;
          begin
             if Desc = null then
                Response.Set_Status (Responses.SC_NOT_FOUND);
                Response.Set_Committed;
                return;
             end if;
-            Mime := Desc.Get_Mime_Type (Request);
-            if Mime = null or else Mime.all = Util.Http.Mimes.Json then
-               declare
-                  Stream : Streams.JSON.Print_Stream;
-               begin
-                  Streams.JSON.Initialize (Stream, Output);
-                  Response.Set_Content_Type ("application/json; charset=utf-8");
-                  Api.Descriptors (Method).Dispatch (Request, Response, Stream);
-               end;
-            elsif Mime.all = Util.Http.Mimes.Xml then
-               declare
-                  Stream : Streams.XML.Print_Stream;
-               begin
-                  Streams.XML.Initialize (Stream, Output);
-                  Response.Set_Content_Type ("application/xml; charset=utf-8");
-                  Api.Descriptors (Method).Dispatch (Request, Response, Stream);
-               end;
-            else
-               declare
-                  Stream : Streams.Raw.Print_Stream;
-               begin
-                  Streams.Raw.Initialize (Stream, Output);
+            Kind := Desc.Get_Stream_Type (Request);
+            case Kind is
+               when Streams.Dynamic.JSON =>
+                  declare
+                     Stream : Streams.JSON.Print_Stream := Response.Get_Output_Stream;
+                  begin
+                     Response.Set_Content_Type ("application/json; charset=utf-8");
+                     Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+                  end;
 
-                  Response.Set_Content_Type (Mime.all);
-                  Api.Descriptors (Method).Dispatch (Request, Response, Stream);
-               end;
-            end if;
+               when XML =>
+                  declare
+                     Stream : Streams.XML.Print_Stream := Response.Get_Output_Stream;
+                  begin
+                     Response.Set_Content_Type ("application/xml; charset=utf-8");
+                     Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+                  end;
+
+               when RAW | FORM =>
+                  declare
+                     Output : constant Streams.Print_Stream := Response.Get_Output_Stream;
+                     Stream : Streams.Raw.Print_Stream;
+                     Mime   : constant Mime_Access := Desc.Get_Mime_Type (Request);
+                  begin
+                     Streams.Raw.Initialize (Stream, Output);
+
+                     if Mime /= null then
+                        Response.Set_Content_Type (Mime.all);
+                     end if;
+                     Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+                  end;
+
+               when DYNAMIC =>
+                  declare
+                     Stream : Streams.Dynamic.Print_Stream := Response.Get_Output_Stream;
+                     Mime   : constant Mime_Access := Desc.Get_Mime_Type (Request);
+                  begin
+                     if Mime /= null then
+                        Response.Set_Content_Type (Mime.all);
+                     end if;
+                     Api.Descriptors (Method).Dispatch (Request, Response, Stream);
+                  end;
+
+            end case;
          end;
       end;
    end Dispatch;

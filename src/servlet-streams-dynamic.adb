@@ -1,24 +1,78 @@
 -----------------------------------------------------------------------
 --  servlet-streams-json -- JSON Print streams for servlets
---  Copyright (C) 2016, 2018, 2022, 2023, 2024 Stephane Carrez
+--  Copyright (C) 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
+with Ada.Unchecked_Deallocation;
+with Servlet.Streams.JSON;
+with Servlet.Streams.XML;
+with Servlet.Streams.Raw;
+package body Servlet.Streams.Dynamic is
 
-package body Servlet.Streams.Raw is
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Object => Util.Serialize.IO.Output_Stream'Class,
+                                     Name   => IO_Output_Stream_Access);
 
    --  Initialize the stream
    procedure Initialize (Stream : in out Print_Stream;
-                         To     : in Servlet.Streams.Print_Stream) is
-   begin
-      Stream.Stream := To.Target;
-   end Initialize;
-
-   procedure Initialize (Stream : in out Print_Stream;
                          To     : in Util.Streams.Texts.Print_Stream_Access) is
    begin
-      Stream.Stream := To;
+      Stream.Raw_Stream := To;
    end Initialize;
+
+   procedure Set_JSON (Stream : in out Print_Stream) is
+      S : constant Streams.JSON.Print_Stream_Access := new Streams.JSON.Print_Stream;
+   begin
+      S.Initialize (Stream.Raw_Stream);
+      Free (Stream.Stream);
+      Stream.Stream := S.all'Access;
+   end Set_JSON;
+
+   procedure Set_XML (Stream : in out Print_Stream) is
+      S : constant Streams.XML.Print_Stream_Access := new Streams.XML.Print_Stream;
+   begin
+      S.Initialize (Stream.Raw_Stream);
+      Free (Stream.Stream);
+      Stream.Stream := S.all'Access;
+   end Set_XML;
+
+   procedure Set_Raw (Stream : in out Print_Stream) is
+      S : constant Streams.Raw.Print_Stream_Access := new Streams.Raw.Print_Stream;
+   begin
+      S.Initialize (Stream.Raw_Stream);
+      Free (Stream.Stream);
+      Stream.Stream := S.all'Access;
+   end Set_Raw;
+
+   procedure Set_Stream_Type (Stream : in out Print_Stream;
+                              Kind   : in Stream_Type) is
+   begin
+      case Kind is
+         when JSON =>
+            Stream.Set_JSON;
+
+         when XML =>
+            Stream.Set_XML;
+
+         when RAW =>
+            Stream.Set_Raw;
+
+         when others =>
+            null;
+
+      end case;
+   end Set_Stream_Type;
+
+   overriding
+   procedure Finalize (Stream : in out Print_Stream) is
+   begin
+      if Stream.Stream /= null then
+         --  Stream.Stream.End_Document;
+         --  Stream.Stream.Flush;
+         Free (Stream.Stream);
+      end if;
+   end Finalize;
 
    --  Flush the buffer (if any) to the sink.
    overriding
@@ -47,54 +101,48 @@ package body Servlet.Streams.Raw is
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in String) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Attribute (Name, Value);
    end Write_Attribute;
 
    overriding
    procedure Write_Wide_Attribute (Stream : in out Print_Stream;
                                    Name   : in String;
                                    Value  : in Wide_Wide_String) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write_Wide (Value);
+      Stream.Stream.Write_Wide_Attribute (Name, Value);
    end Write_Wide_Attribute;
 
    overriding
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in Integer) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Attribute (Name, Value);
    end Write_Attribute;
 
    overriding
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in Boolean) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write ((if Value then "true" else "false"));
+      Stream.Stream.Write_Attribute (Name, Value);
    end Write_Attribute;
 
    overriding
    procedure Write_Attribute (Stream : in out Print_Stream;
                               Name   : in String;
                               Value  : in Util.Beans.Objects.Object) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Util.Beans.Objects.To_String (Value));
+      Stream.Stream.Write_Attribute (Name, Value);
    end Write_Attribute;
 
    --  Write the attribute with a null value.
    overriding
    procedure Write_Null_Attribute (Stream : in out Print_Stream;
                                    Name   : in String) is
-      pragma Unreferenced (Name);
    begin
-      null;
+      Stream.Stream.Write_Null_Attribute (Name);
    end Write_Null_Attribute;
 
    --  Write the entity value.
@@ -102,81 +150,72 @@ package body Servlet.Streams.Raw is
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in String) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Entity (Name, Value);
    end Write_Entity;
 
    overriding
    procedure Write_Wide_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in Wide_Wide_String) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write_Wide (Value);
+      Stream.Stream.Write_Wide_Entity (Name, Value);
    end Write_Wide_Entity;
 
    overriding
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Boolean) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write ((if Value then "true" else "false"));
+      Stream.Stream.Write_Entity (Name, Value);
    end Write_Entity;
 
    overriding
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Integer) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Entity (Name, Value);
    end Write_Entity;
 
    overriding
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Ada.Calendar.Time) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Entity (Name, Value);
    end Write_Entity;
 
    overriding
    procedure Write_Long_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in Long_Long_Integer) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Long_Entity (Name, Value);
    end Write_Long_Entity;
 
    overriding
    procedure Write_Long_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in Long_Long_Float) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Long_Long_Float'Image (Value));
+      Stream.Stream.Write_Long_Entity (Name, Value);
    end Write_Long_Entity;
 
    overriding
    procedure Write_Enum_Entity (Stream : in out Print_Stream;
                                 Name   : in String;
                                 Value  : in String) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Value);
+      Stream.Stream.Write_Enum_Entity (Name, Value);
    end Write_Enum_Entity;
 
    overriding
    procedure Write_Entity (Stream : in out Print_Stream;
                            Name   : in String;
                            Value  : in Util.Beans.Objects.Object) is
-      pragma Unreferenced (Name);
    begin
-      Stream.Stream.Write (Util.Beans.Objects.To_String (Value));
+      Stream.Stream.Write_Entity (Name, Value);
    end Write_Entity;
 
    --  Write an entity with a null value.
@@ -184,7 +223,13 @@ package body Servlet.Streams.Raw is
    procedure Write_Null_Entity (Stream : in out Print_Stream;
                                 Name   : in String) is
    begin
-      null;
+      Stream.Stream.Write_Null_Entity (Name);
    end Write_Null_Entity;
 
-end Servlet.Streams.Raw;
+   procedure Set_Content_Type (Stream : in out Print_Stream;
+                               Mime   : in Util.Http.Mimes.Mime_Access) is
+   begin
+      null;
+   end Set_Content_Type;
+
+end Servlet.Streams.Dynamic;

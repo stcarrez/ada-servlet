@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -40,6 +40,7 @@ package body Servlet.Rest.Definition is
       Instance.Permission := Permission;
       Instance.Handler    := Handler;
       Instance.Pattern    := P'Access;
+      Instance.Streams    := Streams;
       Servlet.Rest.Register (Entries, Instance'Access);
    end Definition;
 

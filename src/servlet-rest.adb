@@ -8,6 +8,7 @@ with Util.Http.Headers;
 with Servlet.Routes;
 with Servlet.Routes.Servlets.Rest;
 with Servlet.Core.Rest;
+with Servlet.Streams.Dynamic;
 with EL.Contexts.Default;
 with Util.Log.Loggers;
 package body Servlet.Rest is
@@ -36,6 +37,52 @@ package body Servlet.Rest is
          return null;
       end if;
    end Get_Mime_Type;
+
+   --  ------------------------------
+   --  Get the stream type that should be configured before calling the operation handler.
+   --  The choice is made on the operation capabilities defined by the Stream_Modes description.
+   --  If there are multiple choices, the DYNAMIC stream type is prefered if it is enabled.
+   --  Otherwise we look at the Accept header and decide according to the generated mime types.
+   --  ------------------------------
+   function Get_Stream_Type (Handler : in Descriptor;
+                             Req     : in Servlet.Rest.Request'Class) return Stream_Type is
+      use Streams.Dynamic;
+
+      Best  : Stream_Type := Stream_Type'Last;
+      Count : Natural := 0;
+   begin
+      for Kind in Stream_Type'Range loop
+         if Handler.Streams (Kind) then
+            Best := Kind;
+            Count := Count + 1;
+         end if;
+      end loop;
+      if Count = 1 then
+         return Best;
+      elsif Count = 0 or else Handler.Streams (DYNAMIC) then
+         return DYNAMIC;
+      else
+         declare
+            Mime : constant Mime_Access := Handler.Get_Mime_Type (Req);
+         begin
+            if Mime = null then
+               if Handler.Streams (JSON) then
+                  return JSON;
+               elsif Handler.Streams (XML) then
+                  return XML;
+               else
+                  return RAW;
+               end if;
+            elsif Mime.all = Util.Http.Mimes.Json then
+               return JSON;
+            elsif Mime.all = Util.Http.Mimes.Xml then
+               return XML;
+            else
+               return RAW;
+            end if;
+         end;
+      end if;
+   end Get_Stream_Type;
 
    --  ------------------------------
    --  Register the API descriptor in a list.
@@ -166,5 +213,49 @@ package body Servlet.Rest is
       end if;
       Registry.Add_Route (Definition.Pattern.all, Ctx, Insert'Access);
    end Register;
+
+   procedure Choose_Content_Type (Req    : in out Servlet.Rest.Request'Class;
+                                  Reply  : in out Servlet.Rest.Response'Class;
+                                  Stream : in out Servlet.Rest.Output_Stream'Class) is
+   begin
+      declare
+         Accept_Header : constant String := Req.Get_Header ("Accept");
+         Mime : Mime_Access;
+      begin
+         Mime := Util.Http.Headers.Get_Accepted (Accept_Header, (1 => Util.Http.Mimes.Json'Access));
+         if Mime /= null then
+            Set_Content_Type (Reply, Mime.all, Stream);
+            return;
+         end if;
+         Mime := Util.Http.Headers.Get_Accepted (Accept_Header, (1 => Util.Http.Mimes.Xml'Access));
+         if Mime /= null then
+            Set_Content_Type (Reply, Mime.all, Stream);
+            return;
+         end if;
+         Servlet.Streams.Dynamic.Print_Stream'Class (Stream).Set_Stream_Type (Servlet.Streams.Dynamic.RAW);
+      end;
+   end Choose_Content_Type;
+
+   --  Set the response Content-Type header and configure the stream accordingly.
+   procedure Set_Content_Type (Reply  : in out Servlet.Rest.Response'Class;
+                               Mime   : in String;
+                               Stream : in out Servlet.Rest.Output_Stream'Class) is
+      use Servlet.Streams;
+   begin
+      Reply.Set_Content_Type (Mime);
+      if not (Stream in Servlet.Streams.Dynamic.Print_Stream'Class) then
+         return;
+      end if;
+      if Util.Http.Mimes.Is_Mime (Mime, Util.Http.Mimes.Json) then
+         Dynamic.Print_Stream'Class (Stream).Set_Stream_Type (Dynamic.JSON);
+         Stream.Start_Document;
+
+      elsif Util.Http.Mimes.Is_Mime (Mime, Util.Http.Mimes.Xml) then
+         Dynamic.Print_Stream'Class (Stream).Set_Stream_Type (Dynamic.XML);
+
+      else
+         Dynamic.Print_Stream'Class (Stream).Set_Stream_Type (Dynamic.RAW);
+      end if;
+   end Set_Content_Type;
 
 end Servlet.Rest;
