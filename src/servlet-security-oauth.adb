@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-security-oauth - OAuth2 servlets
---  Copyright (C) 2018, 2022 Stephane Carrez
+--  Copyright (C) 2018, 2022, 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -100,7 +100,7 @@ package body Servlet.Security.OAuth is
    begin
       if Pos > 0 then
          Params.Client_Id := To_Unbounded_String (Auth (Auth'First .. Pos - 1));
-         Params.Client_Id := To_Unbounded_String (Auth (Pos + 1 .. Auth'Last));
+         Params.Client_Secret := To_Unbounded_String (Auth (Pos + 1 .. Auth'Last));
          Params.Has_Authorization := True;
       end if;
       Streams.JSON.Initialize (Stream, Output);
