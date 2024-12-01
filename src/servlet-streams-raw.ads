@@ -9,7 +9,6 @@ with Ada.Calendar;
 with Ada.Finalization;
 with Util.Beans.Objects;
 with Util.Serialize.IO;
-with Util.Http.Mimes;
 package Servlet.Streams.Raw is
 
    type Print_Stream is limited new Ada.Finalization.Limited_Controlled

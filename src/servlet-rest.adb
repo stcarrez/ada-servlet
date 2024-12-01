@@ -8,7 +8,6 @@ with Util.Http.Headers;
 with Servlet.Routes;
 with Servlet.Routes.Servlets.Rest;
 with Servlet.Core.Rest;
-with Servlet.Streams.Dynamic;
 with EL.Contexts.Default;
 with Util.Log.Loggers;
 package body Servlet.Rest is
@@ -217,22 +216,25 @@ package body Servlet.Rest is
    procedure Choose_Content_Type (Req    : in out Servlet.Rest.Request'Class;
                                   Reply  : in out Servlet.Rest.Response'Class;
                                   Stream : in out Servlet.Rest.Output_Stream'Class) is
+      use Servlet.Streams;
    begin
       declare
          Accept_Header : constant String := Req.Get_Header ("Accept");
          Mime : Mime_Access;
       begin
-         Mime := Util.Http.Headers.Get_Accepted (Accept_Header, (1 => Util.Http.Mimes.Json'Access));
+         Mime := Util.Http.Headers.Get_Accepted (Accept_Header,
+                                                 (1 => Util.Http.Mimes.Json'Access));
          if Mime /= null then
             Set_Content_Type (Reply, Mime.all, Stream);
             return;
          end if;
-         Mime := Util.Http.Headers.Get_Accepted (Accept_Header, (1 => Util.Http.Mimes.Xml'Access));
+         Mime := Util.Http.Headers.Get_Accepted (Accept_Header,
+                                                 (1 => Util.Http.Mimes.Xml'Access));
          if Mime /= null then
             Set_Content_Type (Reply, Mime.all, Stream);
             return;
          end if;
-         Servlet.Streams.Dynamic.Print_Stream'Class (Stream).Set_Stream_Type (Servlet.Streams.Dynamic.RAW);
+         Dynamic.Print_Stream'Class (Stream).Set_Stream_Type (Dynamic.RAW);
       end;
    end Choose_Content_Type;
 
