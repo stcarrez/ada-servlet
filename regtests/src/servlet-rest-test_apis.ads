@@ -7,7 +7,10 @@
 
 with Util.Tests;
 
-package Servlet.Rest.Tests is
+generic
+   NAME            : String;
+   Default_Streams : Servlet.Rest.Stream_Modes;
+package Servlet.Rest.Test_APIs is
 
    --  Test API with simple operations.
    procedure Simple_Get (Req    : in out Servlet.Rest.Request'Class;
@@ -103,10 +106,9 @@ package Servlet.Rest.Tests is
    procedure Test_Operation (T      : in out Test;
                              Method : in String;
                              URI    : in String;
-                             Accept_Header : in String;
                              Status : in Natural);
 
    --  Test Get_Mime_Type and resolution to handle the Accept header.
    procedure Test_Get_Mime_Type (T : in out Test);
 
-end Servlet.Rest.Tests;
+end Servlet.Rest.Test_APIs;

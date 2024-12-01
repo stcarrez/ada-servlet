@@ -9,42 +9,33 @@ with Ada.Strings.Unbounded;
 
 with Util.Log;
 with Util.Test_Caller;
+with Util.Measures;
 with Util.Http.Headers;
 with Util.Http.Mimes;
 
+with EL.Contexts.Default;
+
+with Security.Permissions;
 with Servlet.Requests.Mockup;
 with Servlet.Responses.Mockup;
 with Servlet.Core.Rest;
+with Servlet.Rest.Definition;
 with Servlet.Rest.Operation;
-with Servlet.Rest.Test_APIs;
-package body Servlet.Rest.Tests is
 
-   package Caller is new Util.Test_Caller (Test, "Rest");
+package body Servlet.Rest.Test_APIs is
 
-   package Tests_JSON is
-     new Test_APIs (NAME => "JSON",
-                    Default_Streams => (Streams.Dynamic.JSON => True,
-                                        others => False));
-   package Tests_XML is
-     new Test_APIs (NAME => "XML",
-                    Default_Streams => (Streams.Dynamic.XML => True,
-                                        others => False));
-   package Tests_JSON_XML is
-     new Test_APIs (NAME => "JSON+XML",
-                    Default_Streams => (Streams.Dynamic.JSON => True,
-                                        Streams.Dynamic.XML  => True,
-                                        others => False));
-   package Tests_Dynamic is
-     new Test_APIs (NAME => "Dynamic",
-                    Default_Streams => (Streams.Dynamic.DYNAMIC => True,
-                                        others => False));
+   package Caller is new Util.Test_Caller (Test, "Rest" & NAME);
+
+   procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
+                        Title  : in String;
+                        Method : in String;
+                        URI    : in String);
 
    Default_Mimes   : aliased constant Mime_List :=
-     (1 => Util.Http.Mimes.Json'Access,
-      2 => Util.Http.Mimes.Xml'Access,
-      3 => Util.Http.Mimes.Jpg'Access);
-   Default_Streams : constant Servlet.Rest.Stream_Modes := (Streams.Dynamic.DYNAMIC => True,
-                                                            others => False);
+     (1 => Util.Http.Mimes.Json'Access, 2 => Util.Http.Mimes.Xml'Access);
+
+   package Test_Permission is
+      new Security.Permissions.Definition ("test-permission");
 
    package API_Simple_Get is
      new Servlet.Rest.Operation (Handler    => Simple_Get'Access,
@@ -55,56 +46,118 @@ package body Servlet.Rest.Tests is
    package API_Simple_List is
      new Servlet.Rest.Operation (Handler    => Simple_Get'Access,
                                  URI        => "/simple",
-                                 Mimes      => Default_Mimes'Access,
                                  Streams    => Default_Streams);
 
    package API_Simple_Post is
      new Servlet.Rest.Operation (Handler    => Simple_Post'Access,
                                  URI        => "/simple",
                                  Method     => Servlet.Rest.POST,
-                                 Mimes      => Default_Mimes'Access,
                                  Streams    => Default_Streams);
 
    package API_Simple_Delete is
      new Servlet.Rest.Operation (Handler    => Simple_Delete'Access,
                                  URI        => "/simple/:id",
                                  Method     => Servlet.Rest.DELETE,
-                                 Mimes      => Default_Mimes'Access,
                                  Streams    => Default_Streams);
 
    package API_Simple_Put is
      new Servlet.Rest.Operation (Handler    => Simple_Put'Access,
                                  URI        => "/simple/:id",
                                  Method     => Servlet.Rest.PUT,
-                                 Mimes      => Default_Mimes'Access,
                                  Streams    => Default_Streams);
 
    package API_Simple_Head is
       new Servlet.Rest.Operation (Handler    => Simple_Head'Access,
                                   URI        => "/simple/:id",
                                   Method     => Servlet.Rest.HEAD,
-                                 Mimes      => Default_Mimes'Access,
                                   Streams    => Default_Streams);
 
    package API_Simple_Options is
       new Servlet.Rest.Operation (Handler    => Simple_Options'Access,
                                   URI        => "/simple/:id",
                                   Method     => Servlet.Rest.OPTIONS,
-                                  Mimes      => Default_Mimes'Access,
                                   Streams    => Default_Streams);
 
    package API_Simple_Patch is
       new Servlet.Rest.Operation (Handler    => Simple_Patch'Access,
                                   URI        => "/simple/:id",
                                   Method     => Servlet.Rest.PATCH,
-                                  Mimes      => Default_Mimes'Access,
                                   Streams    => Default_Streams);
+
+   package Test_API_Definition is
+     new Servlet.Rest.Definition (Object_Type => Test_API,
+                                  URI         => "/test");
+
+   package API_Create is
+     new Test_API_Definition.Definition (Handler    => Create'Access,
+                                         Method     => Servlet.Rest.POST,
+                                         Pattern    => "",
+                                         Permission => Test_Permission.Permission,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_Update is
+     new Test_API_Definition.Definition (Handler    => Update'Access,
+                                         Method     => Servlet.Rest.PUT,
+                                         Pattern    => ":id",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_Delete is
+     new Test_API_Definition.Definition (Handler    => Delete'Access,
+                                         Method     => Servlet.Rest.DELETE,
+                                         Pattern    => ":id",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_List is
+     new Test_API_Definition.Definition (Handler    => List'Access,
+                                         Method     => Servlet.Rest.GET,
+                                         Pattern    => "",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_Get is
+     new Test_API_Definition.Definition (Handler    => List'Access,
+                                         Method     => Servlet.Rest.GET,
+                                         Pattern    => ":id",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_Head is
+     new Test_API_Definition.Definition (Handler    => Head'Access,
+                                         Method     => Servlet.Rest.HEAD,
+                                         Pattern    => ":id",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_Options is
+     new Test_API_Definition.Definition (Handler    => Options'Access,
+                                         Method     => Servlet.Rest.OPTIONS,
+                                         Pattern    => ":id",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
+
+   package API_Patch is
+     new Test_API_Definition.Definition (Handler    => Patch'Access,
+                                         Method     => Servlet.Rest.PATCH,
+                                         Pattern    => ":id",
+                                         Permission => 0,
+                                         Streams    => Default_Streams)
+     with Unreferenced;
 
    procedure Simple_Get (Req    : in out Servlet.Rest.Request'Class;
                          Reply  : in out Servlet.Rest.Response'Class;
                          Stream : in out Servlet.Rest.Output_Stream'Class) is
       Data : Test_API;
    begin
+      Servlet.Rest.Choose_Content_Type (Req, Reply, Stream);
       List (Data, Req, Reply, Stream);
    end Simple_Get;
 
@@ -113,6 +166,7 @@ package body Servlet.Rest.Tests is
                          Stream : in out Servlet.Rest.Output_Stream'Class) is
       Data : Test_API;
    begin
+      Servlet.Rest.Choose_Content_Type (Req, Reply, Stream);
       Update (Data, Req, Reply, Stream);
    end Simple_Put;
 
@@ -217,11 +271,8 @@ package body Servlet.Rest.Tests is
                    Stream : in out Servlet.Rest.Output_Stream'Class) is
       pragma Unreferenced (Data);
    begin
+      Servlet.Rest.Choose_Content_Type (Req, Reply, Stream);
       if Req.Get_Path_Parameter_Count = 0 then
-         Servlet.Rest.Choose_Content_Type (Req, Reply, Stream);
-         if Reply.Get_Content_Type = "" then
-            Reply.Set_Content_Type (Util.Http.Mimes.Text);
-         end if;
          Stream.Start_Document;
          Stream.Start_Array ("list");
          for I in 1 .. 10 loop
@@ -237,9 +288,7 @@ package body Servlet.Rest.Tests is
             Id : constant String := Req.Get_Path_Parameter (1);
          begin
             if Id = "100" then
-               Servlet.Rest.Set_Content_Type (Reply, Util.Http.Mimes.Text, Stream);
                Reply.Set_Status (Servlet.Responses.SC_NOT_FOUND);
-               Stream.Write ("Document not found");
             elsif Id /= "44" then
                Reply.Set_Status (Servlet.Responses.SC_GONE);
             end if;
@@ -279,22 +328,40 @@ package body Servlet.Rest.Tests is
                        Test_Patch'Access);
       Caller.Add_Test (Suite, "Test Servlet.Rest.Get_Mime_Type",
                        Test_Get_Mime_Type'Access);
-      Tests_JSON.Add_Tests (Suite);
-      Tests_XML.Add_Tests (Suite);
-      Tests_JSON_XML.Add_Tests (Suite);
-      Tests_Dynamic.Add_Tests (Suite);
    end Add_Tests;
+
+   procedure Benchmark (Ctx    : in Servlet.Core.Servlet_Registry;
+                        Title  : in String;
+                        Method : in String;
+                        URI    : in String) is
+      T : Util.Measures.Stamp;
+   begin
+      for I in 1 .. 1000 loop
+         declare
+            Request : Servlet.Requests.Mockup.Request;
+            Reply   : Servlet.Responses.Mockup.Response;
+            Dispatcher : constant Servlet.Core.Request_Dispatcher
+              := Ctx.Get_Request_Dispatcher (Path => URI);
+         begin
+            Request.Set_Method (Method);
+            Request.Set_Request_URI (URI);
+            Servlet.Core.Forward (Dispatcher, Request, Reply);
+         end;
+      end loop;
+
+      Util.Measures.Report (T, Title, 1000);
+   end Benchmark;
 
    procedure Test_Operation (T      : in out Test;
                              Method : in String;
                              URI    : in String;
-                             Accept_Header : in String;
                              Status : in Natural) is
       use Servlet.Core;
       use Util.Tests;
 
       Ctx     : Servlet_Registry;
       S1      : aliased Servlet.Core.Rest.Rest_Servlet;
+      EL_Ctx  : EL.Contexts.Default.Default_Context;
       Request : Servlet.Requests.Mockup.Request;
       Reply   : Servlet.Responses.Mockup.Response;
    begin
@@ -312,6 +379,9 @@ package body Servlet.Rest.Tests is
       Servlet.Rest.Register (Ctx, API_Simple_Patch.Definition);
       Ctx.Dump_Routes (Util.Log.INFO_LEVEL);
 
+      Test_API_Definition.Register (Registry  => Ctx,
+                                    Name      => "API",
+                                    ELContext => EL_Ctx);
       Request.Set_Method (Method);
       declare
          Dispatcher : constant Request_Dispatcher
@@ -319,19 +389,13 @@ package body Servlet.Rest.Tests is
          Result : Ada.Strings.Unbounded.Unbounded_String;
       begin
          Request.Set_Request_URI (URI);
-         if Accept_Header'Length > 0 then
-            Request.Set_Header ("Accept", Accept_Header);
-         end if;
          Forward (Dispatcher, Request, Reply);
 
          --  Check the response after the API method execution.
          Reply.Read_Content (Result);
          Assert_Equals (T, Status, Reply.Get_Status, "Invalid status for " & Method & ":" & URI);
-
-         if Reply.Get_Status = 200 and then Accept_Header'Length > 0 then
-            Assert_Equals (T, Accept_Header, Reply.Get_Content_Type, "Invalid Content-Type");
-         end if;
       end;
+      Benchmark (Ctx, Method & " " & URI, Method, URI);
    end Test_Operation;
 
    --  ------------------------------
@@ -339,10 +403,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Create (T : in out Test) is
    begin
-      Test_Operation (T, "POST", "/simple",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_CREATED);
-      Test_Operation (T, "POST", "/simple",
-                      Util.Http.Mimes.Xml, Servlet.Responses.SC_CREATED);
+      Test_Operation (T, "POST", "/test", Servlet.Responses.SC_CREATED);
+      Test_Operation (T, "POST", "/simple", Servlet.Responses.SC_CREATED);
    end Test_Create;
 
    --  ------------------------------
@@ -350,8 +412,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Update (T : in out Test) is
    begin
-      Test_Operation (T, "PUT", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_OK);
+      Test_Operation (T, "PUT", "/test/44", Servlet.Responses.SC_OK);
+      Test_Operation (T, "PUT", "/simple/44", Servlet.Responses.SC_OK);
    end Test_Update;
 
    --  ------------------------------
@@ -359,18 +421,12 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Get (T : in out Test) is
    begin
-      Test_Operation (T, "GET", "/simple",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_OK);
-      Test_Operation (T, "GET", "/simple",
-                      Util.Http.Mimes.Xml, Servlet.Responses.SC_OK);
-      Test_Operation (T, "GET", "/simple",
-                      Util.Http.Mimes.Text, Servlet.Responses.SC_OK);
-      Test_Operation (T, "GET", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_OK);
-      Test_Operation (T, "GET", "/simple/44",
-                      Util.Http.Mimes.Xml, Servlet.Responses.SC_OK);
-      Test_Operation (T, "GET", "/simple/100",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_NOT_FOUND);
+      Test_Operation (T, "GET", "/test", Servlet.Responses.SC_OK);
+      Test_Operation (T, "GET", "/test/44", Servlet.Responses.SC_OK);
+      Test_Operation (T, "GET", "/test/100", Servlet.Responses.SC_NOT_FOUND);
+      Test_Operation (T, "GET", "/simple", Servlet.Responses.SC_OK);
+      Test_Operation (T, "GET", "/simple/44", Servlet.Responses.SC_OK);
+      Test_Operation (T, "GET", "/simple/100", Servlet.Responses.SC_NOT_FOUND);
    end Test_Get;
 
    --  ------------------------------
@@ -378,8 +434,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Delete (T : in out Test) is
    begin
-      Test_Operation (T, "DELETE", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_NO_CONTENT);
+      Test_Operation (T, "DELETE", "/test/44", Servlet.Responses.SC_NO_CONTENT);
+      Test_Operation (T, "DELETE", "/simple/44", Servlet.Responses.SC_NO_CONTENT);
    end Test_Delete;
 
    --  ------------------------------
@@ -387,8 +443,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Head (T : in out Test) is
    begin
-      Test_Operation (T, "HEAD", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_GONE);
+      Test_Operation (T, "HEAD", "/test/44", Servlet.Responses.SC_GONE);
+      Test_Operation (T, "HEAD", "/simple/44", Servlet.Responses.SC_GONE);
    end Test_Head;
 
    --  ------------------------------
@@ -396,8 +452,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Options (T : in out Test) is
    begin
-      Test_Operation (T, "OPTIONS", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_OK);
+      Test_Operation (T, "OPTIONS", "/test/44", Servlet.Responses.SC_OK);
+      Test_Operation (T, "OPTIONS", "/simple/44", Servlet.Responses.SC_OK);
    end Test_Options;
 
    --  ------------------------------
@@ -405,8 +461,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Patch (T : in out Test) is
    begin
-      Test_Operation (T, "PATCH", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_ACCEPTED);
+      Test_Operation (T, "PATCH", "/test/44", Servlet.Responses.SC_ACCEPTED);
+      Test_Operation (T, "PATCH", "/simple/44", Servlet.Responses.SC_ACCEPTED);
    end Test_Patch;
 
    --  ------------------------------
@@ -414,8 +470,8 @@ package body Servlet.Rest.Tests is
    --  ------------------------------
    procedure Test_Invalid (T : in out Test) is
    begin
-      Test_Operation (T, "TRACE", "/simple/44",
-                      Util.Http.Mimes.Json, Servlet.Responses.SC_NOT_FOUND);
+      Test_Operation (T, "TRACE", "/test/44", Servlet.Responses.SC_NOT_FOUND);
+      Test_Operation (T, "TRACE", "/simple/44", Servlet.Responses.SC_NOT_FOUND);
    end Test_Invalid;
 
    --  ------------------------------
@@ -444,4 +500,4 @@ package body Servlet.Rest.Tests is
 
    end Test_Get_Mime_Type;
 
-end Servlet.Rest.Tests;
+end Servlet.Rest.Test_APIs;
