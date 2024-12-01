@@ -19,6 +19,7 @@ to provide server web requests.
 
 ## Version 1.8.0   - Under development
   - Fix #15: wrong client_secret initialization in OAuth servlet: copy paste error
+  - Feature #16: Better control of response types in REST servlet from the operation
   - Allow to build and install without Alire
 
 ## Version 1.7.1   - Aug 2024
