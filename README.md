@@ -17,6 +17,9 @@ the [OpenAPI Ada library](https://github.com/stcarrez/swagger-ada)
 and [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide server web requests.
 
+## Version 1.8.0   - Under development
+  - Fix #15: wrong client_secret initialization in OAuth servlet: copy paste error
+
 ## Version 1.7.1   - Aug 2024
   - Cleanup build environment to drop configure
 
