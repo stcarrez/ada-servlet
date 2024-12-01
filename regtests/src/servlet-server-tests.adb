@@ -78,10 +78,12 @@ package body Servlet.Server.Tests is
          --  Define servlet mappings
          App.Add_Mapping (Name => "files", Pattern => "*.css");
          App.Add_Mapping (Name => "files", Pattern => "*.js");
+         App.Add_Mapping (Name => "files", Pattern => "*.ico");
          App.Add_Mapping (Name => "files", Pattern => "*.html");
          App.Add_Mapping (Name => "files", Pattern => "*.txt");
          App.Add_Mapping (Name => "files", Pattern => "*.png");
          App.Add_Mapping (Name => "files", Pattern => "*.jpg");
+         App.Add_Mapping (Name => "files", Pattern => "*.svg");
          App.Add_Mapping (Name => "files", Pattern => "*.gif");
          App.Add_Mapping (Name => "files", Pattern => "*.pdf");
          App.Add_Mapping (Name => "files", Pattern => "*.properties");
@@ -155,6 +157,18 @@ package body Servlet.Server.Tests is
       Do_Get (Request, Reply, "/tests/file.css", "get-file.css");
       Assert_Matches (T, "^\s*div { margin: 0 }.*", Reply, "Wrong content");
       Assert_Header (T, "Content-Type", "text/css", Reply, "Content-Type");
+
+      Do_Get (Request, Reply, "/tests/favicon.ico", "get-file.ico");
+      Assert_Header (T, "Content-Type", "image/x-icon", Reply, "Content-Type");
+
+      Do_Get (Request, Reply, "/tests/file.svg", "get-file.svg");
+      Assert_Header (T, "Content-Type", "image/svg+xml", Reply, "Content-Type");
+
+      Do_Get (Request, Reply, "/tests/file.png", "get-file.png");
+      Assert_Header (T, "Content-Type", "image/png", Reply, "Content-Type");
+
+      Do_Get (Request, Reply, "/tests/file.jpg", "get-file.jpg");
+      Assert_Header (T, "Content-Type", "image/jpeg", Reply, "Content-Type");
 
    end Test_Get_File;
 
