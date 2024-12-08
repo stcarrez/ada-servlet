@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019, 2022 Stephane Carrez
+--  Copyright (C) 2010 - 2024 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -144,15 +144,6 @@ package body Servlet.Requests is
    begin
       return "UTF-8";
    end Get_Character_Encoding;
-
-   --  Overrides the name of the character encoding used in the body of this request.
-   --  This method must be called prior to reading request parameters or reading input
-   --  using getReader(). Otherwise, it has no effect.
-   procedure Set_Character_Encoding (Req : in out Request;
-                                     Encoding : in String) is
-   begin
-      null;
-   end Set_Character_Encoding;
 
    --  ------------------------------
    --  Returns the length, in bytes, of the request body and made available by the
