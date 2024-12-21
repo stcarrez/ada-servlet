@@ -4,7 +4,7 @@
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
-
+with Ada.Strings.Unbounded;
 with Server.Init;
 with Servlet.Core;
 with Servlet.Server;
@@ -19,6 +19,7 @@ procedure Upload_Server is
    Config  : Servlet.Server.Configuration;
    WS      : Server.Init.Container_Type;
 begin
+   Config.Upload_Directory := Ada.Strings.Unbounded.To_Unbounded_String (".");
    Server.Configure (WS, Config);
 
    --  Register the servlets and filters
