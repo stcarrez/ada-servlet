@@ -37,6 +37,7 @@ begin
 
    Servlet.Rest.Register (App, Monitor.API_Get_Values.Definition);
    Servlet.Rest.Register (App, Monitor.API_Put_Value.Definition);
+   Servlet.Rest.Register (App, Monitor.API_Configure.Definition);
 
    WS.Register_Application ("/monitor", App'Unchecked_Access);
 

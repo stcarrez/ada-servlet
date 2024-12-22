@@ -18,16 +18,29 @@ package Monitor is
                         Reply  : in out Servlet.Rest.Response'Class;
                         Stream : in out Servlet.Rest.Output_Stream'Class);
 
+   --  PUT /mon/:id/configure
+   procedure Configure (Req    : in out Servlet.Rest.Request'Class;
+                        Reply  : in out Servlet.Rest.Response'Class;
+                        Stream : in out Servlet.Rest.Output_Stream'Class);
+
    --  Declare each REST API with a relative URI from Mon_API definition.
    --  GET /api/monitor/:id
-   package API_Get_Values is new Servlet.Rest.Operation (Handler    => Get_Values'Access,
-                                                         Method     => Servlet.Rest.GET,
-                                                         URI        => "/api/monitor/:id");
+   package API_Get_Values is
+     new Servlet.Rest.Operation (Handler => Get_Values'Access,
+                                 Method  => Servlet.Rest.GET,
+                                 URI     => "/api/monitor/:id");
 
    --  PUT /api/monitor/:id
-   package API_Put_Value is new Servlet.Rest.Operation (Handler    => Put_Value'Access,
-                                                        Method     => Servlet.Rest.PUT,
-                                                        URI        => "/api/monitor/:id");
+   package API_Put_Value is
+     new Servlet.Rest.Operation (Handler => Put_Value'Access,
+                                 Method  => Servlet.Rest.PUT,
+                                 URI     => "/api/monitor/:id");
+
+   --  PUT /api/configure
+   package API_Configure is
+     new Servlet.Rest.Operation (Handler => Configure'Access,
+                                 Method  => Servlet.Rest.PUT,
+                                 URI     => "/api/monitor/:id/configure");
 
 private
 
@@ -41,6 +54,8 @@ private
       procedure Put (Value : in Natural);
 
       procedure Put (Value : in Natural; Slot : in Natural);
+
+      procedure Configure (Value : in Duration);
 
       function Get_Values return Value_Array;
 

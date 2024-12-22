@@ -66,6 +66,31 @@ package body Monitor is
          Reply.Set_Status (Servlet.Responses.SC_NOT_FOUND);
    end Put_Value;
 
+   --  PUT /configure
+   procedure Configure (Req    : in out Servlet.Rest.Request'Class;
+                        Reply  : in out Servlet.Rest.Response'Class;
+                        Stream : in out Servlet.Rest.Output_Stream'Class) is
+      pragma Unreferenced (Stream);
+
+      Id  : constant String := Req.Get_Path_Parameter (1);
+      Pos : Positive;
+      Val : Duration;
+   begin
+      Pos := Positive'Value (Id);
+      begin
+         Val := Duration'Value (Req.Get_Parameter ("value"));
+         Monitors (Pos).Configure (Val);
+
+      exception
+         when others =>
+            Reply.Set_Status (Servlet.Responses.SC_BAD_REQUEST);
+      end;
+
+   exception
+      when others =>
+         Reply.Set_Status (Servlet.Responses.SC_NOT_FOUND);
+   end Configure;
+
    protected body Monitor_Data is
 
       procedure Put (Value : in Natural) is
@@ -95,6 +120,13 @@ package body Monitor is
       begin
          null;
       end Put;
+
+      procedure Configure (Value : in Duration) is
+      begin
+         if Value > 0.01 and then Value <= 60.0 then
+            Slot_Size := Value;
+         end if;
+      end Configure;
 
       function Get_Values return Value_Array is
          Result : Value_Array (1 .. Value_Count);
