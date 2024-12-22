@@ -20,9 +20,9 @@ Ada Servlet.
 """
 
 [[depends-on]]
-servletada = "^1.7.0"
-utilada = "^2.6.0"
-utilada_unit = "^2.6.0"
+servletada = "^1.8.0"
+utilada = "^2.8.0"
+utilada_unit = "^2.8.0"
 
 [gpr-externals]
 SERVLET_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
