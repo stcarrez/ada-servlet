@@ -27,6 +27,7 @@ to provide server web requests.
 security = "^1.5.0"
 utilada = "^2.8.0"
 elada = "^1.8.5"
+xmlada = "~24.0"
 
 [gpr-externals]
 SERVLET_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
