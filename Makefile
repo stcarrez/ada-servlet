@@ -46,10 +46,10 @@ build-test:: lib-setup
 	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 # Build and run the unit tests
-test:	build runtest
+test:	build samples runtest
 
 runtest:
-	DIR=`pwd`; \
+	-DIR=`pwd`; \
 	export LD_LIBRARY_PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)/relocatable:$$LD_LIBRARY_PATH"; \
 	export PATH="$$DIR/lib/$(NAME)/relocatable:$$DIR/lib/$(NAME)unit/relocatable:$$PATH"; \
 	bin/servlet_harness -l $(NAME): -xml servlet-aunit.xml -config test.properties
