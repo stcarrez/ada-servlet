@@ -4,6 +4,7 @@ with "utilada_unit";
 with "elada";
 with "servletada";
 with "servletada_unit";
+with "utilada_aws";
 
 project ServletAda_Tests is
 

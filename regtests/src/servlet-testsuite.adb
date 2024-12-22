@@ -11,14 +11,20 @@ with Servlet.Requests.Tests;
 with Servlet.Routes.Tests;
 with Servlet.Server.Tests;
 with Servlet.Rest.Tests;
+with Servlet.Samples_Tests;
 
 package body Servlet.Testsuite is
 
    Tests : aliased Util.Tests.Test_Suite;
 
+   package AWS_Samples_Tests is new Servlet.Samples_Tests (Prefix => "aws");
+   package EWS_Samples_Tests is new Servlet.Samples_Tests (Prefix => "ews");
+
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
+      AWS_Samples_Tests.Add_Tests (Ret);
+      EWS_Samples_Tests.Add_Tests (Ret);
       Servlet.Routes.Tests.Add_Tests (Ret);
       Servlet.Requests.Tests.Add_Tests (Ret);
       Servlet.Sessions.Tests.Add_Tests (Ret);
