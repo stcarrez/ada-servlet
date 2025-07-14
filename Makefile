@@ -79,11 +79,11 @@ $(eval $(call alire_publish,.,se/servletada,servletada-$(VERSION).toml))
 $(eval $(call alire_publish,unit,se/servletada_unit,servletada_unit-$(VERSION).toml))
 
 ifeq ($(HAVE_AWS),yes)
-$(eval $(call alire_publish,ews,se/servletada_aws,servletada_aws-$(VERSION).toml))
+$(eval $(call alire_publish,aws,se/servletada_aws,servletada_aws-$(VERSION).toml))
 endif
 
 ifeq ($(HAVE_EWS),yes)
-$(eval $(call alire_publish,aws,se/servletada_ews,servletada_ews-$(VERSION).toml))
+$(eval $(call alire_publish,ews,se/servletada_ews,servletada_ews-$(VERSION).toml))
 endif
 
 setup::
