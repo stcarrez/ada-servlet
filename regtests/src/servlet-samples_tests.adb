@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-samples_tests - Tests the samples
---  Copyright (C) 2024 Stephane Carrez
+--  Copyright (C) 2024 - 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -10,9 +10,11 @@ with Util.Http.Clients.AWS;
 
 package body Servlet.Samples_Tests is
 
-   package Volume_Caller is new Util.Test_Caller (Volume_Test, "Samples.Volume");
-   package Upload_Caller is new Util.Test_Caller (Upload_Test, "Samples.Upload");
-   package Api_Caller is new Util.Test_Caller (Api_Test, "Samples.Rest");
+   NAME : constant String := Ada.Characters.Handling.To_Upper (Prefix);
+
+   package Volume_Caller is new Util.Test_Caller (Volume_Test, "Samples.Volume." & NAME);
+   package Upload_Caller is new Util.Test_Caller (Upload_Test, "Samples.Upload." & NAME);
+   package Api_Caller is new Util.Test_Caller (Api_Test, "Samples.Rest." & NAME);
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
       Label : constant String := "(" & Ada.Characters.Handling.To_Upper (Prefix) & ")";
