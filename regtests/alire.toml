@@ -1,7 +1,7 @@
 description = "Web Servlet Library unit tests"
 tags = ["web", "servlet", "http", "json"]
 name = "servletada_tests"
-version = "1.8.2"
+version = "1.8.1"
 licenses = "Apache-2.0"
 authors = ["Stephane.Carrez@gmail.com"]
 maintainers = ["Stephane.Carrez@gmail.com"]
@@ -10,10 +10,10 @@ project-files = ["servletada_tests.gpr"]
 website = "https://gitlab.com/stcarrez/ada-servlet"
 
 [[depends-on]]
-servletada = "^1.8.0"
-servletada_unit = "^1.8.0"
-servletada_aws = "^1.8.0"
-servletada_ews = "^1.8.0"
+servletada = "*"
+servletada_unit = "*"
+servletada_aws = "*"
+servletada_ews = "*"
 utilada_aws = "^2.8.0"
 utilada_unit = "^2.8.2"
 

@@ -1,7 +1,7 @@
 description = "Web Servlet Library following JSR 154, JSR 315 (EWS)"
 tags = ["web", "servlet", "http", "json"]
 name = "servletada_ews"
-version = "1.8.2"
+version = "1.8.1"
 licenses = "Apache-2.0"
 authors = ["Stephane.Carrez@gmail.com"]
 maintainers = ["Stephane.Carrez@gmail.com"]
@@ -22,7 +22,7 @@ This library integrates the Ada Servlet in the Embedded Web Server.
 """
 
 [[depends-on]]
-servletada = "^1.8.2"
+servletada = "^1.8.1"
 ews = "any"
 
 [gpr-externals]
