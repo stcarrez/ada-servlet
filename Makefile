@@ -1,5 +1,5 @@
 NAME=servletada
-VERSION=1.8.0
+VERSION=1.8.2
 
 DIST_DIR=ada-servlet-$(VERSION)
 DIST_FILE=ada-servlet-$(VERSION).tar.gz
