@@ -15,7 +15,7 @@ servletada_unit = "^1.8.0"
 servletada_aws = "^1.8.0"
 servletada_ews = "^1.8.0"
 utilada_aws = "^2.8.0"
-utilada_unit = "^2.8.0"
+utilada_unit = "^2.8.2"
 
 [configuration]
 disabled = true
