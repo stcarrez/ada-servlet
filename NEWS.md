@@ -1,3 +1,6 @@
+Version 1.8.1   - Nov 2025
+  - Fixes in Alire crates
+
 Version 1.8.0   - Jul 2025
   - Fix #15: wrong client_secret initialization in OAuth servlet: copy paste error
   - Feature #16: Better control of response types in REST servlet from the operation
