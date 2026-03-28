@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010 - 2024 Stephane Carrez
+--  Copyright (C) 2010 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -26,6 +26,9 @@ with Servlet.Streams;
 --  The <b>Servlet.Requests</b> package is an Ada implementation of
 --  the Java servlet request (JSR 315 3. The Request).
 package Servlet.Requests is
+
+   --  Cookie setup for the session identification and management.
+   SID_COOKIE : constant String := "SID";
 
    subtype Quality_Type is Util.Http.Headers.Quality_Type;
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-requests -- Servlet Requests
---  Copyright (C) 2010 - 2024 Stephane Carrez
+--  Copyright (C) 2010 - 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -577,7 +577,7 @@ package body Servlet.Requests is
    begin
       Req.Load_Cookies;
       for I in Req.Info.Cookies'Range loop
-         if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
+         if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = SID_COOKIE then
             return Servlet.Cookies.Get_Value (Req.Info.Cookies (I));
          end if;
       end loop;
@@ -640,8 +640,8 @@ package body Servlet.Requests is
    function Has_Session (Req : in Request'Class) return Boolean is
    begin
       Req.Load_Cookies;
-      for I in Req.Info.Cookies'Range loop
-         if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = "SID" then
+      for I in reverse Req.Info.Cookies'Range loop
+         if Servlet.Cookies.Get_Name (Req.Info.Cookies (I)) = SID_COOKIE then
             declare
                Servlet : constant Core.Servlet_Access := Get_Servlet (Req);
                SID     : constant String := Cookies.Get_Value (Req.Info.Cookies (I));
@@ -690,9 +690,10 @@ package body Servlet.Requests is
             Ctx.Create_Session (Req.Info.Session);
             declare
                C : Cookies.Cookie
-                 := Cookies.Create ("SID", Req.Info.Session.Get_Id);
+                 := Cookies.Create (SID_COOKIE, Req.Info.Session.Get_Id);
+               Ctx : constant String := Req.Get_Context_Path;
             begin
-               Cookies.Set_Path (C, Req.Get_Context_Path);
+               Cookies.Set_Path (C, (if Ctx = "" then "/" else Ctx));
                Req.Info.Response.Add_Cookie (Cookie => C);
             end;
          end;

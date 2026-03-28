@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-filters -- Security filter
---  Copyright (C) 2011, 2012, 2015, 2022 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2015, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -18,7 +18,7 @@ with Security.Policies;  use Security;
 --  a page.
 package Servlet.Security.Filters is
 
-   SID_COOKIE : constant String := "SID";
+   SID_COOKIE : constant String := Servlet.Requests.SID_COOKIE;
 
    AID_COOKIE : constant String := "AID";
 
