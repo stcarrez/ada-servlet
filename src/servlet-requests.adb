@@ -649,7 +649,9 @@ package body Servlet.Requests is
             begin
                Ctx.Find_Session (Id     => SID,
                                  Result => Req.Info.Session);
-               return Req.Info.Session.Is_Valid;
+               if Req.Info.Session.Is_Valid then
+                  return True;
+               end if;
             end;
          end if;
       end loop;
