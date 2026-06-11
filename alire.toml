@@ -24,10 +24,9 @@ to provide server web requests.
 """
 
 [[depends-on]]
-security = "^1.5.0"
+security = "^1.5.1"
 utilada = "^2.8.2"
 elada = "^1.8.5"
-xmlada = "any"
 
 [gpr-externals]
 SERVLET_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
