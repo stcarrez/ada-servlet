@@ -23,6 +23,7 @@ This library integrates the Ada Servlet in the Embedded Web Server.
 
 [[depends-on]]
 servletada = "^1.8.1"
+utilada_xml = "^2.8.2"
 ews = "any"
 
 [gpr-externals]
