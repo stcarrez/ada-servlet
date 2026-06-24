@@ -1,4 +1,4 @@
-Version 1.8.2   - Under development
+Version 1.8.2   - Jun 2026
   - Fix #17: Check session cookie in reverse order to take into account the most recent one
 
 Version 1.8.1   - Nov 2025
