@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016, 2020, 2022, 2024 Stephane Carrez
+--  Copyright (C) 2016, 2020, 2022, 2024, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -89,7 +89,7 @@ private
       Mimes      : Mime_List_Access;
       Pattern    : Util.Strings.Name_Access;
       Permission : Security.Permissions.Permission_Index := 0;
-      Streams    : Stream_Modes := (others => True);
+      Streams    : Stream_Modes := [others => True];
    end record;
 
    --  Register the API descriptor in a list.

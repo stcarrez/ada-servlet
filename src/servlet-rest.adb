@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest -- REST Support
---  Copyright (C) 2016, 2017, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -223,13 +223,13 @@ package body Servlet.Rest is
          Mime : Mime_Access;
       begin
          Mime := Util.Http.Headers.Get_Accepted (Accept_Header,
-                                                 (1 => Util.Http.Mimes.Json'Access));
+                                                 [1 => Util.Http.Mimes.Json'Access]);
          if Mime /= null then
             Set_Content_Type (Reply, Mime.all, Stream);
             return;
          end if;
          Mime := Util.Http.Headers.Get_Accepted (Accept_Header,
-                                                 (1 => Util.Http.Mimes.Xml'Access));
+                                                 [1 => Util.Http.Mimes.Xml'Access]);
          if Mime /= null then
             Set_Content_Type (Reply, Mime.all, Stream);
             return;

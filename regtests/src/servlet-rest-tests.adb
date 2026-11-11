@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
---  Copyright (C) 2016, 2017, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2020, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -23,28 +23,28 @@ package body Servlet.Rest.Tests is
 
    package Tests_JSON is
      new Test_APIs (NAME => "JSON",
-                    Default_Streams => (Streams.Dynamic.JSON => True,
-                                        others => False));
+                    Default_Streams => [Streams.Dynamic.JSON => True,
+                                        others => False]);
    package Tests_XML is
      new Test_APIs (NAME => "XML",
-                    Default_Streams => (Streams.Dynamic.XML => True,
-                                        others => False));
+                    Default_Streams => [Streams.Dynamic.XML => True,
+                                        others => False]);
    package Tests_JSON_XML is
      new Test_APIs (NAME => "JSON+XML",
-                    Default_Streams => (Streams.Dynamic.JSON => True,
+                    Default_Streams => [Streams.Dynamic.JSON => True,
                                         Streams.Dynamic.XML  => True,
-                                        others => False));
+                                        others => False]);
    package Tests_Dynamic is
      new Test_APIs (NAME => "Dynamic",
-                    Default_Streams => (Streams.Dynamic.DYNAMIC => True,
-                                        others => False));
+                    Default_Streams => [Streams.Dynamic.DYNAMIC => True,
+                                        others => False]);
 
    Default_Mimes   : aliased constant Mime_List :=
-     (1 => Util.Http.Mimes.Json'Access,
+     [1 => Util.Http.Mimes.Json'Access,
       2 => Util.Http.Mimes.Xml'Access,
-      3 => Util.Http.Mimes.Jpg'Access);
-   Default_Streams : constant Servlet.Rest.Stream_Modes := (Streams.Dynamic.DYNAMIC => True,
-                                                            others => False);
+      3 => Util.Http.Mimes.Jpg'Access];
+   Default_Streams : constant Servlet.Rest.Stream_Modes := [Streams.Dynamic.DYNAMIC => True,
+                                                            others => False];
 
    package API_Simple_Get is
      new Servlet.Rest.Operation (Handler    => Simple_Get'Access,

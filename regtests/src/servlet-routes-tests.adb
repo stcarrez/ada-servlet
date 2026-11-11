@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-routes-tests - Unit tests for Servlet.Routes
---  Copyright (C) 2015, 2016, 2017, 2020, 2021 Stephane Carrez
+--  Copyright (C) 2015, 2016, 2017, 2020, 2021, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -326,10 +326,10 @@ package body Servlet.Routes.Tests is
    type String_Array is array (Positive range <>) of Const_String_Access;
 
    Path_Array : constant String_Array :=
-     (P_1'Access, P_2'Access, P_3'Access, P_4'Access,
+     [P_1'Access, P_2'Access, P_3'Access, P_4'Access,
       P_5'Access, P_6'Access, P_7'Access, P_8'Access,
       P_9'Access, P_10'Access, P_11'Access, P_12'Access,
-      P_13'Access, P_14'Access);
+      P_13'Access, P_14'Access];
 
    --  ------------------------------
    --  Test the Iterate over several paths.

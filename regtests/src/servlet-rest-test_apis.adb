@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  servlet-rest-tests - Unit tests for Servlet.Rest and Servlet.Core.Rest
---  Copyright (C) 2016, 2017, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2020, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -32,7 +32,7 @@ package body Servlet.Rest.Test_APIs is
                         URI    : in String);
 
    Default_Mimes   : aliased constant Mime_List :=
-     (1 => Util.Http.Mimes.Json'Access, 2 => Util.Http.Mimes.Xml'Access);
+     [1 => Util.Http.Mimes.Json'Access, 2 => Util.Http.Mimes.Xml'Access];
 
    package Test_Permission is
       new Security.Permissions.Definition ("test-permission");
